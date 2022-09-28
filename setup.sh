@@ -22,7 +22,7 @@ fi
 # ---- utils -------- *
 
 _install() {
-	pacman --noconfirm --needed -S "$1"
+	pacman --noconfirm --needed -S "$1" &> /dev/null
 }
 
 _require() {

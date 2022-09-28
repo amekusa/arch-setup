@@ -1,0 +1,103 @@
+_error() {
+	[ -z "$1" ] || echo "ERROR: $1"
+	exit 1
+}
+
+_if() {
+	local eval=false
+	if [ "$1" = "-e" ] || [ "$1" = "eval" ]; then eval=true; shift; fi
+	local t; local f
+	local mode=0
+	local cond=("$1")
+	while shift; do
+		if [ "$1" = "?" ]; then
+			t="$2"
+			[ "$3" = ":" ] && f="$4"
+			mode=1; break;
+		elif [ "$1" = "?:" ]; then
+			f="$2"
+			mode=2; break;
+		fi
+		cond[${#cond[@]}]="$1"
+	done
+	[ $mode -eq 0 ] && _error "syntax error ( _if <cond> ? <A> : <B> )"
+	if $eval; then
+		if [ $(eval "${cond[@]}")$? -eq 0 ]; then echo "$t"; else echo "$f"; fi
+	else
+		if [ $("${cond[@]}")$? -eq 0 ]; then echo "$t"; else echo "$f"; fi
+	fi
+}
+
+_fb() {
+	local i
+	for i in "$@"; do
+		if [ -n "$i" ]; then
+			echo "$i"
+			return
+		fi
+	done
+}
+
+_chk-user() {
+	[ "$(whoami)" = "$1" ] || _error "run as $1"
+}
+
+_chk-cmd() {
+	local i
+	local x
+	for i in "$@"; do
+		x="$(which $i)" || _error "$i is not found"
+	done
+}
+
+_subst() {
+	local arg name value pat
+	for arg in "$@"; do
+		name="${arg%%=*}"
+		value="${arg:$((${#name}+1))}"
+		pat="${pat}s|{{ $name }}|$value|g;"
+	done
+	sed "$pat"
+}
+
+_uncomment() {
+	local search="$1"; shift
+	local file="$1"; shift
+	local expr="/${search}/ s/^#+\s*//"
+	if [ -n "$file" ]
+		then sed -ri "$expr" "$file"
+		else sed -r "$expr"
+	fi
+}
+
+_save-var() {
+	local key="$1"; shift
+	local value="$1"; shift
+	local file="$1"; shift
+	[ -f "$file" ] || touch "$file"
+	local temp="$(mktemp)"
+	local find="^([[:space:]]*)$key="
+	local found=false
+	local line; IFS=; while read -r line; do
+		if [[ $line =~ $find ]]; then
+			line="${BASH_REMATCH[1]}$key=$value"
+			found=true
+		fi
+		echo "$line" >> "$temp"
+	done < "$file"; unset IFS
+	$found || echo "$key=$value" >> "$temp"
+	cat "$temp" > "$file" && rm "$temp"
+}
+
+_load-var() {
+	local key="$1"; shift
+	local file="$1"; shift
+	local find="^$key=\"?([^\"]*)\"?"
+	local line; while read line; do
+		if [[ $line =~ $find ]]; then
+			echo "${BASH_REMATCH[1]}"
+			return
+		fi
+	done < "$file"
+	return 1
+}

@@ -7,19 +7,24 @@ task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _error "argument missing"
 	[ -z "$_CURRENT_TASK" ] || _error "the task:$_CURRENT_TASK is not done yet"
-	[ "$(_load-var "$task" "$TASKS")" = DONE ] && _CURRENT_TASK="" && return 1
+	if [ "$(_load-var "$task" "$TASKS")" = DONE ]; then
+		echo "TASK: $task > SKIP"
+		return 1
+	fi
+	echo "TASK: $task"
 	_CURRENT_TASK="$task"
 }
 
 ksat() {
 	[ -n "$_CURRENT_TASK" ] || _error "no active task"
-	_save-var "$_CURRENT_TASK" DONE "$TASKS"
+	_save-var "$_CURRENT_TASK" DONE "$TASKS" || _error "failed to write: $TASKS"
+	echo "TASK: $_CURRENT_TASK > DONE"
 	_CURRENT_TASK=""
 }
 
 x() {
-	echo "TASK ERROR: $_CURRENT_TASK"
-	[ -z "$1" ] || echo "  > $1"
+	echo "TASK: $_CURRENT_TASK > ERROR!"
+	[ -z "$1" ] || echo " > $1"
 	_save-var "$_CURRENT_TASK" FAILED "$TASKS"
 	exit 1
 }

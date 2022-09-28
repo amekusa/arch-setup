@@ -1,0 +1,14 @@
+[Match]
+Name={{ NAME }}
+Virtualization={{ VM }}
+
+[Network]
+DHCP={{ DHCP }}
+DNS=1.1.1.1
+DNS=8.8.8.8
+
+[DHCPv4]
+RouteMetric=20
+
+[IPv6AcceptRA]
+RouteMetric=20

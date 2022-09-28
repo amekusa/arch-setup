@@ -2,6 +2,7 @@
 
 EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
+ASSETS="$BASE/assets"
 
 . "$BASE/lib/util"
 . "$BASE/lib/task"
@@ -16,6 +17,19 @@ else
 	echo "Generated: $CONF.local"
 	exit
 fi
+
+
+# ---- utils -------- *
+
+_install() {
+	pacman --noconfirm --needed -S "$1"
+}
+
+_require() {
+	local r="$(which "$1")" && echo "$r" && return
+	_install "$1" || return 1
+	echo "$(which "$1")"
+}
 
 
 # ---- tasks -------- *
@@ -55,15 +69,31 @@ if [ -n "$HOSTNAME" ] && task HOSTNAME; then
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
 ksat; fi
 
+# user
+if [ -n "$USER" ] && task USER; then
+	shell="$(_require $USER_SHELL)" || x "cannot install $USER_SHELL"
+	useradd -m -G wheel -s "$shell" "$USER" || x "cannot add user: $USER"
+ksat; fi
+
 # network
-if [ -n "$NETWORK_MAN" ] && task NETWORK; then
-	case "$NETWORK_MAN" in
+if [ -n "$NET_MANAGER" ] && task NETWORK; then
+	case "$NET_MANAGER" in
 	systemd)
+		file="$(_if $NET_WIRED ? wired : wireless).network"
+		cat "$ASSETS/$file" | _subst "" > "/etc/systemd/network/$file" || x
+		systemctl enable --now systemd-networkd.service || x
 		;;
 	netctl)
+		# TODO
 		;;
 	*)
 		x "invalid NETWORK value"
 		;;
 	esac
+ksat; fi
+
+# ssh
+if task SSH; then
+	_install openssh || x "cannot install openssh"
+	systemctl enable --now sshd.service || x "cannot enable sshd.service"
 ksat; fi

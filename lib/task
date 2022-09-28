@@ -11,7 +11,7 @@ task() {
 		echo "TASK: $task > SKIP"
 		return 1
 	fi
-	echo "TASK: $task"
+	echo "TASK: $task ..."
 	_CURRENT_TASK="$task"
 }
 

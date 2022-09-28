@@ -82,7 +82,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	systemd)
 		file="$(_if $NET_WIRED ? wired : wireless).network"
 		cat "$ASSETS/$file" | _subst "" > "/etc/systemd/network/$file" || x
-		systemctl enable --now systemd-networkd.service || x
+		systemctl enable systemd-networkd.service || x
 		;;
 	netctl)
 		# TODO
@@ -96,5 +96,7 @@ ksat; fi
 # ssh
 if task SSH; then
 	_install openssh || x "cannot install openssh"
-	systemctl enable --now sshd.service || x "cannot enable sshd.service"
+	systemctl enable sshd.service || x "cannot enable sshd.service"
 ksat; fi
+
+echo

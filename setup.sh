@@ -26,7 +26,8 @@ _install() {
 }
 
 _require() {
-	local r="$(which "$1")" && echo "$r" && return
+	local r
+	r="$(which "$1")" && echo "$r" && return
 	_install "$1" || return 1
 	echo "$(which "$1")"
 }

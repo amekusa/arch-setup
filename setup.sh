@@ -46,6 +46,13 @@ _nif() {
 	ip -brief link | awk -v e=1 -v find="$find" '$1 ~ find { print $1; e=0; exit } END { exit e }'
 }
 
+# convert the given condition into yes/no
+_yn() {
+	if "$1"
+		then echo "yes"
+		else echo "no"
+	fi
+}
 
 # ---- tasks -------- *
 
@@ -97,12 +104,12 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	systemd)
 		if $NET_WIRED; then
 			file="wired.network"
-			nif="$(_fb "$NET_INTERFACE" $(_nif "en|eth"))" || x "NET_INTERFACE is not set"
+			nif="$(_fb "$NET_INTERFACE" $(_nif "en|eth"))" || x "network interface not found"
 		else
 			file="wireless.network"
-			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "NET_INTERFACE is not set"
+			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "network interface not found"
 		fi
-		cat "$ASSETS/$file" | _subst "NAME=$nif" > "/etc/systemd/network/$file" || x
+		cat "$ASSETS/$file" | _subst "NAME=$nif" "DHCP=$(_yn $NET_DHCP)" "VM=$(_yn $VM)" > "/etc/systemd/network/$file" || x
 		systemctl enable systemd-networkd.service || x
 		;;
 	netctl)

@@ -40,6 +40,12 @@ _require() {
 	echo "$(which "$1")"
 }
 
+# finds a network interface
+_nif() {
+	local find="$1"
+	ip -brief link | awk -v e=1 -v find="$find" '$1 ~ find { print $1; e=0; exit } END { exit e }'
+}
+
 
 # ---- tasks -------- *
 
@@ -88,8 +94,14 @@ ksat; fi
 if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	case "$NET_MANAGER" in
 	systemd)
-		file="$(_if $NET_WIRED ? wired : wireless).network"
-		cat "$ASSETS/$file" | _subst "" > "/etc/systemd/network/$file" || x
+		if $NET_WIRED; then
+			file="wired.network"
+			nif="$(_fb "$NET_INTERFACE" $(_nif "en|eth"))" || x "NET_INTERFACE is not set"
+		else
+			file="wireless.network"
+			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "NET_INTERFACE is not set"
+		fi
+		cat "$ASSETS/$file" | _subst "NAME=$nif" > "/etc/systemd/network/$file" || x
 		systemctl enable systemd-networkd.service || x
 		;;
 	netctl)

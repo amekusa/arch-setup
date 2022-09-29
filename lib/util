@@ -36,6 +36,7 @@ _fb() {
 			return
 		fi
 	done
+	return 1
 }
 
 _chk-user() {

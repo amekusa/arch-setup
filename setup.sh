@@ -67,6 +67,7 @@ ksat; fi
 
 # keymap
 if [ -n "$KEYMAP" ] && task KEYMAP; then
+	loadkeys "$KEYMAP" || x
 	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
 ksat; fi
 

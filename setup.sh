@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#  Arch Setup
+# --------------- -  *
+#  author: Satoshi Soma (https://amekusa.com)
+# ============================================
 
 EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
@@ -21,10 +26,13 @@ fi
 
 # ---- utils -------- *
 
+# installs the given pkg
 _install() {
 	pacman --noconfirm --needed -S "$1" &> /dev/null
 }
 
+# returns full path to the given pkg.
+# if it does not exist, installs it
 _require() {
 	local r
 	r="$(which "$1")" && echo "$r" && return

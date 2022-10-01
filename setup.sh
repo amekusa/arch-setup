@@ -91,6 +91,7 @@ _backup() {
 
 # locale
 if [ -n "$LOCALE" ] && task LOCALE; then
+	_show-var LOCALE
 	# uncomment desired locale in /etc/locale.gen
 	_uncomment "$LOCALE" /etc/locale.gen || x
 	# generate locale
@@ -101,12 +102,14 @@ ksat; fi
 
 # timezone
 if [ -n "$TIMEZONE" ] && task TIMEZONE; then
-	ln -s "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime || x
+	_show-var TIMEZONE
+	_symlink "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime || x
 	hwclock --systohc --utc || x
 ksat; fi
 
 # keymap
 if [ -n "$KEYMAP" ] && task KEYMAP; then
+	_show-var KEYMAP
 	loadkeys "$KEYMAP" || x
 	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
 ksat; fi
@@ -121,18 +124,24 @@ ksat; fi
 
 # hostname
 if [ -n "$HOSTNAME" ] && task HOSTNAME; then
+	depend HOSTS
+	_show-var HOSTNAME
 	echo "$HOSTNAME" > /etc/hostname || x
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
+	_show-file /etc/hosts
 ksat; fi
 
 # user
 if [ -n "$USER" ] && task USER; then
+	_show-var USER
 	shell="$(_require $USER_SHELL)" || x "cannot install $USER_SHELL"
 	useradd -m -G wheel -s "$shell" "$USER" || x "cannot add user: $USER"
+	_show-file /etc/passwd
 ksat; fi
 
 # network
 if [ -n "$NET_MANAGER" ] && task NETWORK; then
+	_show-var NET_MANAGER
 	case "$NET_MANAGER" in
 	systemd)
 		if $NET_WIRED; then
@@ -143,6 +152,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "network interface not found"
 		fi
 		cat "$ASSETS/$file" | _subst "NAME=$nif" "DHCP=$(_yn $NET_DHCP)" "VM=$(_yn $VM)" > "/etc/systemd/network/$file" || x
+		_show-file "/etc/systemd/network/$file"
 		systemctl enable systemd-networkd.service || x
 		;;
 	netctl)
@@ -150,7 +160,6 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 		;;
 	*)
 		x "invalid NETWORK value"
-		;;
 	esac
 ksat; fi
 

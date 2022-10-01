@@ -154,6 +154,17 @@ if [ -n "$USER" ] && task USER; then
 	done
 ksat; fi
 
+# sudo
+if $SUDO && task SUDO; then
+	_install sudo || x "cannot install: sudo"
+	file="/etc/sudoers"
+	case "$SUDO_ALLOW" in
+		wheel) _uncomment "%wheel ALL=(ALL:ALL) ALL" "$file" || x "failed to write: $file" ;;
+		sudo)  _uncomment "%sudo ALL=(ALL:ALL) ALL" "$file" || x "failed to write: $file" ;;
+		*) x "invalid SUDO_ALLOW value"
+	esac
+ksat; fi
+
 # network
 if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	_show-var NET_MANAGER

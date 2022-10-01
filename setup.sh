@@ -136,6 +136,13 @@ if [ -n "$HOSTNAME" ] && task HOSTNAME; then
 	_show-file /etc/hosts
 ksat; fi
 
+# root user
+if task ROOT; then
+	until passwd; do
+		echo "input password for root user"
+	done
+ksat; fi
+
 # user
 if [ -n "$USER" ] && task USER; then
 	_show-var USER

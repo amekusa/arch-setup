@@ -47,6 +47,11 @@ _nif() {
 	ip -brief link | awk -v e=1 -v find="$find" '$1 ~ find { print $1; e=0; exit } END { exit e }'
 }
 
+# finds the disk device path (e.g. /dev/sda, /dev/vda)
+_disk() {
+	lsblk -no PATH,TYPE | awk -v e=1 '$2 == "disk" { print $1; e=0; exit } END { exit e }'
+}
+
 # convert the given condition into yes/no
 _yn() {
 	if "$1"
@@ -172,6 +177,20 @@ if task SSH; then
 	cat "$ASSETS/sshd_config" | _subst "USER=$USER" >> "$conf" || x "failed to write: $conf"
 	_show-file "$conf"
 	systemctl enable sshd.service || x "cannot enable sshd.service"
+ksat; fi
+
+# bootloader
+if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
+	disk="$(_fb "$DISK" $(_disk))" || x "disk not found"
+	case "$BOOTLOADER" in
+	grub)
+		_install grub || x "cannot install grub"
+		grub-install --recheck "$disk" || x "grub-install failed"
+		grub-mkconfig -o /boot/grub/grub.cfg || x "grub-mkconfig failed"
+		;;
+	*)
+		x "invalid BOOTLOADER value"
+	esac
 ksat; fi
 
 echo

@@ -3,11 +3,15 @@ TASKS="$BASE/.tasks"
 
 _CURRENT_TASK=""
 
+task-done() {
+	[ "$(_load-var "$1" "$TASKS")" = DONE ]
+}
+
 task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _error "argument missing"
 	[ -z "$_CURRENT_TASK" ] || _error "the task:$_CURRENT_TASK is not done yet"
-	if [ "$(_load-var "$task" "$TASKS")" = DONE ]; then
+	if task-done "$task"; then
 		echo "TASK: $task > SKIP"
 		return 1
 	fi
@@ -27,6 +31,10 @@ x() {
 	[ -z "$1" ] || echo " > $1"
 	_save-var "$_CURRENT_TASK" FAILED "$TASKS"
 	exit 1
+}
+
+depend() {
+	task-done "$1" || x "task: $1 is not done"
 }
 
 reset-tasks() {

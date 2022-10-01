@@ -146,9 +146,12 @@ ksat; fi
 # user
 if [ -n "$USER" ] && task USER; then
 	_show-var USER
-	shell="$(_require $USER_SHELL)" || x "cannot install $USER_SHELL"
+	shell="$(_require $USER_SHELL)" || x "cannot install: $USER_SHELL"
 	useradd -m -G wheel -s "$shell" "$USER" || x "cannot add user: $USER"
 	_show-file /etc/passwd
+	until passwd "$USER"; do
+		echo "input password for user: $USER"
+	done
 ksat; fi
 
 # network

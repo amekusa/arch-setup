@@ -165,7 +165,12 @@ ksat; fi
 
 # ssh
 if task SSH; then
+	depend USER
 	_install openssh || x "cannot install openssh"
+	conf="/etc/ssh/sshd_config"
+	[ -f "$conf" ] && _backup "$conf" || x "failed to backup: $conf"
+	cat "$ASSETS/sshd_config" | _subst "USER=$USER" >> "$conf" || x "failed to write: $conf"
+	_show-file "$conf"
 	systemctl enable sshd.service || x "cannot enable sshd.service"
 ksat; fi
 

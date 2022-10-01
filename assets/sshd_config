@@ -1,0 +1,12 @@
+
+
+# ---- arch-setup -------- -
+PermitRootLogin no
+MaxAuthTries 3
+
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+
+AllowAgentForwarding no
+AllowTcpForwarding no
+AllowUsers {{ USER }}

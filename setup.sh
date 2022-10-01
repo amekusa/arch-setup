@@ -8,6 +8,7 @@
 EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
+BACKUP="$BASE/backup"
 
 . "$BASE/lib/util"
 . "$BASE/lib/task"
@@ -52,6 +53,38 @@ _yn() {
 		then echo "yes"
 		else echo "no"
 	fi
+}
+
+_show-var() {
+	local var="$1"
+	echo "$var: ${!var}"
+}
+
+_show-file() {
+	echo "---- file: $1 --------"
+	cat "$1"
+	echo "==== END file: $1 ===="
+}
+
+_symlink() {
+	local src="$1"
+	local dst="$2"
+	echo "symlink:"
+	echo " > src: $src"
+	echo " > dst: $dst"
+	[ -h "$dst" ] && rm "$dst" && echo "removed the old symlink"
+	ln -s "$src" "$dst"
+}
+
+_backup() {
+	local now="$(date +%F)"
+	local src="$1"
+	local dst="$BACKUP/$(basename "$1").$(date +%F).backup"
+	echo "backup:"
+	echo " > src: $src"
+	echo " > dst: $dst"
+	echo "# backup at:$now src:$src" > "$dst"
+	cat "$src" >> "$dst"
 }
 
 # ---- tasks -------- *

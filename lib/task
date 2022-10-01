@@ -11,6 +11,7 @@ task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _error "argument missing"
 	[ -z "$_CURRENT_TASK" ] || _error "the task:$_CURRENT_TASK is not done yet"
+	echo
 	if task-done "$task"; then
 		echo "TASK: $task > SKIP"
 		return 1

@@ -94,6 +94,16 @@ _backup() {
 
 # ---- tasks -------- *
 
+# etckeeper
+if $ETCKEEPER && task ETCKEEPER; then
+	_install etckeeper || x "failed to install etckeeper"
+	etckeeper init || x "cmd failed: etckeeper init"
+	file="/etc/.gitignore"
+	_backup "$file" || x "failed to backup: $file"
+	cat "$ASSETS/etc.gitignore" >> "$file" || x "failed to write: $file"
+	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
+ksat; fi
+
 # locale
 if [ -n "$LOCALE" ] && task LOCALE; then
 	_show-var LOCALE

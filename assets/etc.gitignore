@@ -1,0 +1,11 @@
+
+
+# ---- arch-setup -------- -
+*.pem
+*.gpg
+*.db
+
+*.save
+
+/pacman.d/mirrorlist
+/letsencrypt/renewal/

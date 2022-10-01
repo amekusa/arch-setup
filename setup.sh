@@ -107,11 +107,8 @@ ksat; fi
 # locale
 if [ -n "$LOCALE" ] && task LOCALE; then
 	_show-var LOCALE
-	# uncomment desired locale in /etc/locale.gen
 	_uncomment "$LOCALE" /etc/locale.gen || x
-	# generate locale
 	locale-gen || x
-	# locale config
 	_save-var LANG "$LOCALE" /etc/locale.conf || x
 ksat; fi
 

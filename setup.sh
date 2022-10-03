@@ -94,14 +94,21 @@ _backup() {
 
 # ---- tasks -------- *
 
-# etckeeper
-if $ETCKEEPER && task ETCKEEPER; then
-	_install etckeeper || x "failed to install etckeeper"
-	etckeeper init || x "cmd failed: etckeeper init"
-	file="/etc/.gitignore"
-	_backup "$file" || x "failed to backup: $file"
-	cat "$ASSETS/etc.gitignore" >> "$file" || x "failed to write: $file"
-	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
+# hosts
+if task HOSTS; then
+	cat <<- EOF > /etc/hosts
+	127.0.0.1  localhost
+	::1        localhost
+	EOF
+ksat; fi
+
+# hostname
+if [ -n "$HOSTNAME" ] && task HOSTNAME; then
+	depend HOSTS
+	_show-var HOSTNAME
+	echo "$HOSTNAME" > /etc/hostname || x
+	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
+	_show-file /etc/hosts
 ksat; fi
 
 # locale
@@ -124,23 +131,6 @@ if [ -n "$KEYMAP" ] && task KEYMAP; then
 	_show-var KEYMAP
 	loadkeys "$KEYMAP" || x
 	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
-ksat; fi
-
-# hosts
-if task HOSTS; then
-	cat <<- EOF > /etc/hosts
-	127.0.0.1  localhost
-	::1        localhost
-	EOF
-ksat; fi
-
-# hostname
-if [ -n "$HOSTNAME" ] && task HOSTNAME; then
-	depend HOSTS
-	_show-var HOSTNAME
-	echo "$HOSTNAME" > /etc/hostname || x
-	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
-	_show-file /etc/hosts
 ksat; fi
 
 # root user
@@ -166,8 +156,8 @@ if $SUDO && task SUDO; then
 	_install sudo || x "cannot install: sudo"
 	file="/etc/sudoers"
 	case "$SUDO_ALLOW" in
-		wheel) _uncomment "%wheel ALL=(ALL:ALL) ALL" "$file" || x "failed to write: $file" ;;
-		sudo)  _uncomment "%sudo ALL=(ALL:ALL) ALL" "$file" || x "failed to write: $file" ;;
+		wheel) _uncomment '%wheel ALL=\(ALL:ALL\) ALL' "$file" || x "failed to write: $file" ;;
+		sudo)  _uncomment '%sudo ALL=\(ALL:ALL\) ALL' "$file" || x "failed to write: $file" ;;
 		*) x "invalid SUDO_ALLOW value"
 	esac
 ksat; fi
@@ -200,10 +190,10 @@ ksat; fi
 if task SSH; then
 	depend USER
 	_install openssh || x "cannot install openssh"
-	conf="/etc/ssh/sshd_config"
-	[ -f "$conf" ] && _backup "$conf" || x "failed to backup: $conf"
-	cat "$ASSETS/sshd_config" | _subst "USER=$USER" >> "$conf" || x "failed to write: $conf"
-	_show-file "$conf"
+	file="/etc/ssh/sshd_config"
+	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
+	cat "$ASSETS/sshd_config" | _subst "USER=$USER" >> "$file" || x "failed to write: $file"
+	_show-file "$file"
 	systemctl enable sshd.service || x "cannot enable sshd.service"
 ksat; fi
 
@@ -219,6 +209,29 @@ if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 	*)
 		x "invalid BOOTLOADER value"
 	esac
+ksat; fi
+
+# git
+if task GIT; then depend USER
+	_install git || x "cannot install: git"
+	_show-var GIT_EMAIL
+	_show-var GIT_NAME
+	src="$ASSETS/user.gitconfig"
+	save="$HOME/.gitconfig"
+	copy="/home/$USER/.gitconfig"
+	cat "$src" | _subst "EMAIL=$GIT_EMAIL" "NAME=$GIT_NAME" > "$save" || x "failed to write: $save"
+	cp "$save" "$copy" || x "failed to copy: $save -> $copy"
+	_show-file "$save"
+ksat; fi
+
+# etckeeper
+if $ETCKEEPER && task ETCKEEPER; then
+	_install etckeeper || x "failed to install etckeeper"
+	etckeeper init || x "cmd failed: etckeeper init"
+	file="/etc/.gitignore"
+	_backup "$file" || x "failed to backup: $file"
+	cat "$ASSETS/etc.gitignore" >> "$file" || x "failed to write: $file"
+	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
 ksat; fi
 
 echo

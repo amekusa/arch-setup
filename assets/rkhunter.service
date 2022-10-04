@@ -1,0 +1,8 @@
+[Unit]
+Description=Rootkit Scan
+
+[Service]
+Type=oneshot
+ExecStartPre={{ rkhunter }} --update --report-warnings-only
+ExecStart={{ rkhunter }} --cronjob --report-warnings-only
+ExecStartPost={{ rkhunter }} --propupd --report-warnings-only

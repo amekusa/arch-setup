@@ -199,6 +199,27 @@ if task SSH; then depend USER
 	systemctl enable sshd.service || x
 ksat; fi
 
+# rootkit hunter
+if "$RKHUNTER" && task RKHUNTER; then
+	exec="$(_require rkhunter)" || x
+	cp "$ASSETS/rkhunter.conf.local" /etc/ || x
+	rkhunter --config-check || x
+
+	file="/etc/systemd/system/rkhunter.service"
+	cat "$ASSETS/rkhunter.service" | _subst "rkhunter=$exec" > "$file" || x "failed to write: $file"
+	_show-file "$file"
+
+	if [ -n "$RKH_TIMER" ]; then
+		file="/etc/systemd/system/rkhunter.timer"
+		cat "$ASSETS/rkhunter.timer" | _subst "timer=$RKH_TIMER" > "$file" || x "failed to write: $file"
+		_show-file "$file"
+		systemctl enable rkhunter.timer || x
+		systemctl disable rkhunter.service
+	else
+		systemctl enable rkhunter.service || x
+	fi
+ksat; fi
+
 # bootloader
 if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 	disk="$(_fb "$DISK" $(_disk))" || x "disk not found"
@@ -234,6 +255,11 @@ if $ETCKEEPER && task ETCKEEPER; then depend GIT
 	_backup "$file" || x "failed to backup: $file"
 	cat "$ASSETS/etc.gitignore" >> "$file" || x "failed to write: $file"
 	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
+ksat; fi
+
+# rkhunter final scan
+if "$RKHUNTER" && task RKHUNTER_SCAN; then depend RKHUNTER
+	systemctl start rkhunter.service || x
 ksat; fi
 
 echo

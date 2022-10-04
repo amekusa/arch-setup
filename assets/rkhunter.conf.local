@@ -1,4 +1,3 @@
 SCRIPTWHITELIST=/usr/bin/egrep
 SCRIPTWHITELIST=/usr/bin/fgrep
 SCRIPTWHITELIST=/usr/bin/ldd
-SCRIPTWHITELIST=/usr/bin/vendor_perl/GET

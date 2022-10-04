@@ -92,6 +92,7 @@ _backup() {
 	cat "$src" >> "$dst"
 }
 
+
 # ---- tasks -------- *
 
 # hosts
@@ -235,4 +236,9 @@ if $ETCKEEPER && task ETCKEEPER; then depend GIT
 	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
 ksat; fi
 
+echo
+echo "all done."
+echo
+echo "if you are in arch-chroot, type:"
+echo "exit; umount -R /mnt"
 echo

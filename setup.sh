@@ -133,6 +133,20 @@ if [ -n "$KEYMAP" ] && task KEYMAP; then
 	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
 ksat; fi
 
+# bootloader
+if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
+	disk="$(_fb "$DISK" $(_disk))" || x "disk not found"
+	case "$BOOTLOADER" in
+	grub)
+		_install grub || x "cannot install grub"
+		grub-install --recheck "$disk" || x "grub-install failed"
+		grub-mkconfig -o /boot/grub/grub.cfg || x "grub-mkconfig failed"
+		;;
+	*)
+		x "invalid BOOTLOADER value"
+	esac
+ksat; fi
+
 # root user
 if task ROOT; then
 	until passwd; do
@@ -217,20 +231,6 @@ if "$RKHUNTER" && task RKHUNTER; then
 	else
 		systemctl enable rkhunter.service || x
 	fi
-ksat; fi
-
-# bootloader
-if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
-	disk="$(_fb "$DISK" $(_disk))" || x "disk not found"
-	case "$BOOTLOADER" in
-	grub)
-		_install grub || x "cannot install grub"
-		grub-install --recheck "$disk" || x "grub-install failed"
-		grub-mkconfig -o /boot/grub/grub.cfg || x "grub-mkconfig failed"
-		;;
-	*)
-		x "invalid BOOTLOADER value"
-	esac
 ksat; fi
 
 # git

@@ -221,6 +221,7 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT; then depend USER
 	cat "$ASSETS/user.gitconfig" | _subst "EMAIL=$GIT_EMAIL" "NAME=$GIT_NAME" > "$file" || x "failed to write: $file"
 	_show-file "$file"
 	cp "$file" "$copy" || x "failed to copy: $file -> $copy"
+	chown $USER:$USER "$copy" || x "cmd failed: chown"
 ksat; fi
 
 # etckeeper

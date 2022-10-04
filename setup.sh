@@ -212,7 +212,7 @@ if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 ksat; fi
 
 # git
-if task GIT; then depend USER
+if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT; then depend USER
 	_install git || x "cannot install: git"
 	_show-var GIT_EMAIL
 	_show-var GIT_NAME

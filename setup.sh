@@ -178,6 +178,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 		cat "$ASSETS/$file" | _subst "NAME=$nif" "DHCP=$(_yn $NET_DHCP)" "VM=$(_yn $VM)" > "/etc/systemd/network/$file" || x
 		_show-file "/etc/systemd/network/$file"
 		systemctl enable systemd-networkd.service || x
+		systemctl enable systemd-resolved.service || x
 		;;
 	netctl)
 		# TODO

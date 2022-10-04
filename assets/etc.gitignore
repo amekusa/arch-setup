@@ -21,14 +21,19 @@
 *.2
 *.3
 
-*-
-
 *.save
 *.bak
 *.org
 
-/ssl/certs/
+*-
+
+/shadow
+/gshadow
+/cryptab
+/machine-id
 /ca-certificates/
+/ssh/moduli
+/ssl/certs/
 /pacman.d/mirrorlist
 /pacman.d/gnupg/
 /letsencrypt/renewal/

@@ -249,10 +249,9 @@ ksat; fi
 # etckeeper
 if $ETCKEEPER && task ETCKEEPER; then depend GIT
 	_install etckeeper || x "failed to install etckeeper"
-	etckeeper init || x "cmd failed: etckeeper init"
 	file="/etc/.gitignore"
-	_backup "$file" || x "failed to backup: $file"
-	cat "$ASSETS/etc.gitignore" >> "$file" || x "failed to write: $file"
+	cp "$ASSETS/etc.gitignore" "$file" || x "failed to write: $file"
+	etckeeper init || x "cmd failed: etckeeper init"
 	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
 ksat; fi
 

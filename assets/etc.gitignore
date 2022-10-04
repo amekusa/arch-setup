@@ -1,11 +1,26 @@
+# begin section managed by etckeeper (do not edit this section by hand)
+
+# end section managed by etckeeper
 
 
 # ---- arch-setup -------- -
+*.srl
+*.crt
+*.csr
+*.key
+*.pub
 *.pem
 *.gpg
 *.db
+*.rev
+*.key
+*.bin
+*.0
 
 *.save
+*.bak
+*.org
 
+/ssl/certs/
 /pacman.d/mirrorlist
 /letsencrypt/renewal/

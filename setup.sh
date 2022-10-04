@@ -196,7 +196,7 @@ if task SSH; then depend USER
 	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
 	cat "$ASSETS/sshd_config" | _subst "USER=$USER" >> "$file" || x "failed to write: $file"
 	_show-file "$file"
-	systemctl enable sshd.service || x "cannot enable sshd.service"
+	systemctl enable sshd.service || x
 ksat; fi
 
 # bootloader

@@ -257,10 +257,10 @@ ksat; fi
 
 # rkhunter final scan
 if "$RKHUNTER" && task RKHUNTER_SCAN; then depend RKHUNTER
-	rkhunter --config-check || x
-	rkhunter --update --report-warnings-only || x
-	rkhunter --cronjob --report-warnings-only || x
-	rkhunter --propupd --report-warnings-only || x
+	rkhunter --config-check || x "rkhunter: config error"
+	rkhunter --update  --skip-keypress || x "rkhunter: update error"
+	rkhunter --check   --skip-keypress || x "rkhunter: scan error"
+	rkhunter --propupd --skip-keypress || x "rkhunter: propupd error"
 ksat; fi
 
 echo

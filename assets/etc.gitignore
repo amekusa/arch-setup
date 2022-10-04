@@ -15,12 +15,20 @@
 *.rev
 *.key
 *.bin
+
 *.0
+*.1
+*.2
+*.3
+
+*-
 
 *.save
 *.bak
 *.org
 
 /ssl/certs/
+/ca-certificates/
 /pacman.d/mirrorlist
+/pacman.d/gnupg/
 /letsencrypt/renewal/

@@ -29,6 +29,7 @@
 
 /shadow
 /gshadow
+/fstab
 /cryptab
 /machine-id
 /ca-certificates/

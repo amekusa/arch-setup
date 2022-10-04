@@ -35,7 +35,7 @@ x() {
 }
 
 depend() {
-	task-done "$1" || x "task: $1 is not done"
+	task-done "$1" || x "task dependency: $1 is not done"
 }
 
 reset-tasks() {

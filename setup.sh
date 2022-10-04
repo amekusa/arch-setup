@@ -103,8 +103,7 @@ if task HOSTS; then
 ksat; fi
 
 # hostname
-if [ -n "$HOSTNAME" ] && task HOSTNAME; then
-	depend HOSTS
+if [ -n "$HOSTNAME" ] && task HOSTNAME; then depend HOSTS
 	_show-var HOSTNAME
 	echo "$HOSTNAME" > /etc/hostname || x
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
@@ -136,6 +135,7 @@ ksat; fi
 # root user
 if task ROOT; then
 	until passwd; do
+		echo
 		echo "input password for root user"
 	done
 ksat; fi
@@ -147,6 +147,7 @@ if [ -n "$USER" ] && task USER; then
 	useradd -m -G wheel -s "$shell" "$USER" || x "cannot add user: $USER"
 	_show-file /etc/passwd
 	until passwd "$USER"; do
+		echo
 		echo "input password for user: $USER"
 	done
 ksat; fi
@@ -187,8 +188,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 ksat; fi
 
 # ssh
-if task SSH; then
-	depend USER
+if task SSH; then depend USER
 	_install openssh || x "cannot install openssh"
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
@@ -216,16 +216,15 @@ if task GIT; then depend USER
 	_install git || x "cannot install: git"
 	_show-var GIT_EMAIL
 	_show-var GIT_NAME
-	src="$ASSETS/user.gitconfig"
-	save="$HOME/.gitconfig"
+	file="$HOME/.gitconfig"
 	copy="/home/$USER/.gitconfig"
-	cat "$src" | _subst "EMAIL=$GIT_EMAIL" "NAME=$GIT_NAME" > "$save" || x "failed to write: $save"
-	cp "$save" "$copy" || x "failed to copy: $save -> $copy"
-	_show-file "$save"
+	cat "$ASSETS/user.gitconfig" | _subst "EMAIL=$GIT_EMAIL" "NAME=$GIT_NAME" > "$file" || x "failed to write: $file"
+	_show-file "$file"
+	cp "$file" "$copy" || x "failed to copy: $file -> $copy"
 ksat; fi
 
 # etckeeper
-if $ETCKEEPER && task ETCKEEPER; then
+if $ETCKEEPER && task ETCKEEPER; then depend GIT
 	_install etckeeper || x "failed to install etckeeper"
 	etckeeper init || x "cmd failed: etckeeper init"
 	file="/etc/.gitignore"

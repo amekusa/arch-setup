@@ -203,7 +203,6 @@ ksat; fi
 if "$RKHUNTER" && task RKHUNTER; then
 	exec="$(_require rkhunter)" || x
 	cp "$ASSETS/rkhunter.conf.local" /etc/ || x
-	rkhunter --config-check || x
 
 	file="/etc/systemd/system/rkhunter.service"
 	cat "$ASSETS/rkhunter.service" | _subst "rkhunter=$exec" > "$file" || x "failed to write: $file"
@@ -259,7 +258,10 @@ ksat; fi
 
 # rkhunter final scan
 if "$RKHUNTER" && task RKHUNTER_SCAN; then depend RKHUNTER
-	systemctl start rkhunter.service || x
+	rkhunter --config-check || x
+	rkhunter --update --report-warnings-only || x
+	rkhunter --cronjob --report-warnings-only || x
+	rkhunter --propupd --report-warnings-only || x
 ksat; fi
 
 echo

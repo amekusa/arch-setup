@@ -30,7 +30,7 @@
 /shadow
 /gshadow
 /fstab
-/cryptab
+/crypttab
 /machine-id
 /ca-certificates/
 /ssh/moduli

@@ -233,6 +233,13 @@ if $RKHUNTER && task RKHUNTER; then
 	fi
 ksat; fi
 
+# install optional packages
+if [ -n "$PKGS" ] && task PKGS; then
+	for each in "${PKGS[@]}"; do
+		_install "$each" || x "cannot install: $each"
+	done
+ksat; fi
+
 # git
 if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT; then depend USER
 	_install git || x "cannot install: git"

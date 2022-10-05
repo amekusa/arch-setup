@@ -1,3 +1,12 @@
+# ignore warnings for some hidden directories & files
+ALLOWHIDDENDIR=/etc/.git
+ALLOWHIDDENFILE=/etc/.etckeeper
+ALLOWHIDDENFILE=/etc/.gitignore
+ALLOWHIDDENFILE=/etc/.updated
+ALLOWHIDDENFILE=/usr/share/man/man5/.k5identity.5.gz
+ALLOWHIDDENFILE=/usr/share/man/man5/.k5login.5.gz
+
+# ignore the warnings 'The command ... has been replaced by ...'
 SCRIPTWHITELIST=/usr/bin/egrep
 SCRIPTWHITELIST=/usr/bin/fgrep
 SCRIPTWHITELIST=/usr/bin/ldd

@@ -214,7 +214,7 @@ if task SSH; then depend USER
 ksat; fi
 
 # rootkit hunter
-if "$RKHUNTER" && task RKHUNTER; then
+if $RKHUNTER && task RKHUNTER; then
 	exec="$(_require rkhunter)" || x
 	cp "$ASSETS/rkhunter.conf.local" /etc/ || x
 
@@ -255,12 +255,11 @@ if $ETCKEEPER && task ETCKEEPER; then depend GIT
 	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
 ksat; fi
 
-# rkhunter final scan
-if "$RKHUNTER" && task RKHUNTER_SCAN; then depend RKHUNTER
+# rkhunter update
+if $RKHUNTER && task RKH_UPDATE; then depend RKHUNTER
 	rkhunter --config-check || x "rkhunter: config error"
-	rkhunter --update  --skip-keypress
-	rkhunter --check   --skip-keypress || x "rkhunter: scan error"
 	rkhunter --propupd --skip-keypress || x "rkhunter: propupd error"
+	rkhunter --update --skip-keypress ; [ $? = 1 ] && x "rkhunter: update error"
 ksat; fi
 
 echo

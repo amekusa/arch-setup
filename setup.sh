@@ -298,17 +298,16 @@ if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS -d RKHUNTER; then
 	_show-file "$file"
 ksat; fi
 
-# rkhunter update
-if $RKHUNTER && task RKH_UPDATE -d RKHUNTER; then
-	rkhunter --config-check || x "rkhunter: config error"
-	rkhunter --propupd --skip-keypress || x "rkhunter: propupd error"
-	rkhunter --update --skip-keypress ; [ $? = 1 ] && x "rkhunter: update error"
-ksat; fi
-
 # etckeeper commit
-if task-done ETCKEEPER; then
+if $ETCKEEPER && task-done ETCKEEPER; then
 	etckeeper unclean && etckeeper commit "[arch-setup] commit @ $(date +%F)"
 fi
+
+# rkhunter propupd
+if $RKHUNTER && task RKH_PROPUPD -d RKHUNTER; then
+	rkhunter --config-check || x "rkhunter: config error"
+	rkhunter --propupd --report-warnings-only || x "rkhunter: propupd error"
+ksat; fi
 
 echo
 echo "all done."

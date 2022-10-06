@@ -95,6 +95,9 @@ _backup() {
 
 # ---- tasks -------- *
 
+# always update keyring first
+_install archlinux-keyring
+
 # hosts
 if task HOSTS; then
 	cat <<- EOF > /etc/hosts

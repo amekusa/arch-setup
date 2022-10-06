@@ -252,6 +252,12 @@ if $REFLECTOR && task REFLECTOR; then
 	systemctl enable reflector.timer || x
 ksat; fi
 
+# paccache
+if $PACCACHE && task PACCACHE; then
+	_install pacman-contrib || x "cannot install: pacman-contrib"
+	systemctl enable paccache.timer || x
+ksat; fi
+
 # install optional packages
 if [ -n "$PKGS" ] && task PKGS; then
 	for each in "${PKGS[@]}"; do

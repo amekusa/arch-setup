@@ -33,8 +33,10 @@
 /crypttab
 /machine-id
 /ca-certificates/
-/ssh/moduli
 /ssl/certs/
 /pacman.d/mirrorlist
 /pacman.d/gnupg/
 /letsencrypt/renewal/
+
+/ssh/*
+!/ssh/*_config

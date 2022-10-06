@@ -230,9 +230,6 @@ if $RKHUNTER && task RKHUNTER; then
 		cat "$ASSETS/rkhunter.timer" | _subst "timer=$RKH_TIMER" > "$file" || x "failed to write: $file"
 		_show-file "$file"
 		systemctl enable rkhunter.timer || x
-		systemctl disable rkhunter.service
-	else
-		systemctl enable rkhunter.service || x
 	fi
 ksat; fi
 

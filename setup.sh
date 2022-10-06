@@ -242,10 +242,10 @@ if $REFLECTOR && task REFLECTOR; then
 		sed -ri "/^# --country /a --country '$RFL_COUNTRY'" "$file"
 	fi
 	if [ -n "$RFL_LATEST" ]; then
-		sed -ri "s/^--latest /--latest $RFL_LATEST/" "$file"
+		sed -ri "s/^--latest .*/--latest $RFL_LATEST/" "$file"
 	fi
 	if [ -n "$RFL_SORT" ]; then
-		sed -ri "s/^--sort /--sort $RFL_SORT/" "$file"
+		sed -ri "s/^--sort .*/--sort $RFL_SORT/" "$file"
 	fi
 ksat; fi
 

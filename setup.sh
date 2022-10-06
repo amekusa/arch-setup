@@ -233,6 +233,22 @@ if $RKHUNTER && task RKHUNTER; then
 	fi
 ksat; fi
 
+# reflector
+if $REFLECTOR && task REFLECTOR; then
+	_install reflector || x "cannot install: reflector"
+	file="/etc/xdg/reflector/reflector.conf"
+	if [ -n "$RFL_COUNTRY" ]; then
+		sed -ri "/^--country /d" "$file"
+		sed -ri "/^# --country /a --country '$RFL_COUNTRY'" "$file"
+	fi
+	if [ -n "$RFL_LATEST" ]; then
+		sed -ri "s/^--latest /--latest $RFL_LATEST/" "$file"
+	fi
+	if [ -n "$RFL_SORT" ]; then
+		sed -ri "s/^--sort /--sort $RFL_SORT/" "$file"
+	fi
+ksat; fi
+
 # install optional packages
 if [ -n "$PKGS" ] && task PKGS; then
 	for each in "${PKGS[@]}"; do

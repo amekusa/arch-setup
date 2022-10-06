@@ -69,6 +69,7 @@ _show-file() {
 	echo "---- file: $1 --------"
 	cat "$1"
 	echo "==== END file: $1 ===="
+	echo
 }
 
 _symlink() {

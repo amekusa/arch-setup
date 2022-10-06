@@ -279,6 +279,21 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d USER; then
 	chown $USER:$USER "$copy" || x "cmd failed: chown"
 ksat; fi
 
+# aur helper
+if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d GIT; then
+	case "$AUR_HELPER" in
+	yay)
+		repo="https://aur.archlinux.org/yay.git"
+		git clone "$repo" "$BASE/tmp/yay" || x "cannot clone: $repo"
+		cd "$BASE/tmp/yay" || x
+		makepkg -si || x
+		;;
+	*)
+		x "invalid AUR_HELPER value: $AUR_HELPER"
+	esac
+	cd "$BASE"
+ksat; fi
+
 # etckeeper
 if $ETCKEEPER && task ETCKEEPER -d GIT; then
 	_install etckeeper || x "cannot install: etckeeper"

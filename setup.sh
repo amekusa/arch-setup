@@ -238,15 +238,15 @@ if $REFLECTOR && task REFLECTOR; then
 	_install reflector || x "cannot install: reflector"
 	file="/etc/xdg/reflector/reflector.conf"
 	[ -f "$file" ] || x "file not found: $file"
-	if [ -n "$RFL_COUNTRY" ]; then
+	if [ -n "$REF_COUNTRY" ]; then
 		sed -ri "/^--country /d" "$file"
-		sed -ri "/^# --country /a --country '$RFL_COUNTRY'" "$file"
+		sed -ri "/^# --country /a --country '$REF_COUNTRY'" "$file"
 	fi
-	if [ -n "$RFL_LATEST" ]; then
-		sed -ri "s/^--latest .*/--latest $RFL_LATEST/" "$file"
+	if [ -n "$REF_LATEST" ]; then
+		sed -ri "s/^--latest .*/--latest $REF_LATEST/" "$file"
 	fi
-	if [ -n "$RFL_SORT" ]; then
-		sed -ri "s/^--sort .*/--sort $RFL_SORT/" "$file"
+	if [ -n "$REF_SORT" ]; then
+		sed -ri "s/^--sort .*/--sort $REF_SORT/" "$file"
 	fi
 	_show-file "$file"
 	systemctl enable reflector.timer || x

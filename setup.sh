@@ -248,6 +248,7 @@ if $REFLECTOR && task REFLECTOR; then
 	if [ -n "$RFL_SORT" ]; then
 		sed -ri "s/^--sort .*/--sort $RFL_SORT/" "$file"
 	fi
+	_show-file "$file"
 	systemctl enable reflector.timer || x
 ksat; fi
 

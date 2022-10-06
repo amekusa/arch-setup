@@ -304,11 +304,14 @@ ksat; fi
 
 # pacman hooks for rkhunter
 if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS -d RKHUNTER; then
-	file="/etc/pacman.d/hooks/rkhunter-propupd.hook"
+	dir="/etc/pacman.d/hooks"
+	[ -d "$dir" ] || mkdir "$dir" || x "cannot create dir: $dir"
+
+	file="$dir/rkhunter-propupd.hook"
 	cat "$ASSETS/rkhunter-propupd.hook" | _subst "rkhunter=$(which rkhunter)" > "$file" || x "failed to write: $file"
 	_show-file "$file"
 
-	file="/etc/pacman.d/hooks/rkhunter-status.hook"
+	file="$dir/rkhunter-status.hook"
 	cp "$ASSETS/rkhunter-status.hook" "$file" || x "failed to write: $file"
 	_show-file "$file"
 ksat; fi

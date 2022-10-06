@@ -108,7 +108,7 @@ if task HOSTS; then
 ksat; fi
 
 # hostname
-if [ -n "$HOSTNAME" ] && task HOSTNAME; then depend HOSTS
+if [ -n "$HOSTNAME" ] && task HOSTNAME -d HOSTS; then
 	_show-var HOSTNAME
 	echo "$HOSTNAME" > /etc/hostname || x
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
@@ -208,7 +208,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 ksat; fi
 
 # ssh
-if task SSH; then depend USER
+if task SSH -d USER; then
 	_install openssh || x "cannot install openssh"
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
@@ -267,7 +267,7 @@ if [ -n "$PKGS" ] && task PKGS; then
 ksat; fi
 
 # git
-if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT; then depend USER
+if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d USER; then
 	_install git || x "cannot install: git"
 	_show-var GIT_EMAIL
 	_show-var GIT_NAME
@@ -280,8 +280,8 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT; then depend USER
 ksat; fi
 
 # etckeeper
-if $ETCKEEPER && task ETCKEEPER; then depend GIT
-	_install etckeeper || x "failed to install etckeeper"
+if $ETCKEEPER && task ETCKEEPER -d GIT; then
+	_install etckeeper || x "cannot install: etckeeper"
 	file="/etc/.gitignore"
 	cp "$ASSETS/etc.gitignore" "$file" || x "failed to write: $file"
 	etckeeper init || x "cmd failed: etckeeper init"
@@ -289,7 +289,7 @@ if $ETCKEEPER && task ETCKEEPER; then depend GIT
 ksat; fi
 
 # pacman hooks for rkhunter
-if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS; then depend RKHUNTER
+if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS -d RKHUNTER; then
 	file="/etc/pacman.d/hooks/rkhunter-propupd.hook"
 	cat "$ASSETS/rkhunter-propupd.hook" | _subst "rkhunter=$(which rkhunter)" > "$file" || x "failed to write: $file"
 	_show-file "$file"
@@ -300,7 +300,7 @@ if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS; then depend RKHUNTER
 ksat; fi
 
 # rkhunter update
-if $RKHUNTER && task RKH_UPDATE; then depend RKHUNTER
+if $RKHUNTER && task RKH_UPDATE -d RKHUNTER; then
 	rkhunter --config-check || x "rkhunter: config error"
 	rkhunter --propupd --skip-keypress || x "rkhunter: propupd error"
 	rkhunter --update --skip-keypress ; [ $? = 1 ] && x "rkhunter: update error"

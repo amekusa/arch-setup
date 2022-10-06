@@ -11,6 +11,13 @@ task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _error "argument missing"
 	[ -z "$_CURRENT_TASK" ] || _error "the task:$_CURRENT_TASK is not done yet"
+	# check dependencies
+	if [ "$1" = "-d" ]; then shift
+		local each
+		for each in "$@"; do
+			task-done "$each" || return 1
+		done
+	fi
 	echo
 	if task-done "$task"; then
 		echo "TASK: $task > SKIP"
@@ -32,10 +39,6 @@ x() {
 	[ -z "$1" ] || echo " > $1"
 	_save-var "$_CURRENT_TASK" FAILED "$TASKS"
 	exit 1
-}
-
-depend() {
-	task-done "$1" || x "task dependency: $1 is not done"
 }
 
 reset-tasks() {

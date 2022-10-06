@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = rkhunter --propupd
+When = PostTransaction
+Exec = {{ rkhunter }} --propupd --report-warnings-only
+Depends = rkhunter

@@ -287,6 +287,17 @@ if $ETCKEEPER && task ETCKEEPER; then depend GIT
 	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
 ksat; fi
 
+# pacman hooks for rkhunter
+if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS; then depend RKHUNTER
+	file="/etc/pacman.d/hooks/rkhunter-propupd.hook"
+	cat "$ASSETS/rkhunter-propupd.hook" | _subst "rkhunter=$(which rkhunter)" > "$file" || x "failed to write: $file"
+	_show-file "$file"
+
+	file="/etc/pacman.d/hooks/rkhunter-status.hook"
+	cp "$ASSETS/rkhunter-status.hook" "$file" || x "failed to write: $file"
+	_show-file "$file"
+ksat; fi
+
 # rkhunter update
 if $RKHUNTER && task RKH_UPDATE; then depend RKHUNTER
 	rkhunter --config-check || x "rkhunter: config error"

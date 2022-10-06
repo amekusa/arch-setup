@@ -285,7 +285,6 @@ if $ETCKEEPER && task ETCKEEPER -d GIT; then
 	file="/etc/.gitignore"
 	cp "$ASSETS/etc.gitignore" "$file" || x "failed to write: $file"
 	etckeeper init || x "cmd failed: etckeeper init"
-	etckeeper commit "Initial commit" || x "cmd failed: etckeeper commit"
 ksat; fi
 
 # pacman hooks for rkhunter
@@ -305,6 +304,11 @@ if $RKHUNTER && task RKH_UPDATE -d RKHUNTER; then
 	rkhunter --propupd --skip-keypress || x "rkhunter: propupd error"
 	rkhunter --update --skip-keypress ; [ $? = 1 ] && x "rkhunter: update error"
 ksat; fi
+
+# etckeeper commit
+if task-done ETCKEEPER; then
+	etckeeper unclean && etckeeper commit "[arch-setup] commit @ $(date +%F)"
+fi
 
 echo
 echo "all done."

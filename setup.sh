@@ -237,6 +237,7 @@ ksat; fi
 if $REFLECTOR && task REFLECTOR; then
 	_install reflector || x "cannot install: reflector"
 	file="/etc/xdg/reflector/reflector.conf"
+	[ -f "$file" ] || x "file not found: $file"
 	if [ -n "$RFL_COUNTRY" ]; then
 		sed -ri "/^--country /d" "$file"
 		sed -ri "/^# --country /a --country '$RFL_COUNTRY'" "$file"
@@ -247,6 +248,7 @@ if $REFLECTOR && task REFLECTOR; then
 	if [ -n "$RFL_SORT" ]; then
 		sed -ri "s/^--sort .*/--sort $RFL_SORT/" "$file"
 	fi
+	systemctl enable reflector.timer || x
 ksat; fi
 
 # install optional packages

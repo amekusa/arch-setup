@@ -29,7 +29,7 @@ fi
 
 # installs the given pkg
 _install() {
-	pacman --noconfirm --needed -S "$@" &> /dev/null
+	pacman --noconfirm --needed -S "$@"
 }
 
 # returns full path to the given pkg.
@@ -37,7 +37,7 @@ _install() {
 _require() {
 	local r
 	r="$(which "$1")" && echo "$r" && return
-	_install "$1" || return 1
+	_install "$1" &> /dev/null || return 1
 	echo "$(which "$1")"
 }
 

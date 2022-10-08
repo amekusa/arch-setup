@@ -260,6 +260,7 @@ ksat; fi
 
 # install optional packages
 if [ -n "$PKGS" ] && task PKGS; then
+	echo "installing: ${PKGS[@]} ..."
 	for each in "${PKGS[@]}"; do
 		_install "$each" || x "cannot install: $each"
 	done

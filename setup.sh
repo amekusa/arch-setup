@@ -60,7 +60,7 @@ _yn() {
 	fi
 }
 
-_show-var() {
+_var() {
 	local var="$1"
 	echo "$var: ${!var}"
 }
@@ -110,7 +110,7 @@ ksat; fi
 
 # hostname
 if [ -n "$HOSTNAME" ] && task HOSTNAME -d HOSTS; then
-	_show-var HOSTNAME
+	_var HOSTNAME
 	echo "$HOSTNAME" > /etc/hostname || x
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
 	_show-file /etc/hosts
@@ -118,7 +118,7 @@ ksat; fi
 
 # locale
 if [ -n "$LOCALE" ] && task LOCALE; then
-	_show-var LOCALE
+	_var LOCALE
 	_uncomment "$LOCALE" /etc/locale.gen || x
 	locale-gen || x
 	_save-var LANG "$LOCALE" /etc/locale.conf || x
@@ -126,14 +126,14 @@ ksat; fi
 
 # timezone
 if [ -n "$TIMEZONE" ] && task TIMEZONE; then
-	_show-var TIMEZONE
+	_var TIMEZONE
 	_symlink "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime || x
 	hwclock --systohc --utc || x
 ksat; fi
 
 # keymap
 if [ -n "$KEYMAP" ] && task KEYMAP; then
-	_show-var KEYMAP
+	_var KEYMAP
 	loadkeys "$KEYMAP" || x
 	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
 ksat; fi
@@ -183,7 +183,7 @@ ksat; fi
 
 # admin user
 if [ -n "$ADMIN" ] && task ADMIN; then
-	_show-var ADMIN
+	_var ADMIN
 	shell="$(_require $ADMIN_SHELL)" || x "cannot install: $ADMIN_SHELL"
 	useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
 	until passwd "$ADMIN"; do
@@ -205,7 +205,7 @@ ksat; fi
 
 # network
 if [ -n "$NET_MANAGER" ] && task NETWORK; then
-	_show-var NET_MANAGER
+	_var NET_MANAGER
 	case "$NET_MANAGER" in
 	systemd)
 		if $NET_WIRED; then
@@ -272,8 +272,8 @@ ksat; fi
 # git
 if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
 	_install git || x "cannot install: git"
-	_show-var GIT_EMAIL
-	_show-var GIT_NAME
+	_var GIT_EMAIL
+	_var GIT_NAME
 	file="$HOME/.gitconfig"
 	copy="/home/$ADMIN/.gitconfig"
 	cat "$ASSETS/user.gitconfig" | _subst "email=$GIT_EMAIL" "name=$GIT_NAME" > "$file" || x "failed to write: $file"
@@ -284,7 +284,7 @@ ksat; fi
 
 # aur helper
 if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
-	_show-var AUR_HELPER
+	_var AUR_HELPER
 	case "$AUR_HELPER" in
 	yay)
 		sudo -Hu "$ADMIN" bash <<-EOF || x "cannot install: yay"

@@ -29,7 +29,7 @@ fi
 
 # installs the given pkg
 _install() {
-	pacman --noconfirm --needed -S "$1" &> /dev/null
+	pacman --noconfirm --needed -S "$@" &> /dev/null
 }
 
 # returns full path to the given pkg.

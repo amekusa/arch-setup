@@ -1,9 +1,9 @@
 [Match]
-Name={{ NAME }}
-Virtualization={{ VM }}
+Name={{ name }}
+Virtualization={{ vm }}
 
 [Network]
-DHCP={{ DHCP }}
+DHCP={{ dhcp }}
 DNS=1.1.1.1
 DNS=8.8.8.8
 

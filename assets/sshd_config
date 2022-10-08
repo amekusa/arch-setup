@@ -13,4 +13,4 @@ KbdInteractiveAuthentication no
 
 AllowAgentForwarding no
 AllowTcpForwarding no
-AllowUsers {{ USER }}
+AllowUsers {{ admin }}

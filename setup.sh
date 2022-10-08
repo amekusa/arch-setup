@@ -194,7 +194,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 			file="wireless.network"
 			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "network interface not found"
 		fi
-		cat "$ASSETS/$file" | _subst "NAME=$nif" "DHCP=$(_yn $NET_DHCP)" "VM=$(_yn $VM)" > "/etc/systemd/network/$file" || x
+		cat "$ASSETS/$file" | _subst "name=$nif" "chcp=$(_yn $NET_DHCP)" "vm=$(_yn $VM)" > "/etc/systemd/network/$file" || x
 		_show-file "/etc/systemd/network/$file"
 		systemctl enable systemd-networkd.service || x
 		systemctl enable systemd-resolved.service || x
@@ -212,7 +212,7 @@ if task SSH -d ADMIN; then
 	_install openssh || x "cannot install openssh"
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
-	cat "$ASSETS/sshd_config" | _subst "USER=$ADMIN" >> "$file" || x "failed to write: $file"
+	cat "$ASSETS/sshd_config" | _subst "admin=$ADMIN" >> "$file" || x "failed to write: $file"
 	_show-file "$file"
 	systemctl enable sshd.service || x
 ksat; fi
@@ -273,7 +273,7 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
 	_show-var GIT_NAME
 	file="$HOME/.gitconfig"
 	copy="/home/$ADMIN/.gitconfig"
-	cat "$ASSETS/user.gitconfig" | _subst "EMAIL=$GIT_EMAIL" "NAME=$GIT_NAME" > "$file" || x "failed to write: $file"
+	cat "$ASSETS/user.gitconfig" | _subst "email=$GIT_EMAIL" "name=$GIT_NAME" > "$file" || x "failed to write: $file"
 	_show-file "$file"
 	cp "$file" "$copy" || x "failed to copy: $file -> $copy"
 	chown $ADMIN:$ADMIN "$copy" || x "cmd failed: chown"

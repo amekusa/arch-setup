@@ -138,6 +138,27 @@ if [ -n "$KEYMAP" ] && task KEYMAP; then
 	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
 ksat; fi
 
+# reflector
+if $REFLECTOR && task REFLECTOR; then
+	_install reflector || x "cannot install: reflector"
+	file="/etc/xdg/reflector/reflector.conf"
+	[ -f "$file" ] || x "file not found: $file"
+	if [ -n "$REF_COUNTRY" ]; then
+		sed -ri "/^--country /d" "$file"
+		sed -ri "/^# --country /a --country '$REF_COUNTRY'" "$file"
+	fi
+	if [ -n "$REF_LATEST" ]; then
+		sed -ri "s/^--latest .*/--latest $REF_LATEST/" "$file"
+	fi
+	if [ -n "$REF_SORT" ]; then
+		sed -ri "s/^--sort .*/--sort $REF_SORT/" "$file"
+	fi
+	_show-file "$file"
+	_backup "/etc/pacman.d/mirrorlist" || x
+	reflector "@$file" || x
+	systemctl enable reflector.timer || x
+ksat; fi
+
 # bootloader
 if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 	disk="$(_fb "$DISK" $(_disk))" || x "disk not found"
@@ -232,25 +253,6 @@ if $RKHUNTER && task RKHUNTER; then
 		_show-file "$file"
 		systemctl enable rkhunter.timer || x
 	fi
-ksat; fi
-
-# reflector
-if $REFLECTOR && task REFLECTOR; then
-	_install reflector || x "cannot install: reflector"
-	file="/etc/xdg/reflector/reflector.conf"
-	[ -f "$file" ] || x "file not found: $file"
-	if [ -n "$REF_COUNTRY" ]; then
-		sed -ri "/^--country /d" "$file"
-		sed -ri "/^# --country /a --country '$REF_COUNTRY'" "$file"
-	fi
-	if [ -n "$REF_LATEST" ]; then
-		sed -ri "s/^--latest .*/--latest $REF_LATEST/" "$file"
-	fi
-	if [ -n "$REF_SORT" ]; then
-		sed -ri "s/^--sort .*/--sort $REF_SORT/" "$file"
-	fi
-	_show-file "$file"
-	systemctl enable reflector.timer || x
 ksat; fi
 
 # paccache

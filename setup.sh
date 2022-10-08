@@ -283,11 +283,11 @@ if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 	_show-var AUR_HELPER
 	case "$AUR_HELPER" in
 	yay)
-		sudo -Hu "$ADMIN" bash <<-CMD
-		git clone "https://aur.archlinux.org/yay.git" "$HOME/yay" &&
-		cd "$HOME/yay" && makepkg -sic --noconfirm --needed &&
-		rm -rf "$HOME/yay"
-		CMD || x "cannot install: yay"
+		sudo -Hu "$ADMIN" bash <<-EOF || x "cannot install: yay"
+		git clone "https://aur.archlinux.org/yay.git" "\$HOME/yay" &&
+		cd "\$HOME/yay" && makepkg -sic --noconfirm --needed &&
+		rm -rf "\$HOME/yay"
+		EOF
 		;;
 	*)
 		x "invalid AUR_HELPER value: $AUR_HELPER"

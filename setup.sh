@@ -96,8 +96,9 @@ _backup() {
 
 # ---- tasks -------- *
 
-# always update keyring first
+# always update the system first
 _install archlinux-keyring
+pacman --noconfirm --needed -Syu
 
 # hosts
 if task HOSTS; then

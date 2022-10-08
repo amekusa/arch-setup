@@ -164,7 +164,6 @@ if [ -n "$ADMIN" ] && task ADMIN; then
 	_show-var ADMIN
 	shell="$(_require $ADMIN_SHELL)" || x "cannot install: $ADMIN_SHELL"
 	useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
-	_show-file /etc/passwd
 	until passwd "$ADMIN"; do
 		echo
 		echo "input password for user: $ADMIN"
@@ -280,13 +279,15 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
 ksat; fi
 
 # aur helper
-if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d GIT; then
+if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
+	_show-var AUR_HELPER
 	case "$AUR_HELPER" in
 	yay)
-		repo="https://aur.archlinux.org/yay.git"
-		git clone "$repo" "$BASE/tmp/yay" || x "cannot clone: $repo"
-		cd "$BASE/tmp/yay" || x
-		makepkg -si || x
+		sudo -Hu "$ADMIN" bash <<-CMD
+		git clone "https://aur.archlinux.org/yay.git" "$HOME/yay" &&
+		cd "$HOME/yay" && makepkg -sic --noconfirm --needed &&
+		rm -rf "$HOME/yay"
+		CMD || x "cannot install: yay"
 		;;
 	*)
 		x "invalid AUR_HELPER value: $AUR_HELPER"

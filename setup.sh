@@ -159,15 +159,15 @@ if task ROOT; then
 	done
 ksat; fi
 
-# user
-if [ -n "$USER" ] && task USER; then
-	_show-var USER
-	shell="$(_require $USER_SHELL)" || x "cannot install: $USER_SHELL"
-	useradd -m -G wheel -s "$shell" "$USER" || x "cannot add user: $USER"
+# admin user
+if [ -n "$ADMIN" ] && task ADMIN; then
+	_show-var ADMIN
+	shell="$(_require $ADMIN_SHELL)" || x "cannot install: $ADMIN_SHELL"
+	useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
 	_show-file /etc/passwd
-	until passwd "$USER"; do
+	until passwd "$ADMIN"; do
 		echo
-		echo "input password for user: $USER"
+		echo "input password for user: $ADMIN"
 	done
 ksat; fi
 
@@ -208,11 +208,11 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 ksat; fi
 
 # ssh
-if task SSH -d USER; then
+if task SSH -d ADMIN; then
 	_install openssh || x "cannot install openssh"
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
-	cat "$ASSETS/sshd_config" | _subst "USER=$USER" >> "$file" || x "failed to write: $file"
+	cat "$ASSETS/sshd_config" | _subst "USER=$ADMIN" >> "$file" || x "failed to write: $file"
 	_show-file "$file"
 	systemctl enable sshd.service || x
 ksat; fi
@@ -267,16 +267,16 @@ if [ -n "$PKGS" ] && task PKGS; then
 ksat; fi
 
 # git
-if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d USER; then
+if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
 	_install git || x "cannot install: git"
 	_show-var GIT_EMAIL
 	_show-var GIT_NAME
 	file="$HOME/.gitconfig"
-	copy="/home/$USER/.gitconfig"
+	copy="/home/$ADMIN/.gitconfig"
 	cat "$ASSETS/user.gitconfig" | _subst "EMAIL=$GIT_EMAIL" "NAME=$GIT_NAME" > "$file" || x "failed to write: $file"
 	_show-file "$file"
 	cp "$file" "$copy" || x "failed to copy: $file -> $copy"
-	chown $USER:$USER "$copy" || x "cmd failed: chown"
+	chown $ADMIN:$ADMIN "$copy" || x "cmd failed: chown"
 ksat; fi
 
 # aur helper

@@ -299,6 +299,15 @@ if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 	cd "$BASE"
 ksat; fi
 
+# desktop
+if $DESKTOP && task DESKTOP; then
+
+	# xorg
+	if $XORG; then
+		_install xorg-server xorg-server-utils xorg-xinit || x
+	fi
+ksat; fi
+
 # etckeeper
 if $ETCKEEPER && task ETCKEEPER -d GIT; then
 	_install etckeeper || x "cannot install: etckeeper"

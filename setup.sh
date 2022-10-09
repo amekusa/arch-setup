@@ -308,6 +308,18 @@ if $DESKTOP && task DESKTOP; then
 	fi
 ksat; fi
 
+# virtual machine
+if $VM && task VM; then
+	case "$VM_TYPE" in
+	vbox)
+		_install virtualbox-guest-utils || x
+		systemctl enable vboxservice.service || x
+		;;
+	*)
+		x "invalid $(_var VM_TYPE)"
+	esac
+ksat; fi
+
 # etckeeper
 if $ETCKEEPER && task ETCKEEPER -d GIT; then
 	_install etckeeper || x "cannot install: etckeeper"

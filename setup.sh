@@ -215,7 +215,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 			file="wireless.network"
 			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "network interface not found"
 		fi
-		cat "$ASSETS/$file" | _subst "name=$nif" "chcp=$(_yn $NET_DHCP)" "vm=$(_yn $VM)" > "/etc/systemd/network/$file" || x
+		cat "$ASSETS/$file" | _subst "name=$nif" "dhcp=$(_yn $NET_DHCP)" "vm=$(_yn $VM)" > "/etc/systemd/network/$file" || x
 		_show-file "/etc/systemd/network/$file"
 		systemctl enable systemd-networkd.service || x
 		systemctl enable systemd-resolved.service || x

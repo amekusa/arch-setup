@@ -261,14 +261,6 @@ if $PACCACHE && task PACCACHE; then
 	systemctl enable paccache.timer || x
 ksat; fi
 
-# install optional packages
-if [ -n "$PKGS" ] && task PKGS; then
-	echo "installing: ${PKGS[@]} ..."
-	for each in "${PKGS[@]}"; do
-		_install "$each" || x "cannot install: $each"
-	done
-ksat; fi
-
 # git
 if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
 	_install git || x "cannot install: git"
@@ -318,6 +310,14 @@ if $VM && task VM; then
 	*)
 		x "invalid $(_var VM_TYPE)"
 	esac
+ksat; fi
+
+# install optional packages
+if [ -n "$PKGS" ] && task PKGS; then
+	echo "installing: ${PKGS[@]} ..."
+	for each in "${PKGS[@]}"; do
+		_install "$each" || x "cannot install: $each"
+	done
 ksat; fi
 
 # etckeeper

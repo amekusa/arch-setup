@@ -225,6 +225,11 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	netctl)
 		# TODO
 		;;
+	nm|networkmanager|NetworkManager)
+		_install networkmanager || x
+		systemctl enable NetworkManager.service || x
+		systemctl enable systemd-resolved.service || x
+		;;
 	*)
 		x "invalid $(_var NETWORK)"
 	esac

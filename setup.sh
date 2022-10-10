@@ -300,14 +300,25 @@ if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 	cd "$BASE"
 ksat; fi
 
-# desktop
-if $DESKTOP && task DESKTOP; then
+# graphical user interface
+if $GUI; then
 
 	# xorg
-	if $XORG; then
-		_install xorg-server xorg-server-utils xorg-xinit || x
-	fi
-ksat; fi
+	if $GUI_XORG && task XORG; then
+		_install xorg-server xorg-xinit || x
+	ksat; fi
+
+	# gnome
+	if $GUI_GNOME && task GNOME; then
+		_install gnome || x
+		systemctl enable gdm.service || x
+	ksat; fi
+
+	# install optional GUI packages
+	if [ -n "$GUI_PKGS" ] && task GUI_PKGS; then
+		_install "${GUI_PKGS[@]}" || x
+	ksat; fi
+fi
 
 # virtual machine
 if $VM && task VM; then

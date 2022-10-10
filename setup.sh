@@ -197,10 +197,12 @@ if $SUDO && task SUDO; then
 	_install sudo || x
 	file="/etc/sudoers"
 	case "$SUDO_ALLOW" in
-		wheel) _uncomment '%wheel ALL=\(ALL:ALL\) ALL' "$file" || x "failed to write: $file" ;;
-		sudo)  _uncomment '%sudo ALL=\(ALL:ALL\) ALL' "$file" || x "failed to write: $file" ;;
+		wheel)      line='%wheel ALL=\(ALL:ALL\) ALL' ;;
+		wheel-nopw) line='%wheel ALL=\(ALL:ALL\) NOPASSWD: ALL' ;;
+		sudo)       line='%sudo ALL=\(ALL:ALL\) ALL' ;;
 		*) x "invalid $(_var SUDO_ALLOW)"
 	esac
+	_uncomment "$line" "$file" || x "failed to write: $file"
 ksat; fi
 
 # network

@@ -65,7 +65,7 @@ _var() {
 	echo "$var: ${!var}"
 }
 
-_show-file() {
+_show() {
 	echo "---- file: $1 --------"
 	cat "$1"
 	echo "==== END file: $1 ===="
@@ -113,7 +113,7 @@ if [ -n "$HOSTNAME" ] && task HOSTNAME -d HOSTS; then
 	_var HOSTNAME
 	echo "$HOSTNAME" > /etc/hostname || x
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
-	_show-file /etc/hosts
+	_show /etc/hosts
 ksat; fi
 
 # locale
@@ -140,7 +140,7 @@ ksat; fi
 
 # reflector
 if $REFLECTOR && task REFLECTOR; then
-	_install reflector || x "cannot install: reflector"
+	_install reflector || x
 	file="/etc/xdg/reflector/reflector.conf"
 	[ -f "$file" ] || x "file not found: $file"
 	if [ -n "$REF_COUNTRY" ]; then
@@ -153,7 +153,7 @@ if $REFLECTOR && task REFLECTOR; then
 	if [ -n "$REF_SORT" ]; then
 		sed -ri "s/^--sort .*/--sort $REF_SORT/" "$file"
 	fi
-	_show-file "$file"
+	_show "$file"
 	_backup "/etc/pacman.d/mirrorlist" || x
 	reflector "@$file" || x
 	systemctl enable reflector.timer || x
@@ -164,12 +164,12 @@ if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 	disk="$(_fb "$DISK" $(_disk))" || x "disk not found"
 	case "$BOOTLOADER" in
 	grub)
-		_install grub || x "cannot install grub"
-		grub-install --recheck "$disk" || x "grub-install failed"
-		grub-mkconfig -o /boot/grub/grub.cfg || x "grub-mkconfig failed"
+		_install grub || x
+		grub-install --recheck "$disk" || x "cmd failed: grub-install"
+		grub-mkconfig -o /boot/grub/grub.cfg || x "cmd failed: grub-mkconfig"
 		;;
 	*)
-		x "invalid BOOTLOADER value"
+		x "invalid $(_var BOOTLOADER)"
 	esac
 ksat; fi
 
@@ -184,7 +184,7 @@ ksat; fi
 # admin user
 if [ -n "$ADMIN" ] && task ADMIN; then
 	_var ADMIN
-	shell="$(_require $ADMIN_SHELL)" || x "cannot install: $ADMIN_SHELL"
+	shell="$(_require $ADMIN_SHELL)" || x
 	useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
 	until passwd "$ADMIN"; do
 		echo
@@ -194,12 +194,12 @@ ksat; fi
 
 # sudo
 if $SUDO && task SUDO; then
-	_install sudo || x "cannot install: sudo"
+	_install sudo || x
 	file="/etc/sudoers"
 	case "$SUDO_ALLOW" in
 		wheel) _uncomment '%wheel ALL=\(ALL:ALL\) ALL' "$file" || x "failed to write: $file" ;;
 		sudo)  _uncomment '%sudo ALL=\(ALL:ALL\) ALL' "$file" || x "failed to write: $file" ;;
-		*) x "invalid SUDO_ALLOW value"
+		*) x "invalid $(_var SUDO_ALLOW)"
 	esac
 ksat; fi
 
@@ -210,13 +210,13 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	systemd)
 		if $NET_WIRED; then
 			file="wired.network"
-			nif="$(_fb "$NET_INTERFACE" $(_nif "en|eth"))" || x "network interface not found"
+			nif="$(_fb "$NET_INTERFACE" $(_nif "en"))" || x "network interface not found"
 		else
 			file="wireless.network"
 			nif="$(_fb "$NET_INTERFACE" $(_nif "wl"))" || x "network interface not found"
 		fi
 		cat "$ASSETS/$file" | _subst "name=$nif" "dhcp=$(_yn $NET_DHCP)" "vm=$(_yn $VM)" > "/etc/systemd/network/$file" || x
-		_show-file "/etc/systemd/network/$file"
+		_show "/etc/systemd/network/$file"
 		systemctl enable systemd-networkd.service || x
 		systemctl enable systemd-resolved.service || x
 		;;
@@ -224,17 +224,17 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 		# TODO
 		;;
 	*)
-		x "invalid NETWORK value"
+		x "invalid $(_var NETWORK)"
 	esac
 ksat; fi
 
 # ssh
 if task SSH -d ADMIN; then
-	_install openssh || x "cannot install openssh"
+	_install openssh || x
 	file="/etc/ssh/sshd_config"
-	[ -f "$file" ] && _backup "$file" || x "failed to backup: $file"
+	[ -f "$file" ] && _backup "$file" || x "cannot backup: $file"
 	cat "$ASSETS/sshd_config" | _subst "admin=$ADMIN" >> "$file" || x "failed to write: $file"
-	_show-file "$file"
+	_show "$file"
 	systemctl enable sshd.service || x
 ksat; fi
 
@@ -245,31 +245,33 @@ if $RKHUNTER && task RKHUNTER; then
 
 	file="/etc/systemd/system/rkhunter.service"
 	cat "$ASSETS/rkhunter.service" | _subst "rkhunter=$exec" > "$file" || x "failed to write: $file"
-	_show-file "$file"
+	_show "$file"
 
 	if [ -n "$RKH_TIMER" ]; then
 		file="/etc/systemd/system/rkhunter.timer"
 		cat "$ASSETS/rkhunter.timer" | _subst "timer=$RKH_TIMER" > "$file" || x "failed to write: $file"
-		_show-file "$file"
+		_show "$file"
 		systemctl enable rkhunter.timer || x
 	fi
 ksat; fi
 
 # paccache
 if $PACCACHE && task PACCACHE; then
-	_install pacman-contrib || x "cannot install: pacman-contrib"
+	_install pacman-contrib || x
 	systemctl enable paccache.timer || x
 ksat; fi
 
 # git
 if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
-	_install git || x "cannot install: git"
+	_install git || x
 	_var GIT_EMAIL
 	_var GIT_NAME
+
 	file="$HOME/.gitconfig"
-	copy="/home/$ADMIN/.gitconfig"
 	cat "$ASSETS/user.gitconfig" | _subst "email=$GIT_EMAIL" "name=$GIT_NAME" > "$file" || x "failed to write: $file"
-	_show-file "$file"
+	_show "$file"
+
+	copy="/home/$ADMIN/.gitconfig"
 	cp "$file" "$copy" || x "failed to copy: $file -> $copy"
 	chown $ADMIN:$ADMIN "$copy" || x "cmd failed: chown"
 ksat; fi
@@ -286,7 +288,7 @@ if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 		EOF
 		;;
 	*)
-		x "invalid AUR_HELPER value: $AUR_HELPER"
+		x "invalid $(_var AUR_HELPER)"
 	esac
 	cd "$BASE"
 ksat; fi
@@ -314,15 +316,12 @@ ksat; fi
 
 # install optional packages
 if [ -n "$PKGS" ] && task PKGS; then
-	echo "installing: ${PKGS[@]} ..."
-	for each in "${PKGS[@]}"; do
-		_install "$each" || x "cannot install: $each"
-	done
+	_install "${PKGS[@]}" || x
 ksat; fi
 
 # etckeeper
 if $ETCKEEPER && task ETCKEEPER -d GIT; then
-	_install etckeeper || x "cannot install: etckeeper"
+	_install etckeeper || x
 	file="/etc/.gitignore"
 	cp "$ASSETS/etc.gitignore" "$file" || x "failed to write: $file"
 	etckeeper init || x "cmd failed: etckeeper init"
@@ -335,11 +334,11 @@ if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS -d RKHUNTER; then
 
 	file="$dir/rkhunter-propupd.hook"
 	cat "$ASSETS/rkhunter-propupd.hook" | _subst "rkhunter=$(which rkhunter)" > "$file" || x "failed to write: $file"
-	_show-file "$file"
+	_show "$file"
 
 	file="$dir/rkhunter-status.hook"
 	cp "$ASSETS/rkhunter-status.hook" "$file" || x "failed to write: $file"
-	_show-file "$file"
+	_show "$file"
 ksat; fi
 
 # etckeeper commit

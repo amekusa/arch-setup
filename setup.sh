@@ -32,6 +32,17 @@ _install() {
 	pacman --noconfirm --needed -S "$@"
 }
 
+# installs the given pkg with AUR helper
+_aur-install() {
+	case "$AUR_HELPER" in
+	yay)
+		sudo -Hu "$ADMIN" bash "yay --noconfirm --needed -S $@"
+		;;
+	*)
+		return 1
+	esac
+}
+
 # returns full path to the given pkg.
 # if it does not exist, installs it
 _require() {
@@ -284,7 +295,7 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && task GIT -d ADMIN; then
 ksat; fi
 
 # aur helper
-if [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
+if $AUR && [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 	_var AUR_HELPER
 	case "$AUR_HELPER" in
 	yay)
@@ -335,6 +346,11 @@ ksat; fi
 # install optional packages
 if [ -n "$PKGS" ] && task PKGS; then
 	_install "${PKGS[@]}" || x
+ksat; fi
+
+# install AUR packages
+if $AUR && [ -n "$AUR_PKGS" ] && task AUR_PKGS -d AUR_HELPER; then
+	_aur-install "${AUR_PKGS[@]}" || x
 ksat; fi
 
 # etckeeper

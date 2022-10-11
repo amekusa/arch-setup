@@ -231,7 +231,7 @@ if $SUDO && task SUDO; then
 		sudo)       line='%sudo ALL=\(ALL:ALL\) ALL' ;;
 		*) x "invalid $(_var SUDO_ALLOW)"
 	esac
-	_uncomment "$line" "$file" || x "failed to write: $file"
+	echo "$line" | _section "$LABEL" "$file" || x "failed to write: $file"
 ksat; fi
 
 # network

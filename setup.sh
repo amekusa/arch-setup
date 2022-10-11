@@ -55,6 +55,11 @@ _require() {
 	echo "$(which "$1")"
 }
 
+# checks if the given user exists
+_user-exists() {
+	id "$1" &> /dev/null
+}
+
 # finds a network interface
 _nif() {
 	local find="$1"
@@ -199,11 +204,15 @@ ksat; fi
 if [ -n "$ADMIN" ] && task ADMIN; then
 	_var ADMIN
 	shell="$(_require $ADMIN_SHELL)" || x
-	useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
-	until passwd "$ADMIN"; do
-		echo
-		echo "input password for user: $ADMIN"
-	done
+	if _user-exists "$ADMIN"; then
+		usermod --shell "$shell" "$ADMIN" || x "cannot change shell for user: $ADMIN"
+	else
+		useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
+		until passwd "$ADMIN"; do
+			echo
+			echo "input password for user: $ADMIN"
+		done
+	fi
 ksat; fi
 
 # sudo

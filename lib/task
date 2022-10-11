@@ -7,7 +7,10 @@
 TASKS="$BASE/.tasks"
 [ -f "$TASKS" ] || touch "$TASKS"
 
-_CURRENT_TASK=""
+[ -z "$1" ] || reset-task "$1" || _error "cannot reset task:$1"
+_ARG_TASK="$1"
+
+_CURRENT_TASK=
 
 task-done() {
 	[ "$(_load-var "$1" "$TASKS")" = DONE ]
@@ -17,6 +20,7 @@ task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _error "argument missing"
 	[ -z "$_CURRENT_TASK" ] || _error "the task:$_CURRENT_TASK is not done yet"
+	[ -z "$_ARG_TASK" ] || [ "$_ARG_TASK" = "$task" ] || return 1
 	# check dependencies
 	if [ "$1" = "-d" ]; then shift
 		local each
@@ -24,11 +28,8 @@ task() {
 			task-done "$each" || return 1
 		done
 	fi
+	task-done "$task" && return 1
 	echo
-	if task-done "$task"; then
-		echo "TASK: $task > SKIP"
-		return 1
-	fi
 	echo "TASK: $task ..."
 	_CURRENT_TASK="$task"
 }
@@ -45,6 +46,10 @@ x() {
 	[ -z "$1" ] || echo " > $1"
 	_save-var "$_CURRENT_TASK" FAILED "$TASKS"
 	exit 1
+}
+
+reset-task() {
+	_save-var "$1" RESET "$TASKS"
 }
 
 reset-tasks() {

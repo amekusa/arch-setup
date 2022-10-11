@@ -11,12 +11,13 @@ EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
-
 . "$BASE/lib/util"
-. "$BASE/lib/task"
 
 # only root is allowed
 _chk-user root
+
+# task system
+. "$BASE/lib/task"
 
 # config
 CONF="$BASE/conf/setup"
@@ -408,6 +409,6 @@ ksat; fi
 echo
 echo "all done."
 echo
-echo "if you are in arch-chroot, type:"
+echo "if you are in chroot, type:"
 echo "exit; umount -R /mnt"
 echo

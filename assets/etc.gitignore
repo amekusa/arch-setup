@@ -3,7 +3,6 @@
 # end section managed by etckeeper
 
 
-# ---- arch-setup -------- -
 *.srl
 *.crt
 *.csr
@@ -30,8 +29,10 @@
 /shadow
 /gshadow
 /fstab
+/mtab
 /crypttab
 /machine-id
+/adjtime
 /ca-certificates/
 /ssl/certs/
 /pacman.d/mirrorlist

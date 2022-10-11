@@ -119,6 +119,10 @@ _backup() {
 _install archlinux-keyring
 pacman --noconfirm --needed -Syu
 
+# editor
+export EDITOR="$(_require $(_fb $EDITOR nano))"
+export VISUAL="$EDITOR"
+
 # hosts
 if task HOSTS; then
 	cat <<- EOF > /etc/hosts

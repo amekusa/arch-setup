@@ -396,7 +396,7 @@ ksat; fi
 
 # etckeeper commit
 if $ETCKEEPER && task-done ETCKEEPER; then
-	etckeeper unclean && etckeeper commit "[arch-setup] commit @ $(date +%F)"
+	etckeeper unclean && etckeeper commit "[$LABEL] commit @ $(date +%F)"
 fi
 
 # rkhunter propupd

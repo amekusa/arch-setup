@@ -79,22 +79,25 @@ _save-var() {
 	local temp="$(mktemp)"
 	local find="^([[:space:]]*)$key="
 	local found=false
-	local line; IFS=; while read -r line; do
+	local line
+	while IFS= read -r line; do
 		if [[ $line =~ $find ]]; then
 			line="${BASH_REMATCH[1]}$key=$value"
 			found=true
 		fi
 		echo "$line" >> "$temp"
-	done < "$file"; unset IFS
+	done < "$file"
 	$found || echo "$key=$value" >> "$temp"
-	cat "$temp" > "$file" && rm "$temp"
+	cat "$temp" > "$file"
+	rm "$temp"
 }
 
 _load-var() {
 	local key="$1"; shift
 	local file="$1"; shift
-	local find="^$key=\"?([^\"]*)\"?"
-	local line; while read line; do
+	local find="^[[:space:]]*$key=\"?([^\"]*)\"?"
+	local line
+	while IFS= read -r line; do
 		if [[ $line =~ $find ]]; then
 			echo "${BASH_REMATCH[1]}"
 			return

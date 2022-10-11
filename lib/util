@@ -137,6 +137,7 @@ _section() {
 
 	case $ctx in
 	0) # section not found
+		echo >> "$temp"
 		echo "$start" >> "$temp"
 		echo "$ins" >> "$temp"
 		echo "$end" >> "$temp"

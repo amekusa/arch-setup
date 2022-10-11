@@ -1,6 +1,3 @@
-
-
-# ---- arch-setup -------- -
 Protocol 2
 # NOTE: Since 'Protocol 2' is now default, this line can be safely removed.
 #       But I leave it just for suppressing the rkhunter's warning.

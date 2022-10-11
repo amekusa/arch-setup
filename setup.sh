@@ -5,6 +5,8 @@
 #  author: Satoshi Soma (https://amekusa.com)
 # ============================================
 
+LABEL="arch-setup"
+
 EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
@@ -267,7 +269,7 @@ if task SSH -d ADMIN; then
 	_install openssh || x
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "cannot backup: $file"
-	cat "$ASSETS/sshd_config" | _subst "admin=$ADMIN" >> "$file" || x "failed to write: $file"
+	cat "$ASSETS/sshd_config" | _subst "admin=$ADMIN" | _section "$LABEL" "$file" || x "failed to write: $file"
 	_show "$file"
 	systemctl enable sshd.service || x
 ksat; fi

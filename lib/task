@@ -4,8 +4,8 @@
 #  author: Satoshi Soma (https://amekusa.com)
 # ============================================
 
-TASKS="$BASE/.tasks"
-[ -f "$TASKS" ] || touch "$TASKS"
+_TASKS="$BASE/.tasks"
+[ -f "$_TASKS" ] || touch "$_TASKS"
 
 [ -z "$1" ] || reset-task "$1" || _error "cannot reset task:$1"
 _ARG_TASK="$1"
@@ -13,7 +13,7 @@ _ARG_TASK="$1"
 _CURRENT_TASK=
 
 task-done() {
-	[ "$(_load-var "$1" "$TASKS")" = DONE ]
+	[ "$(_load-var "$1" "$_TASKS")" = DONE ]
 }
 
 task() {
@@ -36,7 +36,7 @@ task() {
 
 ksat() {
 	[ -n "$_CURRENT_TASK" ] || _error "no active task"
-	_save-var "$_CURRENT_TASK" DONE "$TASKS" || _error "failed to write: $TASKS"
+	_save-var "$_CURRENT_TASK" DONE "$_TASKS" || _error "failed to write: $_TASKS"
 	echo "TASK: $_CURRENT_TASK > DONE"
 	_CURRENT_TASK=""
 }
@@ -44,14 +44,14 @@ ksat() {
 x() {
 	echo "TASK: $_CURRENT_TASK > ERROR!"
 	[ -z "$1" ] || echo " > $1"
-	_save-var "$_CURRENT_TASK" FAILED "$TASKS"
+	_save-var "$_CURRENT_TASK" FAILED "$_TASKS"
 	exit 1
 }
 
 reset-task() {
-	_save-var "$1" RESET "$TASKS"
+	_save-var "$1" RESET "$_TASKS"
 }
 
 reset-tasks() {
-	echo "" > "$TASKS"
+	echo "" > "$_TASKS"
 }

@@ -1,3 +1,9 @@
+#
+#  Task Library for Bash
+# ----------------------- -  *
+#  author: Satoshi Soma (https://amekusa.com)
+# ============================================
+
 TASKS="$BASE/.tasks"
 [ -f "$TASKS" ] || touch "$TASKS"
 

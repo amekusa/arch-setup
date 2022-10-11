@@ -1,3 +1,10 @@
+#
+#  Bash Util
+# --------------- -  *
+#  update: 2022-10-12
+#  author: Satoshi Soma (https://amekusa.com)
+# ============================================
+
 _error() {
 	[ -z "$1" ] || echo "ERROR: $1"
 	exit 1

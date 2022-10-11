@@ -105,3 +105,47 @@ _load-var() {
 	done < "$file"
 	return 1
 }
+
+# insert/update a section in a file
+_section() {
+	local name="$1"; shift # section name
+	local file="$1"; shift # file to write
+	local ins="$(cat)"     # content to insert (stdin)
+	local temp="$(mktemp)"
+	local start="# [$name:START]" # section start marker
+	local end="# [$name:END]"     # section end marker
+	local ctx=0 # context
+	local line
+	while IFS= read -r line; do
+		case $ctx in
+		0) # before the section
+			echo "$line" >> "$temp"
+			[ "$line" = "$start" ] || continue
+			echo "$ins" >> "$temp"
+			ctx=1
+			;;
+		1) # in the section
+			[ "$line" = "$end" ] || continue
+			echo "$line" >> "$temp"
+			ctx=2
+			;;
+		2) # after the section
+			echo "$line" >> "$temp"
+			;;
+		esac
+	done < "$file"
+
+	case $ctx in
+	0) # section not found
+		echo "$start" >> "$temp"
+		echo "$ins" >> "$temp"
+		echo "$end" >> "$temp"
+		;;
+	1) # end marker missing
+		echo "$end" >> "$temp"
+		;;
+	esac
+
+	cat "$temp" > "$file"
+	rm "$temp"
+}

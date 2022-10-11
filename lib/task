@@ -7,9 +7,6 @@
 _TASKS="$BASE/.tasks"
 [ -f "$_TASKS" ] || touch "$_TASKS"
 
-[ -z "$1" ] || reset-task "$1" || _error "cannot reset task:$1"
-_ARG_TASK="$1"
-
 _CURRENT_TASK=
 
 task-done() {
@@ -55,3 +52,6 @@ reset-task() {
 reset-tasks() {
 	echo "" > "$_TASKS"
 }
+
+[ -z "$1" ] || reset-task "$1" || _error "cannot reset task:$1"
+_ARG_TASK="$1"

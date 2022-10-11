@@ -13,6 +13,9 @@ BACKUP="$BASE/backup"
 . "$BASE/lib/util"
 . "$BASE/lib/task"
 
+# only root is allowed
+_chk-user root
+
 # config
 CONF="$BASE/conf/setup"
 . "$CONF.conf"

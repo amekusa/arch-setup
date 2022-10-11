@@ -325,14 +325,14 @@ ksat; fi
 
 # graphical user interface
 if $GUI; then
-
-	# xorg
-	if $GUI_XORG && task XORG; then
+	# x11
+	if $GUI_X && task GUI_X; then
 		_install xorg-server xorg-xinit || x
+		[ -z "$GUI_X_KEYMAP" ] || localectl --no-convert set-x11-keymap $GUI_X_KEYMAP || x
 	ksat; fi
 
 	# gnome
-	if $GUI_GNOME && task GNOME; then
+	if $GUI_GNOME && task GUI_GNOME; then
 		_install gnome || x
 		systemctl enable gdm.service || x
 	ksat; fi

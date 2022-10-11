@@ -211,9 +211,9 @@ if [ -n "$ADMIN" ] && task ADMIN; then
 	_var ADMIN
 	shell="$(_require $ADMIN_SHELL)" || x
 	if _user-exists "$ADMIN"; then
-		usermod --shell "$shell" "$ADMIN" || x "cannot change shell for user: $ADMIN"
+		usermod -G "$ADMIN_GROUPS" -s "$shell" "$ADMIN" || x "cannot change shell for user: $ADMIN"
 	else
-		useradd -m -G wheel -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
+		useradd -m -G "$ADMIN_GROUPS" -s "$shell" "$ADMIN" || x "cannot add user: $ADMIN"
 		until passwd "$ADMIN"; do
 			echo
 			echo "input password for user: $ADMIN"

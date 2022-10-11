@@ -321,7 +321,7 @@ if $AUR && [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 	yay)
 		sudo -Hu "$ADMIN" bash <<-EOF || x "cannot install: yay"
 		git clone "https://aur.archlinux.org/yay.git" "\$HOME/yay" &&
-		cd "\$HOME/yay" && makepkg -sic --noconfirm --needed &&
+		cd "\$HOME/yay" && makepkg -sic --noconfirm --needed
 		rm -rf "\$HOME/yay"
 		EOF
 		;;

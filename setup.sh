@@ -227,10 +227,10 @@ if $SUDO && task SUDO; then
 	_install sudo || x
 	file="/etc/sudoers"
 	case "$SUDO_ALLOW" in
-		wheel)      line='%wheel ALL=\(ALL:ALL\) ALL' ;;
-		wheel-nopw) line='%wheel ALL=\(ALL:ALL\) NOPASSWD: ALL' ;;
-		sudo)       line='%sudo ALL=\(ALL:ALL\) ALL' ;;
-		sudo-nopw)  line='%sudo ALL=\(ALL:ALL\) NOPASSWD: ALL' ;;
+		wheel)      line='%wheel ALL=(ALL:ALL) ALL' ;;
+		wheel-nopw) line='%wheel ALL=(ALL:ALL) NOPASSWD: ALL' ;;
+		sudo)       line='%sudo ALL=(ALL:ALL) ALL' ;;
+		sudo-nopw)  line='%sudo ALL=(ALL:ALL) NOPASSWD: ALL' ;;
 		*) x "invalid $(_var SUDO_ALLOW)"
 	esac
 	echo "$line" | _section "$LABEL" "$file" || x "failed to write: $file"

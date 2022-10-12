@@ -266,8 +266,17 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 	esac
 ksat; fi
 
-# ssh
-if task SSH -d ADMIN; then
+# ssh authorized keys
+if [ -n "$SSH_AUTH_KEYS" ] && task SSH_AUTH_KEYS -d ADMIN; then
+	dir="/home/$ADMIN/.ssh"
+	file="$dir/authorized_keys"
+	_dir  "$dir"  -m 700 -o "$ADMIN:$ADMIN" || x
+	_file "$file" -m 600 -o "$ADMIN:$ADMIN" || x
+	curl "$SSH_AUTH_KEYS" > "$file" || x
+ksat; fi
+
+# ssh server
+if $SSH_SERVER && task SSH_SERVER -d ADMIN; then
 	_install openssh || x
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "cannot backup: $file"

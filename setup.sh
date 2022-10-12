@@ -336,7 +336,24 @@ if $GUI; then
 	# x11
 	if $GUI_X && task GUI_X; then
 		_install xorg-server xorg-xinit || x
-		[ -z "$GUI_X_KEYMAP" ] || localectl --no-convert set-x11-keymap $GUI_X_KEYMAP || x
+		if [ -n "$GUI_X_KEYMAP" ]; then
+			keymap=($GUI_X_KEYMAP)
+			temp="$(mktemp)" || x
+			cat <<-EOF > "$temp"
+			Section "InputClass"
+			        Identifier "system-keyboard"
+			        MatchIsKeyboard "on"
+			EOF
+			indent="        "
+			[ -z "${keymap[0]}" ] || echo "${indent}Option \"XkbLayout\" \"${keymap[0]}\"" >> "$temp"
+			[ -z "${keymap[1]}" ] || echo "${indent}Option \"XkbModel\" \"${keymap[1]}\"" >> "$temp"
+			[ -z "${keymap[2]}" ] || echo "${indent}Option \"XkbVariant\" \"${keymap[2]}\"" >> "$temp"
+			[ -z "${keymap[3]}" ] || echo "${indent}Option \"XkbOptions\" \"${keymap[3]}\"" >> "$temp"
+			echo "EndSection" >> "$temp"
+			file="/etc/X11/xorg.conf.d/00-keyboard.conf"
+			cat "$temp" > "$file" || x "failed to write: $file"
+			rm "$temp"
+		fi
 	ksat; fi
 
 	# gnome

@@ -68,6 +68,34 @@ _subst() {
 	sed "$pat"
 }
 
+_file() {
+	local path="$1"; shift
+	local echo=false
+	local dir=false
+	local mod own
+	while [ "$#" -gt 0 ]; do
+		case "$1" in
+			-e|--echo) echo=true; shift ;;
+			-d|--dir) dir=true; shift ;;
+			-m|--mod) mod="$2"; shift; shift ;;
+			-o|--own) own="$2"; shift; shift ;;
+			*) $echo || echo "_file: invalid argument: $1"; return 1
+		esac
+	done
+	if $dir
+		then [ -d "$path" ] || mkdir "$path" || return 1
+		else [ -f "$path" ] || touch "$path" || return 1
+	fi
+	[ -z "$mod" ] || chmod "$mod" "$path" || return 2
+	[ -z "$own" ] || chown "$own" "$path" || return 2
+	$echo || return
+	echo "$path"
+}
+
+_dir() {
+	_file "$@" -d
+}
+
 _uncomment() {
 	local search="$1"; shift
 	local file="$1"; shift

@@ -42,7 +42,7 @@ _install() {
 _aur-install() {
 	case "$AUR_HELPER" in
 	yay)
-		sudo -Hu "$ADMIN" bash "yay --noconfirm --needed -S $@"
+		sudo -Hu "$ADMIN" bash -c "yay --noconfirm --needed -S $@"
 		;;
 	*)
 		return 1

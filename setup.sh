@@ -268,6 +268,7 @@ ksat; fi
 
 # ssh authorized keys
 if [ -n "$SSH_AUTH_KEYS" ] && task SSH_AUTH_KEYS -d ADMIN; then
+	_install openssh || x
 	dir="/home/$ADMIN/.ssh"
 	file="$dir/authorized_keys"
 	_dir  "$dir"  -m 700 -o "$ADMIN:$ADMIN" || x

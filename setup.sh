@@ -272,6 +272,7 @@ if [ -n "$SSH_AUTH_KEYS" ] && task SSH_AUTH_KEYS -d ADMIN; then
 	file="$dir/authorized_keys"
 	_dir  "$dir"  -m 700 -o "$ADMIN:$ADMIN" || x
 	_file "$file" -m 600 -o "$ADMIN:$ADMIN" || x
+	echo "fetching auth keys from: $SSH_AUTH_KEYS ..."
 	curl "$SSH_AUTH_KEYS" > "$file" || x
 ksat; fi
 

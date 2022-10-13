@@ -20,7 +20,7 @@ _chk-user root
 . "$BASE/lib/task"
 
 # config
-CONF="$BASE/conf/setup"
+CONF="$BASE/setup"
 . "$CONF.conf"
 if [ -f "$CONF.local" ]; then
 	. "$CONF.local"

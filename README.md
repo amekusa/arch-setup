@@ -6,13 +6,27 @@ No dependencies. No fancy technologies are involved. But it's very carefully cod
 
 The config file is another bash script with just a bunch of variables. Most of them have good default values so you have to edit only a few of them.
 
-The script is supposed to be ran in `chroot` where the basic packages have already been installed with `pacstrap`. If your Arch is not ready, follow the instructions below.
+The setup script supports:
+- bootloader
+- locale, keymap and timezone
+- VirtualBox guests
+- user (groups, default shell, ssh, git, sudo)
+- ssh server
+- network manager (systemd-networkd, NetworkManager)
+- etckeeper
+- rkhunter
+- reflector
+- paccache
+- AUR (yay)
+- X11 and keymap
+- GNOME desktop
 
+The script is supposed to be ran in `chroot` where the basic packages have already been installed with `pacstrap`. If your Arch is not ready, follow the instructions below.
 
 ## Getting Started
 Insert the latest Arch Linux live CD and boot it.
 
-#### Set the correct keymap for the console
+### Set the correct keymap for the console
 The default keymap is `us`.
 Unless you are using a US keyboard, you should set the correct keymap for the current console with `loadkeys` command.
 
@@ -21,7 +35,7 @@ Unless you are using a US keyboard, you should set the correct keymap for the cu
 loadkeys jp106
 ```
 
-#### Partitioning the disk
+### Partitioning the disk
 
 ```sh
 lsblk
@@ -44,7 +58,7 @@ Part. # | Size | Partition Type | Name | Mount Point
 2 | 2 GB | Linux swap (8200) | Swap | -
 3 | the rest | Linux filesystem (8300) | Root | /
 
-#### Create filesystems
+### Create filesystems
 
 ```sh
 # boot partition
@@ -55,14 +69,14 @@ mkfs.ext4 /dev/sda3
 
 Create `ext4` filesystem on each `Linux filesystem (8300)` partition you've created.
 
-#### Activate swap
+### Activate swap
 
 ```sh
 mkswap /dev/sda2
 swapon /dev/sda2
 ```
 
-#### Mount the partitions
+### Mount the partitions
 Mount the root partition to `/mnt`.
 
 ```sh
@@ -76,21 +90,21 @@ mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 ```
 
-#### Install Arch
+### Install Arch
 Install the base Arch Linux system with `pacstrap` command.
 
 ```sh
 pacstrap /mnt base base-devel linux linux-firmware nano git
 ```
 
-#### Generate `fstab`
+### Generate `fstab`
 `fstab` is necessary for the system to mount the partitions automatically on start up.  
 
 ```sh
 genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
-#### Enter the base system
+### Enter the base system
 
 ```sh
 arch-chroot /mnt /bin/bash
@@ -104,7 +118,7 @@ Proceed to the next section.
 
 ## Using the script
 
-#### Clone this repository
+### Clone this repository
 
 ```sh
 cd
@@ -112,7 +126,7 @@ git clone https://github.com/amekusa/arch-setup.git
 cd arch-setup
 ```
 
-#### Run the script and edit your config file
+### Run the script and edit your config file
 
 ```sh
 ./setup.sh
@@ -121,7 +135,7 @@ cd arch-setup
 At the first time you run `setup.sh`, it generates a config file: `setup.local` and opens it with `nano`.
 Edit some of the variables so they suit your needs. Do not forget to save it with `Ctrl+O`.
 
-#### Run the script again
+### Run the script again
 
 ```sh
 ./setup.sh
@@ -134,7 +148,7 @@ If something went wrong along the process, the script immediately stops and show
 
 Completed tasks are saved to `.tasks` file, and the next time you run the script, they will be skipped respectively.
 
-#### Exit `chroot`, unmount, and reboot
+### Exit `chroot`, unmount, and reboot
 If the script finished without any errors, setup is done.
 
 ```sh

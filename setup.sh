@@ -11,24 +11,11 @@ EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
+
 . "$BASE/lib/util"
-
-# only root is allowed
-_chk-user root
-
-# task system
 . "$BASE/lib/task"
 
-# config
-CONF="$BASE/setup"
-. "$CONF.conf"
-if [ -f "$CONF.local" ]; then
-	. "$CONF.local"
-else
-	cp "$CONF.conf" "$CONF.local"
-	echo "Generated: $CONF.local"
-	exit
-fi
+_chk-user root
 
 
 # ---- utils -------- *
@@ -116,15 +103,39 @@ _backup() {
 }
 
 
-# ---- tasks -------- *
-
+# ----
 # always update the system first
 _install archlinux-keyring
 pacman --noconfirm --needed -Syu
 
 # editor
-export EDITOR="$(_require $(_fb $EDITOR nano))"
+export EDITOR="$(_require nano)"
 export VISUAL="$EDITOR"
+
+
+# ---- config -------- *
+
+CONF="$BASE/setup"
+. "$CONF.conf"
+if [ -f "$CONF.local" ]; then
+	. "$CONF.local"
+else
+	cat <<-EOF > "$CONF.local"
+	##
+	#  setup.local
+	# ----------------- -
+	#  Edit this file so it suits your needs.
+	#  After save it, run setup.sh
+	# ========================================
+
+	EOF
+	cat "$CONF.conf" >> "$CONF.local"
+	"$EDITOR" "$CONF.local"
+	exit
+fi
+
+
+# ---- tasks -------- *
 
 # hosts
 if task HOSTS; then

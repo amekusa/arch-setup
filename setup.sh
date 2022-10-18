@@ -103,7 +103,6 @@ _backup() {
 }
 
 
-# ----
 # always update the system first
 _install archlinux-keyring
 pacman --noconfirm --needed -Syu

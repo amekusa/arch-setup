@@ -46,6 +46,23 @@ _fb() {
 	return 1
 }
 
+_fb-cmd() {
+	local full=false
+	case "$1" in
+		-f|--full) full=true; shift ;;
+	esac
+	local arg r
+	for arg in "$@"; do
+		r="$(which $arg)" || continue
+		if $full
+			then echo "$r"
+			else echo "$arg"
+		fi
+		return 0
+	done
+	return 1
+}
+
 _chk-user() {
 	[ "$(whoami)" = "$1" ] || _error "run as $1"
 }

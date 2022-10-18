@@ -33,6 +33,7 @@
 /crypttab
 /machine-id
 /adjtime
+/localtime
 /ca-certificates/
 /ssl/certs/
 /pacman.d/mirrorlist

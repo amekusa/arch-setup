@@ -40,7 +40,7 @@ ksat() {
 
 x() {
 	echo "TASK: $_CURRENT_TASK > ERROR!"
-	[ -z "$1" ] || echo " > $1"
+	[ -z "$*" ] || echo " > $*"
 	_save-var "$_CURRENT_TASK" FAILED "$_TASKS"
 	exit 1
 }

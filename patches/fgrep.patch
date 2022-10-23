@@ -1,0 +1,8 @@
+--- fgrep.org	2022-10-23 14:54:34.000000000 +0900
++++ fgrep	2022-10-23 15:00:28.000000000 +0900
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ cmd=${0##*/}
+-echo "$cmd: warning: $cmd is obsolescent; using grep -F" >&2
++# echo "$cmd: warning: $cmd is obsolescent; using grep -F" >&2
+ exec grep -F "$@"

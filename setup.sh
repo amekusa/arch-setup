@@ -11,6 +11,7 @@ EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
+PATCHES="$BASE/patches"
 
 git submodule init
 git submodule update
@@ -39,6 +40,10 @@ _aur-install() {
 	*)
 		return 1
 	esac
+}
+
+_ver() {
+	pacman -Qi "$1" | awk -F' : ' '$1 ~ "Version" { print $2 }'
 }
 
 # returns full path to the given pkg.
@@ -414,6 +419,34 @@ ksat; fi
 # install AUR packages
 if $AUR && [ -n "$AUR_PKGS" ] && task AUR_PKGS -d AUR_HELPER; then
 	_aur-install "${AUR_PKGS[@]}" || x
+ksat; fi
+
+# patch egrep
+if $PATCH_EGREP && task PATCH_EGREP; then
+	if file="$(which egrep)"; then
+		_backup "$file" || x "cannot backup: $file"
+		patch "$file" < "$PATCHES/egrep.patch" || x "cannot patch: $file"
+	fi
+ksat; fi
+
+# patch fgrep
+if $PATCH_FGREP && task PATCH_FGREP; then
+	if file="$(which fgrep)"; then
+		_backup "$file" || x "cannot backup: $file"
+		patch "$file" < "$PATCHES/fgrep.patch" || x "cannot patch: $file"
+	fi
+ksat; fi
+
+# patch rkhunter
+if $PATCH_RKHUNTER && task PATCH_RKHUNTER -d RKHUNTER; then
+	if file="$(which rkhunter)"; then
+		ver="$(_ver rkhunter)"
+		patch="$PATCHES/rkhunter.$ver.patch"
+		if [ -f "$patch" ]; then
+			_backup "$file" || x "cannot backup: $file"
+			patch "$file" < "$patch" || x "cannot patch: $file"
+		fi
+	fi
 ksat; fi
 
 # etckeeper

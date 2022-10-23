@@ -1,0 +1,8 @@
+--- egrep.org	2022-10-23 14:54:07.000000000 +0900
++++ egrep	2022-10-23 15:00:21.000000000 +0900
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ cmd=${0##*/}
+-echo "$cmd: warning: $cmd is obsolescent; using grep -E" >&2
++# echo "$cmd: warning: $cmd is obsolescent; using grep -E" >&2
+ exec grep -E "$@"

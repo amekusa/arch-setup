@@ -7,19 +7,21 @@ No dependencies. No fancy technologies are involved. But it's very carefully cod
 The config file is another bash script with just a bunch of variables. Most of them have good default values so you have to edit only a few of them.
 
 The setup script supports:
-- bootloader
+- bootloader (grub)
 - locale, keymap and timezone
-- VirtualBox guests
+- VirtualBox guest additions
 - user (groups, default shell, ssh, git, sudo)
 - ssh server
 - network manager (systemd-networkd, NetworkManager)
 - etckeeper
-- rkhunter
-- reflector
-- paccache
-- AUR (yay)
-- X11 and keymap
+- rkhunter (+ systemd timer)
+- reflector (+ systemd timer)
+- paccache (+ systemd timer)
+- AUR helper (yay)
+- X11 and XKeyMap
 - GNOME desktop
+
+Also supports **patching the annoying warnings of egrep, fgrep, and rkhunter** (2022-10-23).
 
 The script is supposed to be ran in `chroot` where the basic packages have already been installed with `pacstrap`. If your Arch is not ready, follow the instructions below.
 

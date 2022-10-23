@@ -17526,7 +17526,7 @@ do_system_config_files_check() {
 
 			test $SUNOS -eq 1 -o $IRIXOS -eq 1 && PS_ARGS="-ef"
 
-			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E '(syslogd|syslog-ng)( |$)' | grep -v 'egrep'`
+			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E '(syslogd|syslog-ng)( |$)' | grep -v 'grep'`
 
 			if [ -n "${RKHTMPVAR}" ]; then
 				SYSLOG_SEEN=1
@@ -17546,7 +17546,7 @@ do_system_config_files_check() {
 				TITLE_SHOWN=1
 			fi
 
-			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E 'systemd-journald( |$)' | grep -v 'egrep'`
+			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E 'systemd-journald( |$)' | grep -v 'grep'`
 
 			if [ -n "${RKHTMPVAR}" ]; then
 				SYSTEMD_SEEN=1
@@ -17562,7 +17562,7 @@ do_system_config_files_check() {
 				TITLE_SHOWN=1
 			fi
 
-			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E 'metalog( |$)' | grep -v 'egrep'`
+			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E 'metalog( |$)' | grep -v 'grep'`
 
 			if [ -n "${RKHTMPVAR}" ]; then
 				METALOG_SEEN=1
@@ -17578,7 +17578,7 @@ do_system_config_files_check() {
 				TITLE_SHOWN=1
 			fi
 
-			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E 'socklog( |$)' | grep -v 'egrep'`
+			RKHTMPVAR=`${PS_CMD} ${PS_ARGS} | grep -E 'socklog( |$)' | grep -v 'grep'`
 
 			if [ -n "${RKHTMPVAR}" ]; then
 				SOCKLOG_SEEN=1

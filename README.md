@@ -21,6 +21,8 @@ The setup script supports:
 - X11 and XKeyMap
 - GNOME desktop
 
+Also supports **patching the annoying warnings of egrep, fgrep, and rkhunter** (2022-10-23).
+
 The script is supposed to be ran in `chroot` where the basic packages have already been installed with `pacstrap`. If your Arch is not ready, follow the instructions below.
 
 ## Getting Started

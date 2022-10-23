@@ -19793,8 +19793,8 @@ CMDLIST="basename diff dirname file find ifconfig ip ipcs ldd lsattr lsmod lsof 
 # required commands are tested early on using just the root PATH. Then
 # BINDIR is checked, and finally the rest of the commands are then
 # checked using the new PATH from BINDIR.
-ABSOLUTELY_REQUIRED_CMDS="cut egrep grep sed tail tr"
-REQCMDS="awk cat chmod chown cp cut date egrep grep head ls mv sed sort tail touch tr uname uniq wc"
+ABSOLUTELY_REQUIRED_CMDS="cut grep sed tail tr"
+REQCMDS="awk cat chmod chown cp cut date grep head ls mv sed sort tail touch tr uname uniq wc"
 
 # This will be set to a list of commands that have been disabled.
 DISABLED_CMDS=""

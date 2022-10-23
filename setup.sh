@@ -12,8 +12,12 @@ BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
 
+git submodule init
+git submodule update
+
 . "$BASE/shlib/util.sh"
 . "$BASE/shlib/io.sh"
+
 . "$BASE/lib/task.sh"
 
 _chk-user root

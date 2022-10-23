@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# This is PATCHED version of rkhunter 1.4.6-2 to eliminate grep and egrep warnings.
+# Diff vs the original: https://github.com/amekusa/arch-setup/compare/825d7ac..b2aceeb
+
 #
 # rkhunter -- Scan the system for rootkits and other known security issues.
 #

@@ -14,7 +14,7 @@ BACKUP="$BASE/backup"
 
 . "$BASE/shlib/util.sh"
 . "$BASE/shlib/io.sh"
-. "$BASE/lib/task"
+. "$BASE/lib/task.sh"
 
 _chk-user root
 

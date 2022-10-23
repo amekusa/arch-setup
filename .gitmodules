@@ -1,0 +1,3 @@
+[submodule "shlib"]
+	path = shlib
+	url = ../shlib.git

@@ -12,7 +12,8 @@ BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
 
-. "$BASE/lib/util"
+. "$BASE/shlib/util.sh"
+. "$BASE/shlib/io.sh"
 . "$BASE/lib/task"
 
 _chk-user root

@@ -15,8 +15,8 @@ task-done() {
 
 task() {
 	local task="$1"; shift
-	[ -n "$task" ] || _error "argument missing"
-	[ -z "$_CURRENT_TASK" ] || _error "the task:$_CURRENT_TASK is not done yet"
+	[ -n "$task" ] || _err "argument missing"
+	[ -z "$_CURRENT_TASK" ] || _err "the task:$_CURRENT_TASK is not done yet"
 	[ -z "$_ARG_TASK" ] || [ "$_ARG_TASK" = "$task" ] || return 1
 	# check dependencies
 	if [ "$1" = "-d" ]; then shift
@@ -32,8 +32,8 @@ task() {
 }
 
 ksat() {
-	[ -n "$_CURRENT_TASK" ] || _error "no active task"
-	_save-var "$_CURRENT_TASK" DONE "$_TASKS" || _error "failed to write: $_TASKS"
+	[ -n "$_CURRENT_TASK" ] || _err "no active task"
+	_save-var "$_CURRENT_TASK" DONE "$_TASKS" || _err "failed to write: $_TASKS"
 	echo "TASK: $_CURRENT_TASK > DONE"
 	_CURRENT_TASK=""
 }
@@ -53,5 +53,5 @@ reset-tasks() {
 	echo "" > "$_TASKS"
 }
 
-[ -z "$1" ] || reset-task "$1" || _error "cannot reset task:$1"
+[ -z "$1" ] || reset-task "$1" || _err "cannot reset task:$1"
 _ARG_TASK="$1"

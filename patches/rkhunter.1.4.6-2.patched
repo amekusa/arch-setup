@@ -181,7 +181,7 @@ fi
 # used. If it is, then some typical grep tests will fail.
 #
 
-if [ "`echo \"rkh-grep-test\" | grep '^\+'`" = "rkh-grep-test" ]; then
+if [ "`echo \"rkh-grep-test\" | grep '^+'`" = "rkh-grep-test" ]; then
 	alias grep='grep -E'
 fi
 
@@ -989,7 +989,7 @@ check_paths() {
 # The code is left here since we may need something very similar for overloaded options.
 #   overloaded options - ALLOWPROCDELFILE PORT_PATH_WHITELIST RTKT_FILE_WHITELIST
 #		if [ "${OPT_NAME}" = "BINDIR" ]; then
-#			if [ -n "`echo \"${FNAME}\" | grep '^\+'`" ]; then
+#			if [ -n "`echo \"${FNAME}\" | grep '^+'`" ]; then
 #				FNAME=`echo "${FNAME}" | cut -c2-`
 #			fi
 #		fi
@@ -2522,7 +2522,7 @@ get_bindir_option() {
 		PREPEND_PATHS=""
 
 		for DIR in ${BINPATHS}; do
-			if [ -n "`echo ${DIR} | grep '^\+'`" ]; then
+			if [ -n "`echo ${DIR} | grep '^+'`" ]; then
 				DIR=`echo ${DIR} | cut -c2-`
 				PREPEND_PATHS="${PREPEND_PATHS} ${DIR}"
 			fi
@@ -2532,7 +2532,7 @@ get_bindir_option() {
 
 
 		for DIR in ${PREPEND_PATHS} ${RKHROOTPATH} ${BINPATHS}; do
-			if [ -n "`echo ${DIR} | grep '^\+'`" ]; then
+			if [ -n "`echo ${DIR} | grep '^+'`" ]; then
 				# These will already be in PREPEND_PATHS.
 				continue
 			elif [ -z "`echo ${DIR} | grep '^/'`" ]; then
@@ -7311,13 +7311,13 @@ get_next_mirror() {
 
 	case $MIRRORS_MODE in
 	0)
-		MIRROR=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}1`
+		MIRROR=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}1`
 		;;
 	1)
-		MIRROR=`grep -E -i '^local=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}1`
+		MIRROR=`grep -E -i '^local=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}1`
 		;;
 	2)
-		MIRROR=`grep -E -i '^remote=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}1`
+		MIRROR=`grep -E -i '^remote=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}1`
 		;;
 	esac
 
@@ -7337,13 +7337,13 @@ get_next_mirror() {
 
 		case $MIRRORS_MODE in
 		0)
-			MIRROR=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}$N | tail ${TAIL_OPT}1 | cut -d= -f2-`
+			MIRROR=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}$N | tail ${TAIL_OPT}1 | cut -d= -f2-`
 			;;
 		1)
-			MIRROR=`grep -E -i '^local=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}$N | tail ${TAIL_OPT}1 | cut -d= -f2-`
+			MIRROR=`grep -E -i '^local=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}$N | tail ${TAIL_OPT}1 | cut -d= -f2-`
 			;;
 		2)
-			MIRROR=`grep -E -i '^remote=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}$N | tail ${TAIL_OPT}1 | cut -d= -f2-`
+			MIRROR=`grep -E -i '^remote=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" 2>/dev/null | head ${HEAD_OPT}$N | tail ${TAIL_OPT}1 | cut -d= -f2-`
 			;;
 		esac
 
@@ -7370,7 +7370,7 @@ get_next_mirror() {
 	# Next get the remaining mirrors.
 	#
 
-	OTHERMIRRORS=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" | grep -v "^${MIRROR}\$"`
+	OTHERMIRRORS=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" | grep -v "^${MIRROR}\$"`
 
 
 	#
@@ -7459,13 +7459,13 @@ download_file() {
 
 		case $MIRRORS_MODE in
 		0)
-			MIRROR_COUNT=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" | wc -l | tr -d ' '`
+			MIRROR_COUNT=`grep -E -i '^(local|remote|mirror)=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" | wc -l | tr -d ' '`
 			;;
 		1)
-			MIRROR_COUNT=`grep -E -i '^local=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" | wc -l | tr -d ' '`
+			MIRROR_COUNT=`grep -E -i '^local=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" | wc -l | tr -d ' '`
 			;;
 		2)
-			MIRROR_COUNT=`grep -E -i '^remote=https?://[-A-Za-z0-9\+@#/%=_:,.]*[-A-Za-z0-9\+@#/%=_]$' "${DB_PATH}/mirrors.dat" | wc -l | tr -d ' '`
+			MIRROR_COUNT=`grep -E -i '^remote=https?://[-A-Za-z0-9+@#/%=_:,.]*[-A-Za-z0-9+@#/%=_]$' "${DB_PATH}/mirrors.dat" | wc -l | tr -d ' '`
 			;;
 		esac
 
@@ -14957,7 +14957,7 @@ xinetd_include() {
 			IFS=$IFSNL
 
 			# Get the default enabled services.
-			for LINE in `grep -E '^[ 	]*enabled[ 	]*\+?=' "${FILENAME}"`; do
+			for LINE in `grep -E '^[ 	]*enabled[ 	]*+?=' "${FILENAME}"`; do
 				SEEN=1
 
 				RKHTMPVAR=`echo "${LINE}" | sed -e 's/^.*=//' | tr -s '	' ' '`
@@ -14975,7 +14975,7 @@ xinetd_include() {
 
 
 			# Get the default disabled services.
-			for LINE in `grep -E '^[ 	]*disabled[ 	]*\+?=' "${FILENAME}"`; do
+			for LINE in `grep -E '^[ 	]*disabled[ 	]*+?=' "${FILENAME}"`; do
 				RKHTMPVAR=`echo "${LINE}" | sed -e 's/^.*=//' | tr -s '	' ' '`
 
 				XINETD_DFLTS_DISABLED="${XINETD_DFLTS_DISABLED} ${RKHTMPVAR}"

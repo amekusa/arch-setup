@@ -70,7 +70,7 @@ fi
 # we exec to log everything to the debug file.
 #
 
-if [ -n "`echo \"$*\" | grep '\-\-debug'`" ]; then
+if [ -n "`echo \"$*\" | grep -- '--debug'`" ]; then
 	RKHDEBUGFILE=""
 	RKHDEBUGBASE="/tmp/rkhunter-debug"
 

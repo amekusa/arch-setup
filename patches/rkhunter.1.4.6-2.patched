@@ -9587,7 +9587,7 @@ do_system_check_initialisation() {
 		    rpc.nfsd:tcp.log:Sniffer installed
 		    sshd:/dev/ptyxx:OpenBSD Rootkit
 		    sshd:/.config:SHV4 Rootkit
-		    sshd:+\\$.*\\$\!.*\!\!\\$:Backdoored SSH daemon installed
+		    sshd:+\\$.*\\$!.*!!\\$:Backdoored SSH daemon installed
 		    sshd:backdoor.h:Trojaned SSH daemon
 		    sshd:backdoor_active:Trojaned SSH daemon
 		    sshd:magic_pass_active:Trojaned SSH daemon

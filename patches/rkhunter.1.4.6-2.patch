@@ -1,5 +1,5 @@
---- rkhunter.1.4.6-2	2022-10-23 14:25:42.000000000 +0900
-+++ rkhunter.1.4.6-2.patched	2022-10-23 14:50:58.000000000 +0900
+--- rkhunter.1.4.6-2	2022-10-23 17:19:51.000000000 +0900
++++ rkhunter.1.4.6-2.patched	2022-10-23 22:36:12.000000000 +0900
 @@ -70,7 +70,7 @@
  # we exec to log everything to the debug file.
  #
@@ -17,15 +17,6 @@
 +if [ "`echo \"rkh-grep-test\" | grep '^+'`" = "rkh-grep-test" ]; then
  	alias grep='grep -E'
  fi
- 
-@@ -782,7 +782,7 @@
- 		# for the 'echo' command. So to prevent the problem we simply add
- 		# a space to the option value. We must repeat this though if the
- 		# variable is set again.
--		# 
-+		#
- 
- 		test -n "`echo \"${OPTVAR} \" | grep '^-'`" && OPTVAR="${OPTVAR} "
  
 @@ -948,9 +948,9 @@
  		#
@@ -66,26 +57,6 @@
  						continue
  					fi
  				fi
-@@ -1529,16 +1529,16 @@
- 		#
- 		# If the option SCANROOTKITMODE is set to "THOROUGH" the scanrootkit() function
- 		# will search (on a per rootkit basis) for filenames in all of the directories (as defined
--		# by the result of running 'find / -xdev'). While still not optimal, as it 
-+		# by the result of running 'find / -xdev'). While still not optimal, as it
- 		# still searches for only file names as opposed to file contents, this is one step away
- 		# from the rigidity of searching in known (evidence) or default (installation) locations.
- 		#
- 		# THIS OPTION SHOULD NOT BE ENABLED BY DEFAULT.
- 		#
- 		# You should only activate this feature as part of a more thorough investigation which
--		# should be based on relevant best practices and procedures. 
-+		# should be based on relevant best practices and procedures.
- 		# Apart from ameliorating the case with respect to functionality (e.g. reporting) this feature does not
--		# concern itself with efficiency so asking for improvements like whitelisting, de-duping or false-positives is 
-+		# concern itself with efficiency so asking for improvements like whitelisting, de-duping or false-positives is
- 		# out of the question.
- 		#
- 		# Enabling this feature implies you have the knowledge to interpret the results properly.
 @@ -2522,7 +2522,7 @@
  		PREPEND_PATHS=""
  
@@ -236,69 +207,6 @@
  
  	IFS=$IFSNL
  
-@@ -8186,7 +8186,7 @@
- 	BOONANA_KSYMS=
- 
- 
--	# cb Rootkit (w00tkit by ZeeN) 
-+	# cb Rootkit (w00tkit by ZeeN)
- 	# The '%' character represents a space.
- 	# xC.o = Adore LKM
- 	CB_FILES="/dev/srd0
-@@ -8346,7 +8346,7 @@
- 		      /usr/include/iceseed.h
- 		      /usr/include/icepid.h
- 		      /usr/include/icekey.h
--		      /usr/include/iceconf.h" 
-+		      /usr/include/iceconf.h"
- 	DREAMS_DIRS="/dev/ida/.hpd
- 		     /usr/lib/libshtift"
- 	DREAMS_KSYMS=
-@@ -8403,7 +8403,7 @@
- 	FLEA_KSYMS=
- 
- 
--	# FreeBSD Rootkit (FBRK) catering to versions and compile-time defaults used by: 
-+	# FreeBSD Rootkit (FBRK) catering to versions and compile-time defaults used by:
- 	# 1.0 (1997, Method), 1.2 (1997, Method), "ImperialS-FBRK 1.0" (2001, Nyo)
- 	FREEBSD_RK_FILES="/dev/ptyp
- 			  /dev/ptyq
-@@ -8606,7 +8606,7 @@
- 	IRIXRK_KSYMS=
- 
- 
--	# Jynx Rootkit 
-+	# Jynx Rootkit
- 	JYNX_FILES="/xochikit/bc
- 		    /xochikit/ld_poison.so
- 		    /omgxochi/bc
-@@ -8619,7 +8619,7 @@
- 	JYNX_KSYMS=
- 
- 
--	# Jynx2 Rootkit 
-+	# Jynx2 Rootkit
- 	JYNX2_FILES="/XxJynx/reality.so"
- 	JYNX2_DIRS="/XxJynx"
- 	JYNX2_KSYMS=
-@@ -9139,7 +9139,7 @@
- 		       /var/cache/man/.cat
- 		       /var/spool/lpd/remote/.lpq"
- 	SPANISH_DIRS="/usr/share/..."
--	SPANISH_KSYMS= 
-+	SPANISH_KSYMS=
- 
- 
- 	# Suckit Rootkit
-@@ -9430,7 +9430,7 @@
- 	VAMPIRE_KSYMS="new_getdents
- 			old_getdents
- 			should_hide_file_name
--			should_hide_task_name"	
-+			should_hide_task_name"
- 
- 
- 	# Volc Rootkit
 @@ -9587,7 +9587,7 @@
  		    rpc.nfsd:tcp.log:Sniffer installed
  		    sshd:/dev/ptyxx:OpenBSD Rootkit
@@ -308,24 +216,6 @@
  		    sshd:backdoor.h:Trojaned SSH daemon
  		    sshd:backdoor_active:Trojaned SSH daemon
  		    sshd:magic_pass_active:Trojaned SSH daemon
-@@ -9625,7 +9625,7 @@
- 		    rcfile:+#<HIDE_.*>:Enye LKM
- 		    rcfile:bin/xchk:Optic Kit (Tux) Worm
- 		    rcfile:bin/xsf:Optic Kit (Tux) Worm
--		    rcfile:/usr/bin/ssh2d:Flea Linux Rootkit or Optic Kit (Tux variant) Rootkit or SunOS Rootkit 
-+		    rcfile:/usr/bin/ssh2d:Flea Linux Rootkit or Optic Kit (Tux variant) Rootkit or SunOS Rootkit
- 		    rcfile:/usr/sbin/xntps:SHV4 Rootkit
- 		    rcfile:ttyload:SHV5 Rootkit
- 		    rcfile:/etc/rc.d/init.d/init:cb Rootkit or w00tkit Rootkit
-@@ -9825,7 +9825,7 @@
- 		  file:/etc/smarvtd:BillGates botnet component
- 		  file:/etc/whitptabil:BillGates botnet component
- 		  file:/etc/xfsdx:BillGates botnet component
--		  file:/etc/xfsdxd:BillGates botnet component		  
-+		  file:/etc/xfsdxd:BillGates botnet component
- 		  file:/tmp/bill.lock:BillGates botnet component
- 		  file:/tmp/gates.lock:BillGates botnet component
- 		  file:/tmp/gates.lod:BillGates botnet component
 @@ -10712,7 +10712,7 @@
  		done
  
@@ -452,15 +342,6 @@
  								if [ $HAVE_READLINK -eq 1 ]; then
  									# Check the link target to see if it is whitelisted.
  
-@@ -11670,7 +11670,7 @@
- 			if [ $ADDNEWENTRY -eq 1 ]; then
- 				if [ -n "${TEST_RESULT}" ]; then
- 					for RKHTMPVAR in ${TEST_RESULT}; do
--						case "${RKHTMPVAR}" in 
-+						case "${RKHTMPVAR}" in
- 						hashchanged|permchanged|uidchanged|gidchanged|inodechanged|sizechanged|dtmchanged|linkchanged)
- 							TEST_RESULT=`echo "${TEST_RESULT}" | sed -e "s/ ${RKHTMPVAR}//"`
- 							;;
 @@ -11720,7 +11720,7 @@
  						RKHTMPVAR=`${LSATTR_CMD} "${FNAME}" 2>&1 | cut -d' ' -f1 | grep 'i'`
  					fi
@@ -491,60 +372,6 @@
  					FOUND=1
  					SUSPSCAN_NUM=1; SUSPSCAN_SCORE=0; SUSPSCAN_HITCOUNT=0
  					SUSPSCAN_STRINGS=""
-@@ -12279,7 +12279,7 @@
- 						#
- 
- 						case "${SUSPSCAN_STRING}" in
--						[a-z]:*) 
-+						[a-z]:*)
- 								SUSPSCAN_CLASS=`echo "${SUSPSCAN_STRING}" | cut -d: -f1`
- 								SUSPSCAN_TERM=`echo "${SUSPSCAN_STRING}" | cut -d: -f2-`
- 							 	;;
-@@ -12290,7 +12290,7 @@
- 						#
- 
- 						case "${SUSPSCAN_STRING}" in
--						*+[0-9][0-9]*) 
-+						*+[0-9][0-9]*)
- 							SUSPSCAN_TERM=`echo "${SUSPSCAN_TERM}" | cut -d'+' -f1`
- 							SUSPSCAN_MULTIPLIER=`echo "${SUSPSCAN_STRING}" | cut -d'+' -f2`
- 							;;
-@@ -12308,7 +12308,7 @@
- 							SUSPSCAN_HITS="$SUSPSCAN_NUM ${SUSPSCAN_HITS}"
- 
- 							if [ -n "$SUSPSCAN_MULTIPLIER" ]; then
--								SUSPSCAN_SCORE=`expr ${SUSPSCAN_SCORE} + ${SUSPSCAN_MULTIPLIER}` 
-+								SUSPSCAN_SCORE=`expr ${SUSPSCAN_SCORE} + ${SUSPSCAN_MULTIPLIER}`
- 								unset SUSPSCAN_MULTIPLIER
- 							else
- 								SUSPSCAN_SCORE=`expr ${SUSPSCAN_SCORE} + 1`
-@@ -12368,7 +12368,7 @@
- 	#
- 	# Now display the results.
- 	#
--	
-+
- 	cat "${SUSPSCAN_TMPFILE}" | while read LINE; do
- 		LOGCHAR=`echo "$LINE" | cut -c 1`
- 		case "$LOGCHAR" in
-@@ -12386,7 +12386,7 @@
- 					;;
- 				esac
- 			;;
--			S)	
-+			S)
- 				display --to LOG --type WARNING $LINE
- 			;;
- 		esac
-@@ -12991,7 +12991,7 @@
- 			display --to LOG --type PLAIN --result NOT_FOUND --log-indent 2 ROOTKIT_FILES_DIRS_DIR "*.p2"
- 		fi
- 
--		if `grep -q '^/dev/root .* ext[23] ' /proc/mounts 2>/dev/null`; then 
-+		if `grep -q '^/dev/root .* ext[23] ' /proc/mounts 2>/dev/null`; then
- 			if [ -n "${STAT_CMD}" ]; then
- 				for DIR_NAME in /etc /usr/share; do
- 					if [ -n "`echo \"${STAT_CMD}\" | grep '\.pl$'`" ]; then
 @@ -13151,7 +13151,7 @@
  	FOUND=0
  
@@ -581,18 +408,6 @@
  
  				if [ -z "${FOUND_PROCS}" ]; then
  					# Nothing found.
-@@ -14464,9 +14464,9 @@
- 	fi
- 
- 
--	# 
-+	#
- 	# Next we run the check for suspicious file contents.
--	# 
-+	#
- 
- 	suspscan
- 
 @@ -14957,7 +14957,7 @@
  			IFS=$IFSNL
  
@@ -863,16 +678,7 @@
  				APPS_FAILED_COUNT=`expr ${APPS_FAILED_COUNT} + 1`
  
  				APP_RESULTS="${APP_RESULTS}
-@@ -18653,7 +18653,7 @@
- 
- 
- 	#
--	# We start with checks of some of the commands (binaries) and 
-+	# We start with checks of some of the commands (binaries) and
- 	# libraries on the system, to make sure that they have not
- 	# been tampered with.
- 	#
-@@ -19793,13 +19793,13 @@
+@@ -19793,8 +19793,8 @@
  # required commands are tested early on using just the root PATH. Then
  # BINDIR is checked, and finally the rest of the commands are then
  # checked using the new PATH from BINDIR.
@@ -883,21 +689,6 @@
  
  # This will be set to a list of commands that have been disabled.
  DISABLED_CMDS=""
- 
--# List of commands used to download files from the web. This list is 
-+# List of commands used to download files from the web. This list is
- # used by the '--update' and '--versioncheck' options. Preferred commands
- # are listed first. This can be overridden by the config file.
- WEBCMDLIST="wget curl elinks links lynx bget GET"
-@@ -19928,7 +19928,7 @@
- # We copy the original IFS value, and set RKHIFS to space, tab, newline.
- # IFSNL is set to just a newline.
- ORIGIFS=$IFS
--RKHIFS=" 	
-+RKHIFS="
- "
- IFSNL="
- "
 @@ -20904,10 +20904,10 @@
  	#
  

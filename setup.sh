@@ -298,7 +298,7 @@ if [ -n "$SSH_AUTH_KEYS" ] && task SSH_AUTH_KEYS -d ADMIN; then
 ksat; fi
 
 # ssh server
-if $SSH_SERVER && task SSH_SERVER -d ADMIN; then
+if $SSHD && task SSHD -d ADMIN; then
 	_install openssh || x
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "cannot backup: $file"

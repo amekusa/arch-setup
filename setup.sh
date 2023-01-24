@@ -42,8 +42,10 @@ _aur-install() {
 	esac
 }
 
+# returns the version number of the given pkg.
+# pkgrel ('-N') is not included
 _ver() {
-	pacman -Qi "$1" | awk -F' : ' '$1 ~ "Version" { print $2 }'
+	pacman -Qi "$1" | awk -F' : ' '$1 ~ "Version" { print $2 }' | cut -d'-' -f 1
 }
 
 # returns full path to the given pkg.

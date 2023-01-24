@@ -784,7 +784,7 @@ get_option() {
 		# for the 'echo' command. So to prevent the problem we simply add
 		# a space to the option value. We must repeat this though if the
 		# variable is set again.
-		#
+		# 
 
 		test -n "`echo \"${OPTVAR} \" | grep '^-'`" && OPTVAR="${OPTVAR} "
 
@@ -1531,16 +1531,16 @@ scanrootkit() {
 		#
 		# If the option SCANROOTKITMODE is set to "THOROUGH" the scanrootkit() function
 		# will search (on a per rootkit basis) for filenames in all of the directories (as defined
-		# by the result of running 'find / -xdev'). While still not optimal, as it
+		# by the result of running 'find / -xdev'). While still not optimal, as it 
 		# still searches for only file names as opposed to file contents, this is one step away
 		# from the rigidity of searching in known (evidence) or default (installation) locations.
 		#
 		# THIS OPTION SHOULD NOT BE ENABLED BY DEFAULT.
 		#
 		# You should only activate this feature as part of a more thorough investigation which
-		# should be based on relevant best practices and procedures.
+		# should be based on relevant best practices and procedures. 
 		# Apart from ameliorating the case with respect to functionality (e.g. reporting) this feature does not
-		# concern itself with efficiency so asking for improvements like whitelisting, de-duping or false-positives is
+		# concern itself with efficiency so asking for improvements like whitelisting, de-duping or false-positives is 
 		# out of the question.
 		#
 		# Enabling this feature implies you have the knowledge to interpret the results properly.
@@ -8188,7 +8188,7 @@ do_system_check_initialisation() {
 	BOONANA_KSYMS=
 
 
-	# cb Rootkit (w00tkit by ZeeN)
+	# cb Rootkit (w00tkit by ZeeN) 
 	# The '%' character represents a space.
 	# xC.o = Adore LKM
 	CB_FILES="/dev/srd0
@@ -8348,7 +8348,7 @@ do_system_check_initialisation() {
 		      /usr/include/iceseed.h
 		      /usr/include/icepid.h
 		      /usr/include/icekey.h
-		      /usr/include/iceconf.h"
+		      /usr/include/iceconf.h" 
 	DREAMS_DIRS="/dev/ida/.hpd
 		     /usr/lib/libshtift"
 	DREAMS_KSYMS=
@@ -8405,7 +8405,7 @@ do_system_check_initialisation() {
 	FLEA_KSYMS=
 
 
-	# FreeBSD Rootkit (FBRK) catering to versions and compile-time defaults used by:
+	# FreeBSD Rootkit (FBRK) catering to versions and compile-time defaults used by: 
 	# 1.0 (1997, Method), 1.2 (1997, Method), "ImperialS-FBRK 1.0" (2001, Nyo)
 	FREEBSD_RK_FILES="/dev/ptyp
 			  /dev/ptyq
@@ -8608,7 +8608,7 @@ do_system_check_initialisation() {
 	IRIXRK_KSYMS=
 
 
-	# Jynx Rootkit
+	# Jynx Rootkit 
 	JYNX_FILES="/xochikit/bc
 		    /xochikit/ld_poison.so
 		    /omgxochi/bc
@@ -8621,7 +8621,7 @@ do_system_check_initialisation() {
 	JYNX_KSYMS=
 
 
-	# Jynx2 Rootkit
+	# Jynx2 Rootkit 
 	JYNX2_FILES="/XxJynx/reality.so"
 	JYNX2_DIRS="/XxJynx"
 	JYNX2_KSYMS=
@@ -9141,7 +9141,7 @@ do_system_check_initialisation() {
 		       /var/cache/man/.cat
 		       /var/spool/lpd/remote/.lpq"
 	SPANISH_DIRS="/usr/share/..."
-	SPANISH_KSYMS=
+	SPANISH_KSYMS= 
 
 
 	# Suckit Rootkit
@@ -9432,7 +9432,7 @@ do_system_check_initialisation() {
 	VAMPIRE_KSYMS="new_getdents
 			old_getdents
 			should_hide_file_name
-			should_hide_task_name"
+			should_hide_task_name"	
 
 
 	# Volc Rootkit
@@ -9627,7 +9627,7 @@ do_system_check_initialisation() {
 		    rcfile:+#<HIDE_.*>:Enye LKM
 		    rcfile:bin/xchk:Optic Kit (Tux) Worm
 		    rcfile:bin/xsf:Optic Kit (Tux) Worm
-		    rcfile:/usr/bin/ssh2d:Flea Linux Rootkit or Optic Kit (Tux variant) Rootkit or SunOS Rootkit
+		    rcfile:/usr/bin/ssh2d:Flea Linux Rootkit or Optic Kit (Tux variant) Rootkit or SunOS Rootkit 
 		    rcfile:/usr/sbin/xntps:SHV4 Rootkit
 		    rcfile:ttyload:SHV5 Rootkit
 		    rcfile:/etc/rc.d/init.d/init:cb Rootkit or w00tkit Rootkit
@@ -9827,7 +9827,7 @@ do_system_check_initialisation() {
 		  file:/etc/smarvtd:BillGates botnet component
 		  file:/etc/whitptabil:BillGates botnet component
 		  file:/etc/xfsdx:BillGates botnet component
-		  file:/etc/xfsdxd:BillGates botnet component
+		  file:/etc/xfsdxd:BillGates botnet component		  
 		  file:/tmp/bill.lock:BillGates botnet component
 		  file:/tmp/gates.lock:BillGates botnet component
 		  file:/tmp/gates.lod:BillGates botnet component
@@ -11672,7 +11672,7 @@ ${RKHLINE}"
 			if [ $ADDNEWENTRY -eq 1 ]; then
 				if [ -n "${TEST_RESULT}" ]; then
 					for RKHTMPVAR in ${TEST_RESULT}; do
-						case "${RKHTMPVAR}" in
+						case "${RKHTMPVAR}" in 
 						hashchanged|permchanged|uidchanged|gidchanged|inodechanged|sizechanged|dtmchanged|linkchanged)
 							TEST_RESULT=`echo "${TEST_RESULT}" | sed -e "s/ ${RKHTMPVAR}//"`
 							;;
@@ -12281,7 +12281,7 @@ suspscan() {
 						#
 
 						case "${SUSPSCAN_STRING}" in
-						[a-z]:*)
+						[a-z]:*) 
 								SUSPSCAN_CLASS=`echo "${SUSPSCAN_STRING}" | cut -d: -f1`
 								SUSPSCAN_TERM=`echo "${SUSPSCAN_STRING}" | cut -d: -f2-`
 							 	;;
@@ -12292,7 +12292,7 @@ suspscan() {
 						#
 
 						case "${SUSPSCAN_STRING}" in
-						*+[0-9][0-9]*)
+						*+[0-9][0-9]*) 
 							SUSPSCAN_TERM=`echo "${SUSPSCAN_TERM}" | cut -d'+' -f1`
 							SUSPSCAN_MULTIPLIER=`echo "${SUSPSCAN_STRING}" | cut -d'+' -f2`
 							;;
@@ -12310,7 +12310,7 @@ suspscan() {
 							SUSPSCAN_HITS="$SUSPSCAN_NUM ${SUSPSCAN_HITS}"
 
 							if [ -n "$SUSPSCAN_MULTIPLIER" ]; then
-								SUSPSCAN_SCORE=`expr ${SUSPSCAN_SCORE} + ${SUSPSCAN_MULTIPLIER}`
+								SUSPSCAN_SCORE=`expr ${SUSPSCAN_SCORE} + ${SUSPSCAN_MULTIPLIER}` 
 								unset SUSPSCAN_MULTIPLIER
 							else
 								SUSPSCAN_SCORE=`expr ${SUSPSCAN_SCORE} + 1`
@@ -12370,7 +12370,7 @@ suspscan() {
 	#
 	# Now display the results.
 	#
-
+	
 	cat "${SUSPSCAN_TMPFILE}" | while read LINE; do
 		LOGCHAR=`echo "$LINE" | cut -c 1`
 		case "$LOGCHAR" in
@@ -12388,7 +12388,7 @@ suspscan() {
 					;;
 				esac
 			;;
-			S)
+			S)	
 				display --to LOG --type WARNING $LINE
 			;;
 		esac
@@ -12993,7 +12993,7 @@ rootkit_file_dir_checks() {
 			display --to LOG --type PLAIN --result NOT_FOUND --log-indent 2 ROOTKIT_FILES_DIRS_DIR "*.p2"
 		fi
 
-		if `grep -q '^/dev/root .* ext[23] ' /proc/mounts 2>/dev/null`; then
+		if `grep -q '^/dev/root .* ext[23] ' /proc/mounts 2>/dev/null`; then 
 			if [ -n "${STAT_CMD}" ]; then
 				for DIR_NAME in /etc /usr/share; do
 					if [ -n "`echo \"${STAT_CMD}\" | grep '\.pl$'`" ]; then
@@ -14466,9 +14466,9 @@ ${FOUND_PROCS}"
 	fi
 
 
-	#
+	# 
 	# Next we run the check for suspicious file contents.
-	#
+	# 
 
 	suspscan
 
@@ -18655,7 +18655,7 @@ do_system_check() {
 
 
 	#
-	# We start with checks of some of the commands (binaries) and
+	# We start with checks of some of the commands (binaries) and 
 	# libraries on the system, to make sure that they have not
 	# been tampered with.
 	#
@@ -19801,7 +19801,7 @@ REQCMDS="awk cat chmod chown cp cut date grep head ls mv sed sort tail touch tr 
 # This will be set to a list of commands that have been disabled.
 DISABLED_CMDS=""
 
-# List of commands used to download files from the web. This list is
+# List of commands used to download files from the web. This list is 
 # used by the '--update' and '--versioncheck' options. Preferred commands
 # are listed first. This can be overridden by the config file.
 WEBCMDLIST="wget curl elinks links lynx bget GET"
@@ -19930,7 +19930,7 @@ VERBOSE_LOGGING=1
 # We copy the original IFS value, and set RKHIFS to space, tab, newline.
 # IFSNL is set to just a newline.
 ORIGIFS=$IFS
-RKHIFS="
+RKHIFS=" 	
 "
 IFSNL="
 "

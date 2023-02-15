@@ -11,3 +11,7 @@ KbdInteractiveAuthentication no
 AllowAgentForwarding no
 AllowTcpForwarding no
 AllowUsers {{ admin }}
+
+TCPKeepAlive {{ keepAliveTcp }}
+ClientAliveInterval {{ keepAliveIntvl }}
+ClientAliveCountMax {{ keepAliveCount }}

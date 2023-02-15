@@ -302,7 +302,13 @@ if $SSHD && task SSHD -d ADMIN; then
 	_install openssh || x
 	file="/etc/ssh/sshd_config"
 	[ -f "$file" ] && _backup "$file" || x "cannot backup: $file"
-	cat "$ASSETS/sshd_config" | _subst "admin=$ADMIN" | _section "$LABEL" "$file" || x "failed to write: $file"
+	cat "$ASSETS/sshd_config" | _subst \
+		"admin=$ADMIN" \
+		"keepAliveTcp=$(_yn $SSHD_KEEPALIVE_TCP)" \
+		"keepAliveIntvl=$SSHD_KEEPALIVE_INTVL" \
+		"keepAliveCount=$SSHD_KEEPALIVE_COUNT" |
+		_section "$LABEL" "$file" || x "failed to write: $file"
+		
 	_show "$file"
 	systemctl enable sshd.service || x
 ksat; fi

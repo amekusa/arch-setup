@@ -1,15 +1,14 @@
---- rkhunter.1.4.6-2	2022-10-23 17:19:51.000000000 +0900
-+++ rkhunter.1.4.6-2.patched	2022-10-23 23:07:17.000000000 +0900
-@@ -1,5 +1,8 @@
+--- rkhunter.1.4.6	2023-01-24 12:35:41.000000000 +0900
++++ rkhunter.1.4.6.patched	2023-01-24 12:38:44.000000000 +0900
+@@ -1,5 +1,7 @@
  #!/bin/sh
  
-+# This is PATCHED version of rkhunter 1.4.6-2 to eliminate grep and egrep warnings.
-+# Diff vs the original: https://github.com/amekusa/arch-setup/compare/825d7ac..b2aceeb
++# This is PATCHED version of rkhunter 1.4.6 to eliminate grep and egrep warnings.
 +
  #
  # rkhunter -- Scan the system for rootkits and other known security issues.
  #
-@@ -70,7 +73,7 @@
+@@ -70,7 +72,7 @@
  # we exec to log everything to the debug file.
  #
  
@@ -18,7 +17,7 @@
  	RKHDEBUGFILE=""
  	RKHDEBUGBASE="/tmp/rkhunter-debug"
  
-@@ -181,7 +184,7 @@
+@@ -181,7 +183,7 @@
  # used. If it is, then some typical grep tests will fail.
  #
  
@@ -27,7 +26,7 @@
  	alias grep='grep -E'
  fi
  
-@@ -948,9 +951,9 @@
+@@ -948,9 +950,9 @@
  		#
  
  		if [ "${OPT_NAME}" = "SHARED_LIB_WHITELIST" ]; then
@@ -39,7 +38,7 @@
  		fi
  
  		if [ -n "${RKHTMPVAR}" ]; then
-@@ -989,7 +992,7 @@
+@@ -989,7 +991,7 @@
  # The code is left here since we may need something very similar for overloaded options.
  #   overloaded options - ALLOWPROCDELFILE PORT_PATH_WHITELIST RTKT_FILE_WHITELIST
  #		if [ "${OPT_NAME}" = "BINDIR" ]; then
@@ -48,7 +47,7 @@
  #				FNAME=`echo "${FNAME}" | cut -c2-`
  #			fi
  #		fi
-@@ -1000,7 +1003,7 @@
+@@ -1000,7 +1002,7 @@
  		# Also check that '/' has not been set.
  		#
  
@@ -57,7 +56,7 @@
  			ERRCODE=1
  
  			echo "Invalid ${OPT_NAME} configuration option: Invalid pathname: ${FNAME}"
-@@ -1134,7 +1137,7 @@
+@@ -1134,7 +1136,7 @@
  				#
  
  				if [ "${OPT_NAME}" = "SHARED_LIB_WHITELIST" ]; then
@@ -66,7 +65,7 @@
  						continue
  					fi
  				fi
-@@ -2522,7 +2525,7 @@
+@@ -2522,7 +2524,7 @@
  		PREPEND_PATHS=""
  
  		for DIR in ${BINPATHS}; do
@@ -75,7 +74,7 @@
  				DIR=`echo ${DIR} | cut -c2-`
  				PREPEND_PATHS="${PREPEND_PATHS} ${DIR}"
  			fi
-@@ -2532,7 +2535,7 @@
+@@ -2532,7 +2534,7 @@
  
  
  		for DIR in ${PREPEND_PATHS} ${RKHROOTPATH} ${BINPATHS}; do
@@ -84,7 +83,7 @@
  				# These will already be in PREPEND_PATHS.
  				continue
  			elif [ -z "`echo ${DIR} | grep '^/'`" ]; then
-@@ -3848,7 +3851,7 @@
+@@ -3848,7 +3850,7 @@
  		#
  
  		for RKHTMPVAR2 in ${RKHTMPVAR}; do
@@ -93,7 +92,7 @@
  				PROTO=`echo ${RKHTMPVAR2} | cut -d: -f1 | tr '[:lower:]' '[:upper:]'`
  				PORT=`echo ${RKHTMPVAR2} | cut -d: -f2`
  
-@@ -3899,7 +3902,7 @@
+@@ -3899,7 +3901,7 @@
  				PROTO=""
  
  				# Dig out the protocol and port number, if present.
@@ -102,7 +101,7 @@
  					PROTO=`echo "${RKHTMPVAR2}" | sed -e 's/^.*:\([a-zA-Z]*\):[1-9][0-9]*$/\1/'`
  					PORT=`echo "${RKHTMPVAR2}" | sed -e 's/^.*:\([1-9][0-9]*\)$/\1/'`
  
-@@ -4839,7 +4842,7 @@
+@@ -4839,7 +4841,7 @@
  		fi
  	fi
  
@@ -111,7 +110,7 @@
  		HASH_FUNC=`echo "${HASH_FUNC}" | tr '[:lower:]' '[:upper:]'`
  	fi
  
-@@ -6412,7 +6415,7 @@
+@@ -6412,7 +6414,7 @@
  		OSNAME="${OSNAME} `sw_vers 2>/dev/null | grep '^ProductVersion:' | sed -e 's/ProductVersion:[ 	]*//'`"
  #		OSNAME="${OSNAME} `sysctl kern.version 2>/dev/null | sed -e 's/^kern.version = //' | cut -d: -f1`"
  
@@ -120,7 +119,7 @@
  			OSNAME="${OSNAME} (64-bit capable)"
  		fi
  		;;
-@@ -6708,7 +6711,7 @@
+@@ -6708,7 +6710,7 @@
  						# this is what RPM does).
  						#
  
@@ -129,7 +128,7 @@
  
  						test -z "${RPM_QUERY_RESULT}" && RPM_QUERY_RESULT=`echo "${RPM_QUERY_RESULT_ARCH}" | tail ${TAIL_OPT}1`
  
-@@ -6883,7 +6886,7 @@
+@@ -6883,7 +6885,7 @@
  					if [ -n "${PKGNAME}" ]; then
  						if [ -f "/var/lib/dpkg/info/${PKGNAME}.md5sums" ]; then
  							FILNAM=`echo "${FNAME}" | sed -e 's:^/::; s:\.:\\\.:g'`
@@ -138,7 +137,7 @@
  							test -n "${SYSHASH}" && FILE_IS_PKGD=1
  						fi
  					fi
-@@ -6925,7 +6928,7 @@
+@@ -6925,7 +6927,7 @@
  					SYSHASH=""
  					RKHTMPVAR=`${HASH_CMD} "${FNAME}" 2>&1`
  
@@ -147,7 +146,7 @@
  						DEPENDENCY_ERR=1
  						RKHTMPVAR=`echo "${RKHTMPVAR}" | tr '\n' ':' | sed -e 's/:$//'`
  					else
-@@ -7311,13 +7314,13 @@
+@@ -7311,13 +7313,13 @@
  
  	case $MIRRORS_MODE in
  	0)
@@ -164,7 +163,7 @@
  		;;
  	esac
  
-@@ -7337,13 +7340,13 @@
+@@ -7337,13 +7339,13 @@
  
  		case $MIRRORS_MODE in
  		0)
@@ -181,7 +180,7 @@
  			;;
  		esac
  
-@@ -7370,7 +7373,7 @@
+@@ -7370,7 +7372,7 @@
  	# Next get the remaining mirrors.
  	#
  
@@ -190,7 +189,7 @@
  
  
  	#
-@@ -7459,13 +7462,13 @@
+@@ -7459,13 +7461,13 @@
  
  		case $MIRRORS_MODE in
  		0)
@@ -207,7 +206,7 @@
  			;;
  		esac
  
-@@ -7991,7 +7994,7 @@
+@@ -7991,7 +7993,7 @@
  	# Now check to see if any unknown options have been configured.
  	#
  
@@ -216,7 +215,7 @@
  
  	IFS=$IFSNL
  
-@@ -9587,7 +9590,7 @@
+@@ -9587,7 +9589,7 @@
  		    rpc.nfsd:tcp.log:Sniffer installed
  		    sshd:/dev/ptyxx:OpenBSD Rootkit
  		    sshd:/.config:SHV4 Rootkit
@@ -225,7 +224,7 @@
  		    sshd:backdoor.h:Trojaned SSH daemon
  		    sshd:backdoor_active:Trojaned SSH daemon
  		    sshd:magic_pass_active:Trojaned SSH daemon
-@@ -10712,7 +10715,7 @@
+@@ -10712,7 +10714,7 @@
  		done
  
  
@@ -234,7 +233,7 @@
  			display --to LOG --type WARNING --nl PROPUPD_WARN
  		fi
  
-@@ -10964,7 +10967,7 @@
+@@ -10964,7 +10966,7 @@
  
  						FILE_IS_PKGD=1
  
@@ -243,7 +242,7 @@
  
  						test -z "${PKGNAME}" && PKGNAME=`echo "${PKGNAME_ARCH}" | tail ${TAIL_OPT}1`
  
-@@ -11163,7 +11166,7 @@
+@@ -11163,7 +11165,7 @@
  					if [ -n "${PKGNAME}" -a -f "/var/lib/dpkg/info/${PKGNAME}.md5sums" ]; then
  						FNGREP=`echo "${FNAMEGREP}" | sed -e 's:^/::'`
  
@@ -252,7 +251,7 @@
  
  						if [ -n "${SYSHASH}" ]; then
  							FILE_IS_PKGD=1
-@@ -11172,7 +11175,7 @@
+@@ -11172,7 +11174,7 @@
  							if [ "${RKHTMPVAR}" != "${SYSHASH}" ]; then
  								PKGMGR_VERIFY_RESULT="5"
  
@@ -261,7 +260,7 @@
  									DEPENDENCY_ERR=1
  								fi
  							fi
-@@ -11221,7 +11224,7 @@
+@@ -11221,7 +11223,7 @@
  							if [ "${RKHTMPVAR}" != "${SYSHASH}" ]; then
  								PKGMGR_VERIFY_RESULT="5"
  
@@ -270,7 +269,7 @@
  									DEPENDENCY_ERR=1
  								fi
  							fi
-@@ -11252,7 +11255,7 @@
+@@ -11252,7 +11254,7 @@
  							if [ "${RKHTMPVAR}" != "${SYSHASH}" ]; then
  								PKGMGR_VERIFY_RESULT="5"
  
@@ -279,7 +278,7 @@
  									DEPENDENCY_ERR=1
  								fi
  							fi
-@@ -11295,7 +11298,7 @@
+@@ -11295,7 +11297,7 @@
  						fi
  					fi
  
@@ -288,7 +287,7 @@
  						HASH_TEST_PASSED=1
  					else
  						TEST_RESULT="${TEST_RESULT} verify:hashchanged"
-@@ -11349,7 +11352,7 @@
+@@ -11349,7 +11351,7 @@
  							SYSHASH=`${HASH_CMD} "${FNAME}" 2>/dev/null | cut -d' ' -f $HASH_FLD_IDX`
  
  							if [ -z "${SYSHASH}" ]; then
@@ -297,7 +296,7 @@
  									if [ "${RKHHASH}" = "ignore-prelink-dep-err" ]; then
  										SYSHASH="${RKHHASH}"
  										display --to LOG --type INFO FILE_PROP_IGNORE_PRELINK_DEP_ERR "`name2text \"${FNAME}\"`"
-@@ -11445,7 +11448,7 @@
+@@ -11445,7 +11447,7 @@
  					#
  
  					if [ $FILE_IS_PKGD -eq 1 ]; then
@@ -306,7 +305,7 @@
  					else
  						RKH_CC2=`expr $RKH_CC + 2`
  
-@@ -11465,7 +11468,7 @@
+@@ -11465,7 +11467,7 @@
  					#
  
  					if [ $FILE_IS_PKGD -eq 1 ]; then
@@ -315,7 +314,7 @@
  					else
  						RKH_CC2=`expr $RKH_CC + 3`
  
-@@ -11485,7 +11488,7 @@
+@@ -11485,7 +11487,7 @@
  					#
  
  					if [ $FILE_IS_PKGD -eq 1 ]; then
@@ -324,7 +323,7 @@
  					else
  						RKH_CC2=`expr $RKH_CC + 4`
  
-@@ -11525,7 +11528,7 @@
+@@ -11525,7 +11527,7 @@
  					#
  
  					if [ $FILE_IS_PKGD -eq 1 ]; then
@@ -333,7 +332,7 @@
  							SIZE_TEST_PASSED=1
  						else
  							TEST_RESULT="${TEST_RESULT} verify:sizechanged"
-@@ -11553,7 +11556,7 @@
+@@ -11553,7 +11555,7 @@
  					#
  
  					if [ $FILE_IS_PKGD -eq 1 ]; then
@@ -342,7 +341,7 @@
  					elif [ $PRELINKED -eq 0 -o $FILE_IS_PKGD -eq 0 ]; then
  						RKH_CC2=`expr $RKH_CC + 6`
  
-@@ -11574,7 +11577,7 @@
+@@ -11574,7 +11576,7 @@
  
  					if [ -h "${FNAME}" ]; then
  						if [ $FILE_IS_PKGD -eq 1 ]; then
@@ -351,7 +350,7 @@
  								if [ $HAVE_READLINK -eq 1 ]; then
  									# Check the link target to see if it is whitelisted.
  
-@@ -11720,7 +11723,7 @@
+@@ -11720,7 +11722,7 @@
  						RKHTMPVAR=`${LSATTR_CMD} "${FNAME}" 2>&1 | cut -d' ' -f1 | grep 'i'`
  					fi
  				else
@@ -360,7 +359,7 @@
  				fi
  
  				#
-@@ -11768,9 +11771,9 @@
+@@ -11768,9 +11770,9 @@
  					test -n "${BASENAME_CMD}" && RKHTMPVAR=`${BASENAME_CMD} "${FNAME}"` || RKHTMPVAR=`echo "${FNAME}" | sed -e 's:^.*/::'`
  
  					if [ "${RKHTMPVAR}" = "rkhunter" ]; then
@@ -372,7 +371,7 @@
  					fi
  
  					test -n "${SYSSCRIPT}" && TEST_RESULT="${TEST_RESULT} script"
-@@ -12256,7 +12259,7 @@
+@@ -12256,7 +12258,7 @@
  				# Adding "text" to the egrep below widens scope at the expense of more false-positives and extending running time.
  				#
  
@@ -381,7 +380,7 @@
  					FOUND=1
  					SUSPSCAN_NUM=1; SUSPSCAN_SCORE=0; SUSPSCAN_HITCOUNT=0
  					SUSPSCAN_STRINGS=""
-@@ -13151,7 +13154,7 @@
+@@ -13151,7 +13153,7 @@
  	FOUND=0
  
  	if [ -n "${KSYMS_FILE}" ]; then
@@ -390,7 +389,7 @@
  	fi
  
  	if [ $FOUND -eq 0 ]; then
-@@ -14061,7 +14064,7 @@
+@@ -14061,7 +14063,7 @@
  
  								FNAMEGREP=`echo "${FNAMEGREP}" | sed -e 's/^|//;'`
  
@@ -399,7 +398,7 @@
  									PROCWHITELISTED=1
  								fi
  							else
-@@ -14174,7 +14177,7 @@
+@@ -14174,7 +14176,7 @@
  			RKHLSOF_FILE="${TEMPFILE}"
  			touch "${RKHLSOF_FILE}"
  
@@ -408,7 +407,7 @@
  
  			#
  			# Now loop through the known suspicious filenames,
-@@ -14376,7 +14379,7 @@
+@@ -14376,7 +14378,7 @@
  				ROOTKIT_COUNT=`expr $ROOTKIT_COUNT + 1`
  
  				SEEN=1
@@ -417,7 +416,7 @@
  
  				if [ -z "${FOUND_PROCS}" ]; then
  					# Nothing found.
-@@ -14957,7 +14960,7 @@
+@@ -14957,7 +14959,7 @@
  			IFS=$IFSNL
  
  			# Get the default enabled services.
@@ -426,7 +425,7 @@
  				SEEN=1
  
  				RKHTMPVAR=`echo "${LINE}" | sed -e 's/^.*=//' | tr -s '	' ' '`
-@@ -14975,7 +14978,7 @@
+@@ -14975,7 +14977,7 @@
  
  
  			# Get the default disabled services.
@@ -435,7 +434,7 @@
  				RKHTMPVAR=`echo "${LINE}" | sed -e 's/^.*=//' | tr -s '	' ' '`
  
  				XINETD_DFLTS_DISABLED="${XINETD_DFLTS_DISABLED} ${RKHTMPVAR}"
-@@ -15024,14 +15027,14 @@
+@@ -15024,14 +15026,14 @@
  			#
  
  			if [ -n "${XINETD_DFLTS_ENABLED}" ]; then
@@ -453,7 +452,7 @@
  				:
  			elif [ -z "`echo $DATA | grep 'disable = yes'`" ]; then
  				SEEN=1
-@@ -15368,7 +15371,7 @@
+@@ -15368,7 +15370,7 @@
  			test -f "${DIR}/mod_rootme2.so" && FOUNDFILES="${FOUNDFILES} ${DIR}/mod_rootme2.so"
  
  			if [ -f "${DIR}/httpd.conf" ]; then
@@ -462,7 +461,7 @@
  					FOUNDFILES="${FOUNDFILES} ${DIR}/httpd.conf"
  				fi
  			fi
-@@ -15671,7 +15674,7 @@
+@@ -15671,7 +15673,7 @@
  		${FIND_CMD} "${LKM_PATH}" -type f -a \( -name "*.o" -o -name "*.ko" -o -name "*.ko.xz" \) >"${TEMPFILE}" 2>/dev/null
  
  		for RKHTMPVAR in ${LKM_NAMES}; do
@@ -471,7 +470,7 @@
  				FOUND=1
  				FOUNDFILES="${FOUNDFILES} ${RKHTMPVAR}"
  			fi
-@@ -15821,10 +15824,10 @@
+@@ -15821,10 +15823,10 @@
  			if [ -n "`echo \"${LSOFLINE}\" | grep \" ${PROTO} \*:${PORT} \"`" ]; then
  				# Process listening for connections from anywhere.
  				PID=`echo "${LSOFLINE}" | ${AWK_CMD} '{ print $2 }'`
@@ -484,7 +483,7 @@
  				# Established or listening process using IPv6 address.
  				PID=`echo "${LSOFLINE}" | ${AWK_CMD} '{ print $2 }'`
  			else
-@@ -15886,7 +15889,7 @@
+@@ -15886,7 +15888,7 @@
  			if [ "${PROTO}" = "UDP" ]; then
  				FOUND=`${NETSTAT_CMD} -an | grep -i "^udp.*\.${PORT} " | ${AWK_CMD} '{ print $4 }' | grep "\.${PORT}$"`
  			elif [ "${PROTO}" = "TCP" ]; then
@@ -493,7 +492,7 @@
  			fi
  			;;
  		SunOS)
-@@ -15897,10 +15900,10 @@
+@@ -15897,10 +15899,10 @@
  					FOUND=`${NETSTAT_CMD} -an | ${AWK_CMD} '/^UDP: IPv6/, /^$/ { print $1 }' | grep "\.${PORT}$"`
  				fi
  			elif [ "${PROTO}" = "TCP" ]; then
@@ -506,7 +505,7 @@
  				fi
  			fi
  			;;
-@@ -16435,7 +16438,7 @@
+@@ -16435,7 +16437,7 @@
  	WHITEPROC=""
  	BLACKPROC=""
  
@@ -515,7 +514,7 @@
  
  	if [ -n "${LIBPCAPRES}" ]; then
  		ALLOWPROCLISTENERS=""
-@@ -16451,7 +16454,7 @@
+@@ -16451,7 +16453,7 @@
  
  		INODE_LIST=""
  
@@ -524,7 +523,7 @@
  			INODE_LIST="${INODE_LIST}|$INODE"
  		done
  
-@@ -16459,7 +16462,7 @@
+@@ -16459,7 +16461,7 @@
  		test -z "${INODE_LIST}" && INODE_LIST="RKHunterPktCapture"
  
  
@@ -533,7 +532,7 @@
  			NAME=""
  
  			if [ -h "/proc/$PID/exe" -a $HAVE_READLINK -eq 1 ]; then
-@@ -16677,7 +16680,7 @@
+@@ -16677,7 +16679,7 @@
  			RKHTMPVAR=`grep "${STRING}" "${FNAME}"`
  
  			if [ -n "${RKHTMPVAR}" ]; then
@@ -542,7 +541,7 @@
  
  				if [ -n "`echo \"${RTKT_FILE_WHITELIST}\" | grep \"^${FNAMEGREP}:${STRING}$\"`" ]; then
  					if [ $VERBOSE_LOGGING -eq 1 ]; then
-@@ -16951,7 +16954,7 @@
+@@ -16951,7 +16953,7 @@
  			if [ -n "${DSCL_CMD}" ]; then
  				display --to LOG --type INFO FOUND_CMD 'dscl' "${DSCL_CMD}"
  
@@ -551,7 +550,7 @@
  			else
  				display --to LOG --type INFO NOT_FOUND_CMD 'dscl'
  			fi
-@@ -17526,7 +17529,7 @@
+@@ -17526,7 +17528,7 @@
  
  			test $SUNOS -eq 1 -o $IRIXOS -eq 1 && PS_ARGS="-ef"
  
@@ -560,7 +559,7 @@
  
  			if [ -n "${RKHTMPVAR}" ]; then
  				SYSLOG_SEEN=1
-@@ -17546,7 +17549,7 @@
+@@ -17546,7 +17548,7 @@
  				TITLE_SHOWN=1
  			fi
  
@@ -569,7 +568,7 @@
  
  			if [ -n "${RKHTMPVAR}" ]; then
  				SYSTEMD_SEEN=1
-@@ -17562,7 +17565,7 @@
+@@ -17562,7 +17564,7 @@
  				TITLE_SHOWN=1
  			fi
  
@@ -578,7 +577,7 @@
  
  			if [ -n "${RKHTMPVAR}" ]; then
  				METALOG_SEEN=1
-@@ -17578,7 +17581,7 @@
+@@ -17578,7 +17580,7 @@
  				TITLE_SHOWN=1
  			fi
  
@@ -587,7 +586,7 @@
  
  			if [ -n "${RKHTMPVAR}" ]; then
  				SOCKLOG_SEEN=1
-@@ -17639,7 +17642,7 @@
+@@ -17639,7 +17641,7 @@
  					RKHTMPVAR="an"
  				elif [ -n "`echo \"${FNAME}\" | grep '/syslog-ng\.conf$'`" ]; then
  					FTYPE="syslog-ng"
@@ -596,7 +595,7 @@
  					FTYPE="systemd"
  				else
  					FTYPE="syslog"
-@@ -17657,15 +17660,15 @@
+@@ -17657,15 +17659,15 @@
  				if [ "${FTYPE}" != "systemd" ]; then
  					RKHTMPVAR=""
  
@@ -615,7 +614,7 @@
  					fi
  
  					if [ -n "${RKHTMPVAR}" ]; then
-@@ -17681,7 +17684,7 @@
+@@ -17681,7 +17683,7 @@
  			# that the warnings are shown before anything else.
  			#
  
@@ -624,7 +623,7 @@
  				display --to SCREEN+LOG --type PLAIN --result WARNING --color RED --log-indent 2 --screen-indent 4 SYSTEM_CONFIGS_FILE
  				display --to LOG --type WARNING SYSTEM_CONFIGS_SYSLOG_NO_FILE 'syslog'
  			elif [ $SYSTEMD_SEEN -eq 1 -a -z "`echo \"${FILEFOUND}\" | grep ' systemd '`" ]; then
-@@ -17697,7 +17700,7 @@
+@@ -17697,7 +17699,7 @@
  			# We only display the remote logging result if a configuration file was found.
  			#
  
@@ -633,7 +632,7 @@
  				if [ $ALLOW_SYSLOG_REMOTE_LOGGING -eq 1 ]; then
  					display --to SCREEN+LOG --type PLAIN --result ALLOWED --color GREEN --log-indent 2 --screen-indent 4 SYSTEM_CONFIGS_SYSLOG_REMOTE
  				elif [ $REM_LOGGING_FOUND -eq 0 ]; then
-@@ -17734,7 +17737,7 @@
+@@ -17734,7 +17736,7 @@
  		FTYPE=`echo "${FTYPE}" | tail ${TAIL_OPT}1`
  	fi
  
@@ -642,7 +641,7 @@
  		return
  	fi
  
-@@ -17832,7 +17835,7 @@
+@@ -17832,7 +17834,7 @@
  			RKHTMPVAR=`find_cmd mount`
  
  			if [ -n "${RKHTMPVAR}" ]; then
@@ -651,7 +650,7 @@
  			else
  				display --to LOG --type INFO NOT_FOUND_CMD 'mount'
  			fi
-@@ -17930,7 +17933,7 @@
+@@ -17930,7 +17932,7 @@
  
  	for DIR in ${SHORTSEARCHDIRS}; do
  		if [ -d "${DIR}" ]; then
@@ -660,7 +659,7 @@
  			test -n "${RKHTMPVAR}" && LOOKINDIRS="${LOOKINDIRS}
  ${RKHTMPVAR}"
  		fi
-@@ -17972,7 +17975,7 @@
+@@ -17972,7 +17974,7 @@
  
  		FTYPE=`${FILE_CMD} "${FNAME}" 2>&1 | ${AWK_CMD} -F':' '{ print $NF }' | cut -c2-`
  
@@ -669,7 +668,7 @@
  
  		FNAMEGREP=`echo "${FNAME}" | sed -e 's/\([.$*?\\]\)/\\\\\1/g; s/\[/\\\\[/g; s/\]/\\\\]/g'`
  
-@@ -18313,7 +18316,7 @@
+@@ -18313,7 +18315,7 @@
  				;;
  			named)
  				WHOLE_VERSION=`${APP_CMD_FOUND} -v 2>/dev/null`
@@ -678,7 +677,7 @@
  
  				if [ -n "`echo \"${VERSION}\" | grep '^[^-]*\.[0-9][0-9]*-P[^-]*-'`" ]; then
  					VERSION=`echo "${VERSION}" | cut -d'-' -f1-2`
-@@ -18377,7 +18380,7 @@
+@@ -18377,7 +18379,7 @@
  			if [ -n "`echo \"${APP_WHITELIST}\" | grep -i \" ${APPLICATION}:${RKHTMPVAR} \"`" ]; then
  				APP_RESULTS="${APP_RESULTS}
  ${APPLICATION}%${APPLICATION_DESC}%${VERSION}%-1"
@@ -687,7 +686,7 @@
  				APPS_FAILED_COUNT=`expr ${APPS_FAILED_COUNT} + 1`
  
  				APP_RESULTS="${APP_RESULTS}
-@@ -19793,8 +19796,8 @@
+@@ -19793,8 +19795,8 @@
  # required commands are tested early on using just the root PATH. Then
  # BINDIR is checked, and finally the rest of the commands are then
  # checked using the new PATH from BINDIR.
@@ -698,7 +697,7 @@
  
  # This will be set to a list of commands that have been disabled.
  DISABLED_CMDS=""
-@@ -20904,10 +20907,10 @@
+@@ -20904,10 +20906,10 @@
  	#
  
  	if [ -z "${PRELINK_HASH}" ]; then
@@ -711,7 +710,7 @@
  				if [ $HASH_OPT -eq 1 ]; then
  					echo "This system uses prelinking, but the '--hash' option (${HASH_FUNC}) does not look like SHA1 or MD5."
  				else
-@@ -21015,7 +21018,7 @@
+@@ -21015,7 +21017,7 @@
  #
  IFS=$IFSNL
  
@@ -720,7 +719,7 @@
  	TYPE=`echo "${LINE}" | cut -d: -f1`
  
  	if [ "${LANGUAGE}" != "en" ]; then
-@@ -21220,7 +21223,7 @@
+@@ -21220,7 +21222,7 @@
  			fi
  		elif [ -n "${PRELINK_HASH}" ]; then
  			display --to LOG --type INFO HASH_FUNC_PRELINK "${PRELINK_HASH}"

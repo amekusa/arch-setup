@@ -9,10 +9,6 @@ _TASKS="$BASE/.tasks"
 
 _CURRENT_TASK=
 
-task-done() {
-	[ "$(_load-var "$1" "$_TASKS")" = DONE ]
-}
-
 task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _err "argument missing"
@@ -22,10 +18,10 @@ task() {
 	if [ "$1" = "-d" ]; then shift
 		local each
 		for each in "$@"; do
-			task-done "$each" || return 1
+			is-task "$each" DONE || return 1
 		done
 	fi
-	task-done "$task" && return 1
+	is-task "$task" DONE && return 1
 	echo
 	echo "TASK: $task ..."
 	_CURRENT_TASK="$task"
@@ -43,6 +39,16 @@ x() {
 	[ -z "$*" ] || echo " > $*"
 	_save-var "$_CURRENT_TASK" FAILED "$_TASKS"
 	exit 1
+}
+
+is-task() {
+	local task="$1"; shift
+	local status="$(_load-var "$task" "$_TASKS")"
+	local arg
+	for arg in "$@"; do
+		[ "$arg" = "$status" ] && return 0
+	done
+	return 1
 }
 
 reset-task() {

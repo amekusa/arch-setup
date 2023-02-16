@@ -480,7 +480,7 @@ if $RKHUNTER && $RKH_HOOKS && task RKH_HOOKS -d RKHUNTER; then
 ksat; fi
 
 # etckeeper commit
-if $ETCKEEPER && task-done ETCKEEPER; then
+if $ETCKEEPER && is-task ETCKEEPER DONE; then
 	etckeeper unclean && etckeeper commit "[$LABEL] commit @ $(date +%F)"
 fi
 

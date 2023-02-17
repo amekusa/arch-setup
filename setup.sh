@@ -116,6 +116,29 @@ _backup() {
 }
 
 
+# commandline args
+while true; do
+	case "$1" in
+	-h|--help)
+		cat <<-EOF
+		Usage:
+		  setup.sh [options]
+		  setup.sh [options] <task>
+
+		Options:
+		  -h, --help   :  Shows this text
+		  -p, --prompt :  Runs in prompt mode
+		
+		EOF
+		exit
+		;;
+	-p|--prompt)
+		MODE_PROMPT=true
+		;;
+	esac
+	shift || break
+done
+
 # always update the system first
 _install archlinux-keyring
 pacman --noconfirm --needed -Syu
@@ -123,16 +146,6 @@ pacman --noconfirm --needed -Syu
 # editor
 export EDITOR="$(_require nano)"
 export VISUAL="$EDITOR"
-
-
-# ---- commandline args -------- *
-for arg in "$@"; do
-	case "$arg" in
-	-p|--prompt)
-		MODE_PROMPT=true
-		;;
-	esac
-done
 
 
 # ---- config -------- *

@@ -5,13 +5,14 @@
 #  author: Satoshi Soma (https://amekusa.com)
 # ============================================
 
-LABEL="arch-setup"
-
 EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
 PATCHES="$BASE/patches"
+
+LABEL="arch-setup"
+MODE_PROMPT=false
 
 git submodule init
 git submodule update
@@ -122,6 +123,16 @@ pacman --noconfirm --needed -Syu
 # editor
 export EDITOR="$(_require nano)"
 export VISUAL="$EDITOR"
+
+
+# ---- commandline args -------- *
+for arg in "$@"; do
+	case "$arg" in
+	-p|--prompt)
+		MODE_PROMPT=true
+		;;
+	esac
+done
 
 
 # ---- config -------- *
@@ -310,7 +321,7 @@ if $SSHD && task SSHD -d ADMIN; then
 		"keepAliveIntvl=$SSHD_KEEPALIVE_INTVL" \
 		"keepAliveCount=$SSHD_KEEPALIVE_COUNT" |
 		_section "$LABEL" "$file" || x "failed to write: $file"
-		
+
 	_show "$file"
 	systemctl enable sshd.service || x
 ksat; fi

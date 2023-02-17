@@ -14,14 +14,32 @@ task() {
 	[ -n "$task" ] || _err "argument missing"
 	[ -z "$_CURRENT_TASK" ] || _err "the task:$_CURRENT_TASK is not done yet"
 	[ -z "$_ARG_TASK" ] || [ "$_ARG_TASK" = "$task" ] || return 1
+
+	# check task status
+	is-task "$task" DONE NEVER && return 1
+
 	# check dependencies
 	if [ "$1" = "-d" ]; then shift
-		local each
-		for each in "$@"; do
-			is-task "$each" DONE || return 1
+		local arg
+		for arg in "$@"; do
+			is-task "$arg" DONE || return 1
 		done
 	fi
-	is-task "$task" DONE && return 1
+
+	# prompt
+	if $MODE_PROMPT; then
+		local answer
+		while true; do
+			read -n 1 -p "Run task:$task? [ (R)un / (S)kip / (N)ever / (D)one already ] " answer; echo
+			case "$answer" in
+				[Rr]) echo " > Run";          break ;;
+				[Ss]) echo " > Skip";         return 1 ;;
+				[Nn]) echo " > Never";        set-task "$task" NEVER; return 1 ;;
+				[Dd]) echo " > Done already"; set-task "$task" DONE;  return 1 ;;
+			esac
+		done
+	fi
+
 	echo
 	echo "TASK: $task ..."
 	_CURRENT_TASK="$task"
@@ -51,8 +69,14 @@ is-task() {
 	return 1
 }
 
+set-task() {
+	local task="$1"
+	local status="$2"
+	_save-var "$task" "$status" "$_TASKS" || _err "failed to write: $_TASKS"
+}
+
 reset-task() {
-	_save-var "$1" RESET "$_TASKS"
+	set-task "$1" RESET
 }
 
 reset-tasks() {

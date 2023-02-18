@@ -15,6 +15,7 @@ PATCHES="$BASE/patches"
 LABEL="arch-setup"
 
 OPT_TASKS=()
+OPT_UPGRADE=true
 OPT_PROMPT=false
 OPT_LIST=false
 
@@ -37,9 +38,10 @@ while true; do
 		  setup.sh [options] <task1> <task2> ...
 
 		Options:
-		  -h, --help   :  Shows this text
-		  -l, --list   :  Lists task names
-		  -p, --prompt :  Runs in prompt mode
+		  -h, --help   : Show this text
+		  -l, --list   : List task names
+		  -p, --prompt : Run in prompt mode
+		  --no-upgrade : Skip system upgrade
 
 		EOF
 		exit
@@ -49,6 +51,9 @@ while true; do
 		;;
 	-p|--prompt)
 		OPT_PROMPT=true
+		;;
+	--no-upgrade)
+		OPT_UPGRADE=false
 		;;
 	*)
 		OPT_TASKS+=("$1")
@@ -78,13 +83,14 @@ else
 fi
 
 if ! $OPT_LIST; then
-
 	# only root user is allowed
 	_chk-user root
 
-	# always update the system first
-	_install archlinux-keyring
-	pacman --noconfirm --needed -Syu
+	# upgrade the system first
+	if $OPT_UPGRADE; then
+		_install archlinux-keyring
+		pacman --noconfirm --needed -Syu
+	fi
 fi
 
 

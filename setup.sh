@@ -446,9 +446,12 @@ if $RKHUNTER && task RKH_PROPUPD -d RKHUNTER; then
 	rkhunter --propupd --report-warnings-only || x "rkhunter: propupd error"
 ksat; fi
 
-echo
-echo "all done."
-echo
-echo "if you are in chroot, type:"
-echo "exit; umount -R /mnt"
-echo
+
+if ! $OPT_LIST; then
+	echo
+	echo "all done."
+	echo
+	echo "if you are in chroot, type:"
+	echo "exit; umount -R /mnt"
+	echo
+fi

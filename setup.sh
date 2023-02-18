@@ -12,7 +12,9 @@ BACKUP="$BASE/backup"
 PATCHES="$BASE/patches"
 
 LABEL="arch-setup"
-MODE_PROMPT=false
+OPT_TASKS=()
+OPT_PROMPT=false
+OPT_LIST=false
 
 git submodule init
 git submodule update
@@ -30,53 +32,61 @@ while true; do
 		cat <<-EOF
 		Usage:
 		  setup.sh [options]
-		  setup.sh [options] <task>
+		  setup.sh [options] <task1> <task2> ...
 
 		Options:
 		  -h, --help   :  Shows this text
+		  -l, --list   :  Lists task names
 		  -p, --prompt :  Runs in prompt mode
-		
+
 		EOF
 		exit
 		;;
+	-l|--list)
+		OPT_LIST=true
+		;;
 	-p|--prompt)
-		MODE_PROMPT=true
+		OPT_PROMPT=true
+		;;
+	*)
+		OPT_TASKS+=("$1")
 		;;
 	esac
 	shift || break
 done
 
-# only root user is allowed
-_chk-user root
+if ! $OPT_LIST; then
 
-# always update the system first
-_install archlinux-keyring
-pacman --noconfirm --needed -Syu
+	# only root user is allowed
+	_chk-user root
 
-# editor
-export EDITOR="$(_require nano)"
-export VISUAL="$EDITOR"
+	# always update the system first
+	_install archlinux-keyring
+	pacman --noconfirm --needed -Syu
 
+	# editor
+	export EDITOR="$(_require nano)"
+	export VISUAL="$EDITOR"
 
-# ---- config -------- *
+	# config
+	CONF="$BASE/setup"
+	. "$CONF.conf"
+	if [ -f "$CONF.local" ]; then
+		. "$CONF.local"
+	else
+		cat <<-EOF > "$CONF.local"
+		##
+		#  setup.local
+		# ----------------- -
+		#  Edit this file so it suits your needs.
+		#  After save it, run setup.sh
+		# ========================================
 
-CONF="$BASE/setup"
-. "$CONF.conf"
-if [ -f "$CONF.local" ]; then
-	. "$CONF.local"
-else
-	cat <<-EOF > "$CONF.local"
-	##
-	#  setup.local
-	# ----------------- -
-	#  Edit this file so it suits your needs.
-	#  After save it, run setup.sh
-	# ========================================
-
-	EOF
-	cat "$CONF.conf" >> "$CONF.local"
-	"$EDITOR" "$CONF.local"
-	exit
+		EOF
+		cat "$CONF.conf" >> "$CONF.local"
+		"$EDITOR" "$CONF.local"
+		exit
+	fi
 fi
 
 

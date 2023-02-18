@@ -12,8 +12,24 @@ _CURRENT_TASK=
 task() {
 	local task="$1"; shift
 	[ -n "$task" ] || _err "argument missing"
+
+	# selective tasks
+	if [ -n "$OPT_TASKS" ]; then
+		_in "$task" "${OPT_TASKS[@]}" || return 1
+	fi
+
+	# list mode
+	if $OPT_LIST; then
+		local status="$(task-status "$task")"
+		if [ -z "$status" ];
+			then echo "$task"
+			else echo "$task (status: $status)"
+		fi
+		return 1
+	fi
+
+	# check if the previous task finished
 	[ -z "$_CURRENT_TASK" ] || _err "the task:$_CURRENT_TASK is not done yet"
-	[ -z "$_ARG_TASK" ] || [ "$_ARG_TASK" = "$task" ] || return 1
 
 	# check task status
 	is-task "$task" DONE NEVER && return 1
@@ -27,15 +43,15 @@ task() {
 	fi
 
 	# prompt
-	if $MODE_PROMPT; then
+	if $OPT_PROMPT; then
 		local answer
 		while true; do
 			read -n 1 -p "Run task:$task? [ (R)un / (S)kip / (N)ever / (D)one already ] " answer; echo
 			case "$answer" in
-				[Rr]) echo " > Run";          break ;;
-				[Ss]) echo " > Skip";         return 1 ;;
-				[Nn]) echo " > Never";        set-task "$task" NEVER; return 1 ;;
-				[Dd]) echo " > Done already"; set-task "$task" DONE;  return 1 ;;
+			[Rr]) echo "> Run";          break ;;
+			[Ss]) echo "> Skip";         return 1 ;;
+			[Nn]) echo "> Never";        set-task "$task" NEVER; return 1 ;;
+			[Dd]) echo "> Done already"; set-task "$task" DONE;  return 1 ;;
 			esac
 		done
 	fi
@@ -59,14 +75,13 @@ x() {
 	exit 1
 }
 
+task-status() {
+	_load-var "$1" "$_TASKS"
+}
+
 is-task() {
-	local task="$1"; shift
-	local status="$(_load-var "$task" "$_TASKS")"
-	local arg
-	for arg in "$@"; do
-		[ "$arg" = "$status" ] && return 0
-	done
-	return 1
+	local status="$(task-status "$1")"; shift
+	_in "$status" "$@"
 }
 
 set-task() {
@@ -82,6 +97,3 @@ reset-task() {
 reset-tasks() {
 	echo "" > "$_TASKS"
 }
-
-[ -z "$1" ] || reset-task "$1" || _err "cannot reset task:$1"
-_ARG_TASK="$1"

@@ -25,6 +25,22 @@ Also supports **patching the annoying warnings of egrep, fgrep, and rkhunter** (
 
 The script is supposed to be ran in `chroot` where the basic packages have already been installed with `pacstrap`. If your Arch is not ready, follow the instructions below.
 
+
+## Commandline Usage
+
+```
+Usage:
+  setup.sh [options]
+  setup.sh [options] <task1> <task2> ...
+
+Options:
+  -h, --help   : Show this text
+  -l, --list   : List task names
+  -p, --prompt : Run in prompt mode
+  --no-upgrade : Skip system upgrade
+```
+
+
 ## Getting Started
 Insert the latest Arch Linux live CD and boot it.
 

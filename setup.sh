@@ -28,23 +28,26 @@ git submodule update
 . "$BASE/lib/util.sh"
 . "$BASE/lib/task.sh"
 
+_help() {
+	cat <<-EOF
+	Usage:
+	  setup.sh [options]
+	  setup.sh [options] <task1> <task2> ...
+
+	Options:
+	  -h, --help   : Show this text
+	  -l, --list   : List task names
+	  -p, --prompt : Run in prompt mode
+	  --no-upgrade : Skip system upgrade
+
+	EOF
+}
+
 # commandline args
 while true; do
 	case "$1" in
 	-h|--help)
-		cat <<-EOF
-		Usage:
-		  setup.sh [options]
-		  setup.sh [options] <task1> <task2> ...
-
-		Options:
-		  -h, --help   : Show this text
-		  -l, --list   : List task names
-		  -p, --prompt : Run in prompt mode
-		  --no-upgrade : Skip system upgrade
-
-		EOF
-		exit
+		_help; exit
 		;;
 	-l|--list)
 		OPT_LIST=true
@@ -55,7 +58,12 @@ while true; do
 	--no-upgrade)
 		OPT_UPGRADE=false
 		;;
-	*)
+	-*)
+		echo "invalid option '$1'";
+		echo
+		_help; exit
+		;;
+ 	*)
 		OPT_TASKS+=("$1")
 		;;
 	esac

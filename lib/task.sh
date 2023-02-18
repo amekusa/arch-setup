@@ -46,7 +46,8 @@ task() {
 	if $OPT_PROMPT; then
 		local answer
 		while true; do
-			read -n 1 -p "Run task:$task? [ (R)un / (S)kip / (N)ever / (D)one already ] " answer; echo
+			echo "Run task:$task ?"
+			read -n 1 -p "[ (R)un / (S)kip / (N)ever / (D)one already ] " answer; echo
 			case "$answer" in
 			[Rr]) echo "> Run";          break ;;
 			[Ss]) echo "> Skip";         return 1 ;;

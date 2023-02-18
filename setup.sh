@@ -7,11 +7,13 @@
 
 EXEC="$(realpath "$0")"
 BASE="$(dirname "$EXEC")"
+CONF="$BASE/setup"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
 PATCHES="$BASE/patches"
 
 LABEL="arch-setup"
+
 OPT_TASKS=()
 OPT_PROMPT=false
 OPT_LIST=false
@@ -55,6 +57,26 @@ while true; do
 	shift || break
 done
 
+# configuration
+. "$CONF.conf"
+if [ -f "$CONF.local" ]; then . "$CONF.local"
+else
+	cat <<-EOF > "$CONF.local"
+	##
+	#  setup.local
+	# ----------------- -
+	#  Edit this file so it suits your needs.
+	#  After save it, run setup.sh again
+	# ========================================
+
+	EOF
+	cat "$CONF.conf" >> "$CONF.local"
+
+	[ -n "$EDITOR" ] || EDITOR="$(_fb-cmd nano micro nvim vim vi)" || _err "editor not found"
+	"$EDITOR" "$CONF.local"
+	exit
+fi
+
 if ! $OPT_LIST; then
 
 	# only root user is allowed
@@ -63,30 +85,6 @@ if ! $OPT_LIST; then
 	# always update the system first
 	_install archlinux-keyring
 	pacman --noconfirm --needed -Syu
-
-	# editor
-	export EDITOR="$(_require nano)"
-	export VISUAL="$EDITOR"
-
-	# config
-	CONF="$BASE/setup"
-	. "$CONF.conf"
-	if [ -f "$CONF.local" ]; then
-		. "$CONF.local"
-	else
-		cat <<-EOF > "$CONF.local"
-		##
-		#  setup.local
-		# ----------------- -
-		#  Edit this file so it suits your needs.
-		#  After save it, run setup.sh
-		# ========================================
-
-		EOF
-		cat "$CONF.conf" >> "$CONF.local"
-		"$EDITOR" "$CONF.local"
-		exit
-	fi
 fi
 
 

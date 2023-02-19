@@ -259,7 +259,7 @@ ksat; fi
 if $SSHD && task SSHD -d ADMIN; then
 	_install openssh || x
 	file="/etc/ssh/sshd_config"
-	[ -f "$file" ] && _backup "$file" || x "cannot backup: $file"
+	_backup "$file" || x
 	cat "$ASSETS/sshd_config" | _subst \
 		"admin=$ADMIN" \
 		"keepAliveTcp=$(_yn $SSHD_KEEPALIVE_TCP)" \
@@ -314,7 +314,7 @@ if $AUR && [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 	_var AUR_HELPER
 	case "$AUR_HELPER" in
 	yay)
-		sudo -Hu "$ADMIN" bash <<-EOF || x "cannot install: yay"
+		sudo -Hu "$ADMIN" bash <<- EOF || x "cannot install: yay"
 		git clone "https://aur.archlinux.org/yay.git" "\$HOME/yay" &&
 		cd "\$HOME/yay" && makepkg -sic --noconfirm --needed
 		rm -rf "\$HOME/yay"
@@ -388,7 +388,7 @@ ksat; fi
 # patch egrep
 if $PATCH_EGREP && task PATCH_EGREP; then
 	if file="$(which egrep)"; then
-		_backup "$file" || x "cannot backup: $file"
+		_backup "$file" || x
 		patch "$file" < "$PATCHES/egrep.patch" || x "cannot patch: $file"
 	fi
 ksat; fi
@@ -396,7 +396,7 @@ ksat; fi
 # patch fgrep
 if $PATCH_FGREP && task PATCH_FGREP; then
 	if file="$(which fgrep)"; then
-		_backup "$file" || x "cannot backup: $file"
+		_backup "$file" || x
 		patch "$file" < "$PATCHES/fgrep.patch" || x "cannot patch: $file"
 	fi
 ksat; fi
@@ -407,7 +407,7 @@ if $PATCH_RKHUNTER && task PATCH_RKHUNTER -d RKHUNTER; then
 		ver="$(_ver rkhunter)"
 		patch="$PATCHES/rkhunter.$ver.patch"
 		if [ -f "$patch" ]; then
-			_backup "$file" || x "cannot backup: $file"
+			_backup "$file" || x
 			patch "$file" < "$patch" || x "cannot patch: $file"
 		fi
 	fi

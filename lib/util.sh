@@ -82,8 +82,9 @@ _symlink() {
 }
 
 _backup() {
-	local now="$(date +%F)"
 	local src="$1"
+	[ -e "$src" ] || return 0
+	local now="$(date +%F)"
 	local dst="$BACKUP/$(basename "$1").$(date +%F).backup"
 	echo "backup:"
 	echo " > src: $src"

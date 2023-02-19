@@ -29,18 +29,18 @@ git submodule update
 . "$BASE/lib/task.sh"
 
 _help() {
-	cat <<-EOF
-	Usage:
-	  setup.sh [options]
-	  setup.sh [options] <task1> <task2> ...
+	cat << EOF
+Usage:
+  setup.sh [options]
+  setup.sh [options] <task1> <task2> ...
 
-	Options:
-	  -h, --help   : Show this text
-	  -l, --list   : List task names
-	  -p, --prompt : Run in prompt mode
-	  --no-upgrade : Skip system upgrade
+Options:
+  -h, --help   : Show this text
+  -l, --list   : List task names
+  -p, --prompt : Run in prompt mode
+  --no-upgrade : Skip system upgrade
 
-	EOF
+EOF
 }
 
 # commandline args
@@ -74,7 +74,7 @@ done
 . "$CONF.conf"
 if [ -f "$CONF.local" ]; then . "$CONF.local"
 else
-	cat <<-EOF > "$CONF.local"
+	cat <<- EOF > "$CONF.local"
 	##
 	#  setup.local
 	# ----------------- -
@@ -335,7 +335,7 @@ if $GUI; then
 			keymap=($GUI_X_KEYMAP)
 			opts=(XkbLayout XkbModel XkbVariant XkbOptions)
 			temp="$(mktemp)" || x
-			cat <<-EOF > "$temp"
+			cat <<- EOF > "$temp"
 			Section "InputClass"
 			        Identifier "system-keyboard"
 			        MatchIsKeyboard "on"

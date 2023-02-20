@@ -20,6 +20,15 @@ _aur-install() {
 	esac
 }
 
+# enables the given systemd service
+_sys-enable() {
+	if systemctl is-enabled --quiet "$1"; then
+		echo "'$1' is already enabled"
+		return 0
+	fi
+	systemctl enable "$1"
+}
+
 # returns the version number of the given pkg.
 # pkgrel ('-N') is not included
 _ver() {

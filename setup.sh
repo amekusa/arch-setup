@@ -162,7 +162,7 @@ if $REFLECTOR && task REFLECTOR; then
 	_show "$file"
 	_backup "/etc/pacman.d/mirrorlist" || x
 	reflector "@$file" || x
-	systemctl enable reflector.timer || x
+	_sys-enable reflector.timer || x
 ksat; fi
 
 # bootloader
@@ -231,16 +231,16 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 		fi
 		cat "$ASSETS/$file" | _subst "name=$nif" "dhcp=$(_yn $NET_DHCP)" "vm=$(_yn $VM)" > "/etc/systemd/network/$file" || x
 		_show "/etc/systemd/network/$file"
-		systemctl enable systemd-networkd.service || x
-		systemctl enable systemd-resolved.service || x
+		_sys-enable systemd-networkd.service || x
+		_sys-enable systemd-resolved.service || x
 		;;
 	netctl)
 		# TODO
 		;;
 	nm|networkmanager|NetworkManager)
 		_install networkmanager || x
-		systemctl enable NetworkManager.service || x
-		systemctl enable systemd-resolved.service || x
+		_sys-enable NetworkManager.service || x
+		_sys-enable systemd-resolved.service || x
 		;;
 	*)
 		x "invalid $(_var NETWORK)"
@@ -272,7 +272,7 @@ if $SSHD && task SSHD -d ADMIN; then
 		_section "$LABEL" "$file" || x "failed to write: $file"
 
 	_show "$file"
-	systemctl enable sshd.service || x
+	_sys-enable sshd.service || x
 ksat; fi
 
 # rootkit hunter
@@ -288,14 +288,14 @@ if $RKHUNTER && task RKHUNTER; then
 		file="/etc/systemd/system/rkhunter.timer"
 		cat "$ASSETS/rkhunter.timer" | _subst "timer=$RKH_TIMER" > "$file" || x "failed to write: $file"
 		_show "$file"
-		systemctl enable rkhunter.timer || x
+		_sys-enable rkhunter.timer || x
 	fi
 ksat; fi
 
 # paccache
 if $PACCACHE && task PACCACHE; then
 	_install pacman-contrib || x
-	systemctl enable paccache.timer || x
+	_sys-enable paccache.timer || x
 ksat; fi
 
 # git
@@ -359,7 +359,7 @@ if $GUI; then
 	# gnome
 	if $GUI_GNOME && task GUI_GNOME; then
 		_install gnome || x
-		systemctl enable gdm.service || x
+		_sys-enable gdm.service || x
 	ksat; fi
 
 	# install optional GUI packages
@@ -373,7 +373,7 @@ if $VM && task VM; then
 	case "$VM_TYPE" in
 	vbox)
 		_install virtualbox-guest-utils || x
-		systemctl enable vboxservice.service || x
+		_sys-enable vboxservice.service || x
 		;;
 	*)
 		x "invalid $(_var VM_TYPE)"

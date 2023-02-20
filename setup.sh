@@ -176,6 +176,7 @@ if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 		;;
 	*)
 		x "invalid $(_var BOOTLOADER)"
+		;;
 	esac
 ksat; fi
 
@@ -207,11 +208,11 @@ if $SUDO && task SUDO; then
 	_install sudo || x
 	file="/etc/sudoers"
 	case "$SUDO_ALLOW" in
-		wheel)      line='%wheel ALL=(ALL:ALL) ALL' ;;
-		wheel-nopw) line='%wheel ALL=(ALL:ALL) NOPASSWD: ALL' ;;
-		sudo)       line='%sudo ALL=(ALL:ALL) ALL' ;;
-		sudo-nopw)  line='%sudo ALL=(ALL:ALL) NOPASSWD: ALL' ;;
-		*) x "invalid $(_var SUDO_ALLOW)"
+	wheel)      line='%wheel ALL=(ALL:ALL) ALL' ;;
+	wheel-nopw) line='%wheel ALL=(ALL:ALL) NOPASSWD: ALL' ;;
+	sudo)       line='%sudo ALL=(ALL:ALL) ALL' ;;
+	sudo-nopw)  line='%sudo ALL=(ALL:ALL) NOPASSWD: ALL' ;;
+	*) x "invalid $(_var SUDO_ALLOW)" ;;
 	esac
 	echo "$line" | _section "$LABEL" "$file" || x "failed to write: $file"
 ksat; fi
@@ -243,6 +244,7 @@ if [ -n "$NET_MANAGER" ] && task NETWORK; then
 		;;
 	*)
 		x "invalid $(_var NETWORK)"
+		;;
 	esac
 ksat; fi
 
@@ -324,6 +326,7 @@ if $AUR && [ -n "$AUR_HELPER" ] && task AUR_HELPER -d ADMIN SUDO GIT; then
 		;;
 	*)
 		x "invalid $(_var AUR_HELPER)"
+		;;
 	esac
 	cd "$BASE"
 ksat; fi
@@ -374,6 +377,7 @@ if $VM && task VM; then
 		;;
 	*)
 		x "invalid $(_var VM_TYPE)"
+		;;
 	esac
 ksat; fi
 

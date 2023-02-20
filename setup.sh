@@ -106,7 +106,8 @@ fi
 
 # hosts
 if task HOSTS; then
-	cat <<- EOF > /etc/hosts
+	_backup "/etc/hosts" || x
+	cat <<- EOF > "/etc/hosts"
 	127.0.0.1  localhost
 	::1        localhost
 	EOF
@@ -115,7 +116,8 @@ ksat; fi
 # hostname
 if [ -n "$HOSTNAME" ] && task HOSTNAME -d HOSTS; then
 	_var HOSTNAME
-	echo "$HOSTNAME" > /etc/hostname || x
+	_backup "/etc/hostname" || x
+	echo "$HOSTNAME" > "/etc/hostname" || x
 	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
 	_show /etc/hosts
 ksat; fi

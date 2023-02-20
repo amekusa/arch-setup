@@ -118,22 +118,22 @@ if [ -n "$HOSTNAME" ] && task HOSTNAME -d HOSTS; then
 	_var HOSTNAME
 	_backup "/etc/hostname" || x
 	echo "$HOSTNAME" > "/etc/hostname" || x
-	echo "127.0.1.1  $HOSTNAME" >> /etc/hosts || x
-	_show /etc/hosts
+	echo "127.0.1.1  $HOSTNAME" >> "/etc/hosts" || x
+	_show "/etc/hosts"
 ksat; fi
 
 # locale
 if [ -n "$LOCALE" ] && task LOCALE; then
 	_var LOCALE
-	_uncomment "$LOCALE" /etc/locale.gen || x
+	_uncomment "$LOCALE" "/etc/locale.gen" || x
 	locale-gen || x
-	_save-var LANG "$LOCALE" /etc/locale.conf || x
+	_save-var LANG "$LOCALE" "/etc/locale.conf" || x
 ksat; fi
 
 # timezone
 if [ -n "$TIMEZONE" ] && task TIMEZONE; then
 	_var TIMEZONE
-	_symlink "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime || x
+	_symlink "/usr/share/zoneinfo/$TIMEZONE" "/etc/localtime" || x
 	hwclock --systohc --utc || x
 ksat; fi
 
@@ -141,7 +141,7 @@ ksat; fi
 if [ -n "$KEYMAP" ] && task KEYMAP; then
 	_var KEYMAP
 	loadkeys "$KEYMAP" || x
-	_save-var KEYMAP "$KEYMAP" /etc/vconsole.conf || x
+	_save-var KEYMAP "$KEYMAP" "/etc/vconsole.conf" || x
 ksat; fi
 
 # reflector
@@ -172,7 +172,7 @@ if [ -n "$BOOTLOADER" ] && task BOOTLOADER; then
 	grub)
 		_install grub || x
 		grub-install --recheck "$disk" || x "cmd failed: grub-install"
-		grub-mkconfig -o /boot/grub/grub.cfg || x "cmd failed: grub-mkconfig"
+		grub-mkconfig -o "/boot/grub/grub.cfg" || x "cmd failed: grub-mkconfig"
 		;;
 	*)
 		x "invalid $(_var BOOTLOADER)"

@@ -1,3 +1,6 @@
 [submodule "shlib"]
 	path = shlib
 	url = ../shlib.git
+[submodule "ush"]
+	path = ush
+	url = https://github.com/amekusa/u.sh.git

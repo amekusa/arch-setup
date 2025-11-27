@@ -334,12 +334,23 @@ if $GUI; then
 	# gnome
 	if $GUI_GNOME && _task GUI_GNOME; then
 		_install gnome || _fail
-		_sys-enable gdm.service || _fail
 	fi
 
+	# display manager
+	case "$GUI_DM" in
+	gdm)
+		_install gdm || _fail
+		_sys-enable gdm.service || _fail
+		;;
+	lightdm)
+		_install lightdm || _fail
+		_sys-enable lightdm.service || _fail
+		;;
+	esac
+
 	# install optional GUI packages
-	if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then
 		_install "${GUI_PKGS[@]}" || _fail
+		if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then
 	fi
 fi
 

@@ -94,7 +94,7 @@ _backup() {
 	local src="$1"
 	[ -e "$src" ] || return 0
 	local now="$(date +%F)"
-	local dst="$BACKUP/$(basename "$1").$(date +%F).backup"
+	local dst="$BACKUP/$(basename "$1").$now.backup"
 	echo "backup:"
 	echo " > src: $src"
 	echo " > dst: $dst"

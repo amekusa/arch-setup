@@ -5,7 +5,6 @@
 
 BASE="$(dirname "$(realpath "$0")")"
 
-CONF="$BASE/conf"
 ASSETS="$BASE/assets"
 BACKUP="$BASE/backup"
 PATCHES="$BASE/patches"
@@ -52,20 +51,20 @@ done
 
 
 # === CONFIG ===
-. "$CONF.conf"
-if [ -f "$CONF.local" ]; then
-	. "$CONF.local"
+. "$BASE/default.conf"
+if [ -f "$BASE/user.conf" ]; then
+	. "$BASE/user.conf"
 else
-	cat <<- EOF > "$CONF.local"
-	#  --- setup.local ---
+	cat <<- EOF > "$BASE/user.conf"
+	#  --- user.conf ---
 	#  Edit this file so it suits your needs.
 	#  After save it, run setup.sh again
 	# ========================================
 
 	EOF
-	cat "$CONF.conf" >> "$CONF.local"
+	cat "$BASE/default.conf" >> "$BASE/user.conf"
 	[ -n "$EDITOR" ] || EDITOR="$(_fb-cmd -f nano nvim vim vi '')" || _die "editor not found"
-	"$EDITOR" "$CONF.local"
+	"$EDITOR" "$BASE/user.conf"
 	exit
 fi
 

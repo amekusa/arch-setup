@@ -37,7 +37,7 @@ _help() {
 }
 
 TASK_OPTS=()
-while true; do
+while [ $# -gt 0 ]; do
 	case "$1" in
 	-h|--help)
 		_help; exit
@@ -46,7 +46,7 @@ while true; do
 		TASK_OPTS+=("$1")
 		;;
 	esac
-	shift || break
+	shift
 done
 
 

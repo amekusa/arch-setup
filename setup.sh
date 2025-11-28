@@ -358,7 +358,10 @@ fi
 if $VM && _task VM; then
 	case "$VM_TYPE" in
 	vbox)
-		_install virtualbox-guest-utils || _fail
+		if $GUI_X
+			then _install virtualbox-guest-utils || _fail
+			else _install virtualbox-guest-utils-nox || _fail
+		fi
 		_sys-enable vboxservice.service || _fail
 		;;
 	*)

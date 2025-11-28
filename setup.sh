@@ -349,8 +349,8 @@ if $GUI; then
 	esac
 
 	# install optional GUI packages
+	if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then
 		_install "${GUI_PKGS[@]}" || _fail
-		if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then
 	fi
 fi
 

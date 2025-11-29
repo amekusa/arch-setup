@@ -217,7 +217,7 @@ if [ -n "$NET_MANAGER" ] && _task NETWORK; then
 		_sys-enable systemd-resolved.service || _fail
 		;;
 	*)
-		_fail "invalid $(_var NETWORK)"
+		_fail "invalid $(_var NET_MANAGER)"
 		;;
 	esac
 fi

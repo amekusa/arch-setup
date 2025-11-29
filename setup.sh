@@ -337,17 +337,19 @@ if $GUI; then
 	fi
 
 	# display manager
-	case "$GUI_DM" in
-	gdm)
-		_install gdm || _fail
-		_sys-enable gdm.service || _fail
-		;;
-	lightdm)
-		_install lightdm || _fail
-		_install lightdm-gtk-greeter || _fail
-		_sys-enable lightdm.service || _fail
-		;;
-	esac
+	if [ -n "$GUI_DM" ] && _task GUI_DM; then
+		case "$GUI_DM" in
+		gdm)
+			_install gdm || _fail
+			_sys-enable gdm.service || _fail
+			;;
+		lightdm)
+			_install lightdm || _fail
+			_install lightdm-gtk-greeter || _fail
+			_sys-enable lightdm.service || _fail
+			;;
+		esac
+	fi
 
 	# install optional GUI packages
 	if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then

@@ -344,6 +344,7 @@ if $GUI; then
 		;;
 	lightdm)
 		_install lightdm || _fail
+		_install lightdm-gtk-greeter || _fail
 		_sys-enable lightdm.service || _fail
 		;;
 	esac
@@ -363,9 +364,6 @@ if $VM && _task VM; then
 			else _install virtualbox-guest-utils-nox || _fail
 		fi
 		_sys-enable vboxservice.service || _fail
-		;;
-	*)
-		_fail "invalid $(_var VM_TYPE)"
 		;;
 	esac
 fi

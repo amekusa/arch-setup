@@ -88,11 +88,11 @@ if _task HOSTS; then
 fi
 
 # hostname
-if [ -n "$HOSTNAME" ] && _task HOSTNAME -d HOSTS; then
-	_var HOSTNAME
+if [ -n "$HOST" ] && _task HOSTNAME -d HOSTS; then
+	_var HOST
 	_backup "/etc/hostname" || _fail
-	echo "$HOSTNAME" > "/etc/hostname" || _fail
-	echo "127.0.1.1  $HOSTNAME" >> "/etc/hosts" || _fail
+	echo "$HOST" > "/etc/hostname" || _fail
+	echo "127.0.1.1  $HOST" >> "/etc/hosts" || _fail
 	_show "/etc/hosts"
 fi
 

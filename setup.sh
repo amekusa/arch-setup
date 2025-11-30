@@ -360,6 +360,11 @@ fi
 # virtual machine
 if $VM && _task VM; then
 	case "$VM_TYPE" in
+	qemu)
+		if $GUI; then
+			_install mesa || _fail
+		fi
+		;;
 	vbox)
 		if $GUI_X
 			then _install virtualbox-guest-utils || _fail

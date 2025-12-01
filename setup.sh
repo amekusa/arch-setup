@@ -373,7 +373,7 @@ if $GUI; then
 		_var GUI_DE
 		case "$GUI_DE" in
 		bspwm)
-			[ "$GUI_WS" = x ] || _fail "GUI_WS is not 'x'"
+			[ "$GUI_WS" = x ] || _fail "GUI_WS must be 'x' for bspwm"
 			_install bspwm sxhkd || _fail
 
 			;;

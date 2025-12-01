@@ -308,29 +308,37 @@ fi
 # graphical user interface
 if $GUI; then
 
-	# x11
-	if $GUI_X && _task GUI_X; then
-		_install xorg-server xorg-xinit || _fail
-		if [ -n "$GUI_X_KEYMAP" ]; then
-			keymap=($GUI_X_KEYMAP)
-			opts=(XkbLayout XkbModel XkbVariant XkbOptions)
-			temp="$(mktemp)" || _fail
-			cat <<- EOF > "$temp"
-			Section "InputClass"
-			        Identifier "system-keyboard"
-			        MatchIsKeyboard "on"
-			EOF
-			for i in "${!keymap[@]}"; do
-				echo "        Option \"${opts[$i]}\" \"${keymap[$i]}\"" >> "$temp"
-			done
-			echo "EndSection" >> "$temp"
-			file="/etc/X11/xorg.conf.d/00-keyboard.conf"
-			cat "$temp" > "$file" || _fail "failed to write: $file"
-			_show "$file"
-			rm "$temp"
-		fi
+	# window system
+	if [ -n "$GUI_WS" ] && _task GUI_WS; then
+		case "$GUI_WS" in
+		x)
+			_install xorg-server xorg-xinit || _fail
+			if [ -n "$GUI_X_KEYMAP" ]; then
+				keymap=($GUI_X_KEYMAP)
+				opts=(XkbLayout XkbModel XkbVariant XkbOptions)
+				temp="$(mktemp)" || _fail
+				cat <<- EOF > "$temp"
+				Section "InputClass"
+						Identifier "system-keyboard"
+						MatchIsKeyboard "on"
+				EOF
+				for i in "${!keymap[@]}"; do
+					echo "        Option \"${opts[$i]}\" \"${keymap[$i]}\"" >> "$temp"
+				done
+				echo "EndSection" >> "$temp"
+				file="/etc/X11/xorg.conf.d/00-keyboard.conf"
+				cat "$temp" > "$file" || _fail "failed to write: $file"
+				_show "$file"
+				rm "$temp"
+			fi
+			;;
+		wayland)
+			_fail "wayland is not supported yet"
+			;;
+		esac
 	fi
 
+	# desktop environment
 	if [ -n "$GUI_DE" ] && _task GUI_DE; then
 		case "$GUI_DE" in
 		bspwm)
@@ -375,7 +383,7 @@ if $VM && _task VM; then
 		fi
 		;;
 	vbox)
-		if $GUI_X
+		if [ "$GUI_WS" = x ]
 			then _install virtualbox-guest-utils || _fail
 			else _install virtualbox-guest-utils-nox || _fail
 		fi

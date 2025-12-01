@@ -331,22 +331,31 @@ if $GUI; then
 		fi
 	fi
 
-	# gnome
-	if $GUI_GNOME && _task GUI_GNOME; then
-		_install gnome || _fail
+	if [ -n "$GUI_DE" ] && _task GUI_DE; then
+		case "$GUI_DE" in
+		bspwm)
+
+			;;
+		i3)
+			_fail "i3 is not supported yet"
+			;;
+		gnome)
+			_install gnome || _fail
+			;;
+		esac
 	fi
 
 	# display manager
 	if [ -n "$GUI_DM" ] && _task GUI_DM; then
 		case "$GUI_DM" in
-		gdm)
-			_install gdm || _fail
-			_sys-enable gdm.service || _fail
-			;;
 		lightdm)
 			_install lightdm || _fail
 			_install lightdm-gtk-greeter || _fail
 			_sys-enable lightdm.service || _fail
+			;;
+		gdm)
+			_install gdm || _fail
+			_sys-enable gdm.service || _fail
 			;;
 		esac
 	fi

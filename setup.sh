@@ -369,6 +369,8 @@ if $GUI; then
 	if [ -n "$GUI_DE" ] && _task GUI_DE; then
 		case "$GUI_DE" in
 		bspwm)
+			[ "$GUI_WS" = x ] || _fail "GUI_WS is not 'x'"
+			_install bspwm sxhkd || _fail
 
 			;;
 		i3)

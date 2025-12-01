@@ -338,17 +338,14 @@ if $GUI; then
 		esac
 	fi
 
-	# desktop environment
-	if [ -n "$GUI_DE" ] && _task GUI_DE; then
-		case "$GUI_DE" in
-		bspwm)
-
+	# opengl
+	if [ -n "$GUI_GL" ] && _task GUI_GL; then
+		case "$GUI_GL" in
+		mesa)
+			_install mesa || _fail
 			;;
-		i3)
-			_fail "i3 is not supported yet"
-			;;
-		gnome)
-			_install gnome || _fail
+		mesa-amber)
+			_install mesa-amber || _fail
 			;;
 		esac
 	fi
@@ -368,6 +365,21 @@ if $GUI; then
 		esac
 	fi
 
+	# desktop environment
+	if [ -n "$GUI_DE" ] && _task GUI_DE; then
+		case "$GUI_DE" in
+		bspwm)
+
+			;;
+		i3)
+			_fail "i3 is not supported yet"
+			;;
+		gnome)
+			_install gnome || _fail
+			;;
+		esac
+	fi
+
 	# install optional GUI packages
 	if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then
 		_install "${GUI_PKGS[@]}" || _fail
@@ -378,9 +390,6 @@ fi
 if $VM && _task VM; then
 	case "$VM_TYPE" in
 	qemu)
-		if $GUI; then
-			_install mesa || _fail
-		fi
 		;;
 	vbox)
 		if [ "$GUI_WS" = x ]

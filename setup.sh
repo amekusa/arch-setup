@@ -310,6 +310,7 @@ if $GUI; then
 
 	# window system
 	if [ -n "$GUI_WS" ] && _task GUI_WS; then
+		_var GUI_WS
 		case "$GUI_WS" in
 		x)
 			_install xorg-server xorg-xinit || _fail
@@ -340,6 +341,7 @@ if $GUI; then
 
 	# opengl
 	if [ -n "$GUI_GL" ] && _task GUI_GL; then
+		_var GUI_GL
 		case "$GUI_GL" in
 		mesa)
 			_install mesa || _fail
@@ -352,6 +354,7 @@ if $GUI; then
 
 	# display manager
 	if [ -n "$GUI_DM" ] && _task GUI_DM; then
+		_var GUI_DM
 		case "$GUI_DM" in
 		lightdm)
 			_install lightdm || _fail
@@ -367,6 +370,7 @@ if $GUI; then
 
 	# desktop environment
 	if [ -n "$GUI_DE" ] && _task GUI_DE; then
+		_var GUI_DE
 		case "$GUI_DE" in
 		bspwm)
 			[ "$GUI_WS" = x ] || _fail "GUI_WS is not 'x'"
@@ -390,6 +394,7 @@ fi
 
 # virtual machine
 if $VM && _task VM; then
+	_var VM_TYPE
 	case "$VM_TYPE" in
 	qemu)
 		;;

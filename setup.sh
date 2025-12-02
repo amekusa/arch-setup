@@ -136,7 +136,7 @@ if $REFLECTOR && _task REFLECTOR; then
 	_show "$file"
 	_backup "/etc/pacman.d/mirrorlist" || _fail
 	reflector "@$file" || _fail
-	_sys-enable reflector.timer || _fail
+	_enable reflector.timer || _fail
 fi
 
 # bootloader
@@ -205,16 +205,16 @@ if [ -n "$NET_MANAGER" ] && _task NETWORK; then
 		fi
 		cat "$ASSETS/$file" | _subst "name=$nif" "dhcp=$(_yn $NET_DHCP)" "vm=$(_yn $VM)" > "/etc/systemd/network/$file" || _fail
 		_show "/etc/systemd/network/$file"
-		_sys-enable systemd-networkd.service || _fail
-		_sys-enable systemd-resolved.service || _fail
+		_enable systemd-networkd.service || _fail
+		_enable systemd-resolved.service || _fail
 		;;
 	netctl)
 		# TODO
 		;;
 	nm|networkmanager|NetworkManager)
 		_pkg networkmanager || _fail
-		_sys-enable NetworkManager.service || _fail
-		_sys-enable systemd-resolved.service || _fail
+		_enable NetworkManager.service || _fail
+		_enable systemd-resolved.service || _fail
 		;;
 	*)
 		_fail "invalid $(_var NET_MANAGER)"
@@ -246,7 +246,7 @@ if $SSHD && _task SSHD -d ADMIN; then
 		_section "$LABEL" "$file" || _fail "failed to write: $file"
 
 	_show "$file"
-	_sys-enable sshd.service || _fail
+	_enable sshd.service || _fail
 fi
 
 # rootkit hunter
@@ -262,14 +262,14 @@ if $RKHUNTER && _task RKHUNTER; then
 		file="/etc/systemd/system/rkhunter.timer"
 		cat "$ASSETS/rkhunter.timer" | _subst "timer=$RKH_TIMER" > "$file" || _fail "failed to write: $file"
 		_show "$file"
-		_sys-enable rkhunter.timer || _fail
+		_enable rkhunter.timer || _fail
 	fi
 fi
 
 # paccache
 if $PACCACHE && _task PACCACHE; then
 	_pkg pacman-contrib || _fail
-	_sys-enable paccache.timer || _fail
+	_enable paccache.timer || _fail
 fi
 
 # git
@@ -359,11 +359,11 @@ if $GUI; then
 		lightdm)
 			_pkg lightdm || _fail
 			_pkg lightdm-gtk-greeter || _fail
-			_sys-enable lightdm.service || _fail
+			_enable lightdm.service || _fail
 			;;
 		gdm)
 			_pkg gdm || _fail
-			_sys-enable gdm.service || _fail
+			_enable gdm.service || _fail
 			;;
 		esac
 	fi
@@ -403,7 +403,7 @@ if $VM && _task VM; then
 			then _pkg virtualbox-guest-utils || _fail
 			else _pkg virtualbox-guest-utils-nox || _fail
 		fi
-		_sys-enable vboxservice.service || _fail
+		_enable vboxservice.service || _fail
 		;;
 	esac
 fi

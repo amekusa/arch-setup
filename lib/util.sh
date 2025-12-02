@@ -21,7 +21,7 @@ _aur() {
 }
 
 # enables the given systemd service
-_sys-enable() {
+_enable() {
 	if systemctl is-enabled --quiet "$1"; then
 		echo "'$1' is already enabled"
 		return 0

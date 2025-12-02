@@ -98,6 +98,14 @@ _backup() {
 	echo "backup:"
 	echo " > src: $src"
 	echo " > dst: $dst"
-	echo "# backup at:$now src:$src" > "$dst"
+	echo "# [backup at:$now src:$src]" > "$dst"
 	cat "$src" >> "$dst"
 }
+
+_copy() {
+	local src="$1"
+	local dst="$2"
+	_backup "$src"
+	cp -f "$src" "$dst"
+}
+

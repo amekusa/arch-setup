@@ -252,7 +252,7 @@ fi
 # rootkit hunter
 if $RKHUNTER && _task RKHUNTER; then
 	exec="$(_require rkhunter)" || _fail
-	cp "$ASSETS/rkhunter.conf.local" /etc/ || _fail
+	_copy "$ASSETS/rkhunter.conf.local" /etc/ || _fail
 
 	file="/etc/systemd/system/rkhunter.service"
 	cat "$ASSETS/rkhunter.service" | _subst "rkhunter=$exec" > "$file" || _fail "failed to write: $file"
@@ -283,7 +283,7 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && _task GIT -d ADMIN; then
 	_show "$file"
 
 	copy="/home/$ADMIN/.gitconfig"
-	cp "$file" "$copy" || _fail "failed to copy: $file -> $copy"
+	_copy "$file" "$copy" || _fail "failed to copy: $file -> $copy"
 	chown $ADMIN:$ADMIN "$copy" || _fail "cmd failed: chown"
 fi
 
@@ -450,7 +450,7 @@ fi
 if $ETCKEEPER && _task ETCKEEPER -d GIT; then
 	_pkg etckeeper || _fail
 	file="/etc/.gitignore"
-	cp "$ASSETS/etc.gitignore" "$file" || _fail "failed to write: $file"
+	_copy "$ASSETS/etc.gitignore" "$file" || _fail "failed to write: $file"
 	etckeeper init || _fail "cmd failed: etckeeper init"
 fi
 
@@ -464,7 +464,7 @@ if $RKHUNTER && $RKH_HOOKS && _task RKH_HOOKS -d RKHUNTER; then
 	_show "$file"
 
 	file="$dir/rkhunter-status.hook"
-	cp "$ASSETS/rkhunter-status.hook" "$file" || _fail "failed to write: $file"
+	_copy "$ASSETS/rkhunter-status.hook" "$file" || _fail "failed to write: $file"
 	_show "$file"
 fi
 

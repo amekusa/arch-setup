@@ -74,7 +74,7 @@ _task-system -s "$BASE/tasks" "${TASK_OPTS[@]}"
 
 # system update
 if _task UPDATE; then
-	_install archlinux-keyring
+	_pkg archlinux-keyring
 	pacman --noconfirm --needed -Syu
 fi
 
@@ -120,7 +120,7 @@ fi
 
 # reflector
 if $REFLECTOR && _task REFLECTOR; then
-	_install reflector || _fail
+	_pkg reflector || _fail
 	file="/etc/xdg/reflector/reflector.conf"
 	[ -f "$file" ] || _fail "file not found: $file"
 	if [ -n "$REF_COUNTRY" ]; then
@@ -144,7 +144,7 @@ if [ -n "$BOOTLOADER" ] && _task BOOTLOADER; then
 	disk="$(_fb "$DISK" $(_disk))" || _fail "disk not found"
 	case "$BOOTLOADER" in
 	grub)
-		_install grub || _fail
+		_pkg grub || _fail
 		grub-install --recheck "$disk" || _fail "cmd failed: grub-install"
 		grub-mkconfig -o "/boot/grub/grub.cfg" || _fail "cmd failed: grub-mkconfig"
 		;;
@@ -179,7 +179,7 @@ fi
 
 # sudo
 if $SUDO && _task SUDO; then
-	_install sudo || _fail
+	_pkg sudo || _fail
 	file="/etc/sudoers"
 	case "$SUDO_ALLOW" in
 		wheel)      line='%wheel ALL=(ALL:ALL) ALL' ;;
@@ -212,7 +212,7 @@ if [ -n "$NET_MANAGER" ] && _task NETWORK; then
 		# TODO
 		;;
 	nm|networkmanager|NetworkManager)
-		_install networkmanager || _fail
+		_pkg networkmanager || _fail
 		_sys-enable NetworkManager.service || _fail
 		_sys-enable systemd-resolved.service || _fail
 		;;
@@ -224,7 +224,7 @@ fi
 
 # ssh authorized keys
 if [ -n "$SSH_AUTH_KEYS" ] && _task SSH_AUTH_KEYS -d ADMIN; then
-	_install openssh || _fail
+	_pkg openssh || _fail
 	dir="/home/$ADMIN/.ssh"
 	file="$dir/authorized_keys"
 	_dir  "$dir"  -m 700 -o "$ADMIN:$ADMIN" || _fail
@@ -235,7 +235,7 @@ fi
 
 # ssh server
 if $SSHD && _task SSHD -d ADMIN; then
-	_install openssh || _fail
+	_pkg openssh || _fail
 	file="/etc/ssh/sshd_config"
 	_backup "$file" || _fail
 	cat "$ASSETS/sshd_config" | _subst \
@@ -268,13 +268,13 @@ fi
 
 # paccache
 if $PACCACHE && _task PACCACHE; then
-	_install pacman-contrib || _fail
+	_pkg pacman-contrib || _fail
 	_sys-enable paccache.timer || _fail
 fi
 
 # git
 if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && _task GIT -d ADMIN; then
-	_install git || _fail
+	_pkg git || _fail
 	_var GIT_EMAIL
 	_var GIT_NAME
 
@@ -313,7 +313,7 @@ if $GUI; then
 		_var GUI_WS
 		case "$GUI_WS" in
 		x)
-			_install xorg-server xorg-xinit || _fail
+			_pkg xorg-server xorg-xinit || _fail
 			if [ -n "$GUI_X_KEYMAP" ]; then
 				keymap=($GUI_X_KEYMAP)
 				opts=(XkbLayout XkbModel XkbVariant XkbOptions)
@@ -344,10 +344,10 @@ if $GUI; then
 		_var GUI_GL
 		case "$GUI_GL" in
 		mesa)
-			_install mesa || _fail
+			_pkg mesa || _fail
 			;;
 		mesa-amber)
-			_install mesa-amber || _fail
+			_pkg mesa-amber || _fail
 			;;
 		esac
 	fi
@@ -357,12 +357,12 @@ if $GUI; then
 		_var GUI_DM
 		case "$GUI_DM" in
 		lightdm)
-			_install lightdm || _fail
-			_install lightdm-gtk-greeter || _fail
+			_pkg lightdm || _fail
+			_pkg lightdm-gtk-greeter || _fail
 			_sys-enable lightdm.service || _fail
 			;;
 		gdm)
-			_install gdm || _fail
+			_pkg gdm || _fail
 			_sys-enable gdm.service || _fail
 			;;
 		esac
@@ -374,21 +374,21 @@ if $GUI; then
 		case "$GUI_DE" in
 		bspwm)
 			[ "$GUI_WS" = x ] || _fail "GUI_WS must be 'x' for bspwm"
-			_install bspwm sxhkd || _fail
+			_pkg bspwm sxhkd || _fail
 
 			;;
 		i3)
 			_fail "i3 is not supported yet"
 			;;
 		gnome)
-			_install gnome || _fail
+			_pkg gnome || _fail
 			;;
 		esac
 	fi
 
 	# install optional GUI packages
 	if [ -n "$GUI_PKGS" ] && _task GUI_PKGS; then
-		_install "${GUI_PKGS[@]}" || _fail
+		_pkg "${GUI_PKGS[@]}" || _fail
 	fi
 fi
 
@@ -400,8 +400,8 @@ if $VM && _task VM; then
 		;;
 	vbox)
 		if [ "$GUI_WS" = x ]
-			then _install virtualbox-guest-utils || _fail
-			else _install virtualbox-guest-utils-nox || _fail
+			then _pkg virtualbox-guest-utils || _fail
+			else _pkg virtualbox-guest-utils-nox || _fail
 		fi
 		_sys-enable vboxservice.service || _fail
 		;;
@@ -410,12 +410,12 @@ fi
 
 # install optional packages
 if [ -n "$PKGS" ] && _task PKGS; then
-	_install "${PKGS[@]}" || _fail
+	_pkg "${PKGS[@]}" || _fail
 fi
 
 # install AUR packages
 if $AUR && [ -n "$AUR_PKGS" ] && _task AUR_PKGS -d AUR_HELPER; then
-	_aur-install "${AUR_PKGS[@]}" || _fail
+	_aur "${AUR_PKGS[@]}" || _fail
 fi
 
 # patch egrep
@@ -448,7 +448,7 @@ fi
 
 # etckeeper
 if $ETCKEEPER && _task ETCKEEPER -d GIT; then
-	_install etckeeper || _fail
+	_pkg etckeeper || _fail
 	file="/etc/.gitignore"
 	cp "$ASSETS/etc.gitignore" "$file" || _fail "failed to write: $file"
 	etckeeper init || _fail "cmd failed: etckeeper init"

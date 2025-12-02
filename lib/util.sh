@@ -5,12 +5,12 @@
 # ============================================
 
 # installs the given pkg
-_install() {
+_pkg() {
 	pacman --noconfirm --needed -S "$@"
 }
 
 # installs the given pkg with AUR helper
-_aur-install() {
+_aur() {
 	case "$AUR_HELPER" in
 	yay)
 		sudo -Hu "$ADMIN" bash -c "yay --noconfirm --needed -S $@"
@@ -40,7 +40,7 @@ _ver() {
 _require() {
 	local r
 	r="$(which "$1")" && echo "$r" && return
-	_install "$1" &> /dev/null || return 1
+	_pkg "$1" &> /dev/null || return 1
 	echo "$(which "$1")"
 }
 

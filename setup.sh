@@ -3,6 +3,11 @@
 # @author Satoshi Soma (github.com/amekusa)
 # ============================================
 
+if [ "$(whoami)" != root ]; then
+	echo "[ERROR] run as root" >&2
+	exit 1
+fi
+
 BASE="$(dirname "$(realpath "$0")")"
 
 ASSETS="$BASE/assets"

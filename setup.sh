@@ -37,6 +37,7 @@ _help() {
 	  -p, --prompt : Run in prompt mode
 	  -r, --reset  : Reset tasks
 	  -F, --force  : Force run tasks
+	  -u, --update : Update arch-setup
 
 	EOF
 }
@@ -46,6 +47,11 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 	-h|--help)
 		_help; exit
+		;;
+	-u|--update)
+		git pull "git@github.com:amekusa/arch-setup.git"
+		_backup "$BASE/user.conf"
+		_backup "$BASE/tasks"
 		;;
  	*)
 		TASK_OPTS+=("$1")

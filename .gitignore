@@ -1,2 +1,5 @@
 /user.conf
 /tasks
+/.default.old.conf
+/.default.conf.patch
+

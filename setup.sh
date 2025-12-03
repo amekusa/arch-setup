@@ -49,9 +49,12 @@ while [ $# -gt 0 ]; do
 		_help; exit
 		;;
 	-u|--update)
-		git pull "git@github.com:amekusa/arch-setup.git"
 		_backup "$BASE/user.conf"
 		_backup "$BASE/tasks"
+		cp -f "$BASE/default.conf" "$BASE/.default.old.conf"
+		git pull "https://github.com/amekusa/arch-setup.git"
+		diff -uwB "$BASE/.default.old.conf" "$BASE/default.conf" > "$BASE/.default.conf.patch"
+		[ -f "$BASE/user.conf" ] && patch "$BASE/user.conf" < "$BASE/.default.conf.patch"
 		;;
  	*)
 		TASK_OPTS+=("$1")

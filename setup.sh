@@ -55,6 +55,7 @@ while [ $# -gt 0 ]; do
 		git pull "https://github.com/amekusa/arch-setup.git"
 		diff -uwB "$BASE/.default.old.conf" "$BASE/default.conf" > "$BASE/.default.conf.patch"
 		[ -f "$BASE/user.conf" ] && patch "$BASE/user.conf" < "$BASE/.default.conf.patch"
+		exit 0
 		;;
  	*)
 		TASK_OPTS+=("$1")

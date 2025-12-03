@@ -459,7 +459,7 @@ fi
 if $PATCH_EGREP && _task PATCH_EGREP; then
 	if file="$(which egrep)"; then
 		_backup "$file" || _fail
-		patch "$file" "$PATCHES/egrep.patch" || _fail "cannot patch: $file"
+		patch "$file" < "$PATCHES/egrep.patch" || _fail "cannot patch: $file"
 	fi
 fi
 
@@ -467,7 +467,7 @@ fi
 if $PATCH_FGREP && _task PATCH_FGREP; then
 	if file="$(which fgrep)"; then
 		_backup "$file" || _fail
-		patch "$file" "$PATCHES/fgrep.patch" || _fail "cannot patch: $file"
+		patch "$file" < "$PATCHES/fgrep.patch" || _fail "cannot patch: $file"
 	fi
 fi
 
@@ -478,7 +478,7 @@ if $PATCH_RKHUNTER && _task PATCH_RKHUNTER -d RKHUNTER; then
 		patch="$PATCHES/rkhunter.$ver.patch"
 		if [ -f "$patch" ]; then
 			_backup "$file" || _fail
-			patch "$file" "$patch" || _fail "cannot patch: $file"
+			patch "$file" < "$patch" || _fail "cannot patch: $file"
 		fi
 	fi
 fi

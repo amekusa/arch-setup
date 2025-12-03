@@ -416,7 +416,8 @@ if $GUI; then
 		bspwm)
 			[ "$GUI_WS" = x ] || _fail "GUI_WS must be 'x' for bspwm"
 			_pkg bspwm sxhkd || _fail
-
+			install -Dm 755 "/usr/share/doc/bspwm/examples/bspwmrc" "/root/.config/bspwm/bspwmrc"
+			install -Dm 755 "/usr/share/doc/bspwm/examples/sxhkdrc" "/root/.config/bspwm/sxhkdrc"
 			;;
 		i3)
 			_fail "i3 is not supported yet"

@@ -283,7 +283,7 @@ if [ -n "$GIT_EMAIL" ] && [ -n "$GIT_NAME" ] && _task GIT -d ADMIN; then
 	_var GIT_EMAIL
 	_var GIT_NAME
 
-	file="$HOME/.gitconfig"
+	file="/root/.gitconfig"
 	cat "$ASSETS/user.gitconfig" | _subst "email=$GIT_EMAIL" "name=$GIT_NAME" > "$file" || _fail "failed to write: $file"
 	_show "$file"
 

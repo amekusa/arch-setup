@@ -165,6 +165,16 @@ if _task ROOT; then
 		echo
 		echo "input password for root user"
 	done
+	if [ -n "$ROOT_SHELL" ]; then
+		_var ROOT_SHELL
+		shell="$(_require $ROOT_SHELL)" || _fail
+		chsh -s "$shell" || _fail
+		case "$ROOT_SHELL" in
+		fish)
+			mkdir -p "/root/.config/fish" || _fail
+			;;
+		esac
+	fi
 fi
 
 # admin user
@@ -308,6 +318,22 @@ if $AUR && [ -n "$AUR_HELPER" ] && _task AUR_HELPER -d ADMIN SUDO GIT; then
 		;;
 	esac
 	cd "$BASE"
+fi
+
+# replace vim with neovim
+if $NEOVIM && _task NEOVIM -d ROOT; then
+	_pkg neovim
+	case "$ROOT_SHELL" in
+		zsh)  file="/root/.zshrc" ;;
+		bash) file="/root/.bashrc" ;;
+		fish) file="/root/.config/fish/config.fish" ;;
+		*)    _fail "unsupported $(_var ROOT_SHELL)"
+	esac
+	cat <<- EOF > "$file"
+	alias vi='nvim'
+	alias vim='nvim'
+	alias vimdiff='nvim -d'
+	EOF
 fi
 
 # graphical user interface

@@ -68,7 +68,7 @@ if [ -f "$BASE/user.conf" ]; then
 else
 	cat <<- EOF > "$BASE/user.conf"
 	#  --- user.conf ---
-	#  Edit this file so it suits your needs.
+	#  Edit this file to configure Arch.
 	#  After save it, run setup.sh again
 	# ========================================
 

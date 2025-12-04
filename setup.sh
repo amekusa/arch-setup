@@ -9,19 +9,20 @@ if [ "$(whoami)" != root ]; then
 fi
 
 BASE="$(dirname "$(realpath "$0")")"
+cd "$BASE" || exit 1
 
-ASSETS="$BASE/assets"
-BACKUP="$BASE/backup"
-PATCHES="$BASE/patches"
+ASSETS="assets"
+BACKUP="backup"
+PATCHES="patches"
 
 git submodule init
 git submodule update
 
-. "$BASE/ush/load" util
-. "$BASE/ush/load" io
-. "$BASE/ush/load" task
+. "ush/load" util
+. "ush/load" io
+. "ush/load" task
 
-. "$BASE/lib/util.sh"
+. "lib/util.sh"
 
 
 # === PARSE ARGS ===
@@ -49,12 +50,12 @@ while [ $# -gt 0 ]; do
 		_help; exit
 		;;
 	-u|--update)
-		_backup "$BASE/user.conf"
-		_backup "$BASE/tasks"
-		cp -f "$BASE/default.conf" "$BASE/.default.old.conf"
+		_backup "user.conf"
+		_backup "tasks"
+		cp -f "default.conf" ".default.old.conf"
 		git pull "https://github.com/amekusa/arch-setup.git"
-		diff -uwB "$BASE/.default.old.conf" "$BASE/default.conf" > "$BASE/.default.conf.patch"
-		[ -f "$BASE/user.conf" ] && patch "$BASE/user.conf" < "$BASE/.default.conf.patch"
+		diff -uwB ".default.old.conf" "default.conf" > ".default.conf.patch"
+		[ -f "user.conf" ] && patch "user.conf" < ".default.conf.patch"
 		exit 0
 		;;
  	*)
@@ -66,26 +67,26 @@ done
 
 
 # === CONFIG ===
-. "$BASE/default.conf"
-if [ -f "$BASE/user.conf" ]; then
-	. "$BASE/user.conf"
+. "default.conf"
+if [ -f "user.conf" ]; then
+	. "user.conf"
 else
-	cat <<- EOF > "$BASE/user.conf"
+	cat <<- EOF > "user.conf"
 	#  --- user.conf ---
 	#  Edit this file to configure Arch.
 	#  After save it, run setup.sh again
 	# ========================================
 
 	EOF
-	cat "$BASE/default.conf" >> "$BASE/user.conf"
+	cat "default.conf" >> "user.conf"
 	[ -n "$EDITOR" ] || EDITOR="$(_fb-cmd -f nano nvim vim vi '')" || _die "editor not found"
-	"$EDITOR" "$BASE/user.conf"
+	"$EDITOR" "user.conf"
 	exit
 fi
 
 
 # === TASKS ===
-_task-system -s "$BASE/tasks" "${TASK_OPTS[@]}"
+_task-system -s "tasks" "${TASK_OPTS[@]}"
 
 # system update
 if _task UPDATE; then
